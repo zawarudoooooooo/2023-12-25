@@ -5,6 +5,10 @@
 
             }
         },
+        //進入頁面時，變更背景顏色
+        beforeCreate () {
+        document.querySelector('body').setAttribute('style', 'background:#F8F5EE')
+        },
         methods:{
             goSignUp(){
                 this.$router.push('/SignUp')
@@ -69,6 +73,8 @@
                         border-radius: 10px;
                         background-color: #D4D2D2;
                         border-style: none;
+                        outline: none;
+                        padding-left: 2vmin;
                     }
                 }
 
@@ -90,6 +96,7 @@
                         border-style: none;
                         background-color: #E9D2A6;
                         color: white;
+                        font-weight: bold;
                     }
                 }
         }
