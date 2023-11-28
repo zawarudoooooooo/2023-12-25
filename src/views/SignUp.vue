@@ -19,20 +19,25 @@
 
 <template>
     <div class="content">
+    <!-- 註冊 -->
         <div class="signupArea">
             <div class="title">
                 <h1>Sign Up</h1>
             </div>
             <div class="inputArea">
+    <!-- ID -->
                 <h3>ID</h3>
                     <div class="idinput">
                         <p>@</p>
                         <input type="text">
                     </div>
+    <!-- 密碼 -->
                 <h3>Password</h3>
                 <input type="password">
+    <!-- 電子郵件 -->
                 <h3>Email</h3>
                 <input type="text">
+    <!-- 生日 -->
                 <h3>Birthday</h3>
                 <input type="date">
             </div>
@@ -49,7 +54,7 @@
         width: 100vw;
         height: 75vh;
         margin-top: 15vmin;
-    
+//註冊
         .signupArea{
             width: 40vw;
             height: 70vh;
@@ -63,7 +68,7 @@
                     text-align: center;
                     color: #978989;
                 }
-
+//輸入
                 .inputArea{
                     width: 26vw;
                     height: 45vh;
@@ -72,6 +77,7 @@
                         color: #978989;
                         margin-bottom: 0;
                     }
+//ID輸入
                     .idinput{
                         width: 25vw;
                         display: flex;

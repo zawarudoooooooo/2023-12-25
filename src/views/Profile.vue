@@ -1,58 +1,45 @@
 <script>
+import { RouterLink, RouterView } from 'vue-router'
+import ProfileDashBoard from '../components/ProfileDashBoard.vue'
     export default{
-        data(){
-            return{
-
-            }
-        },
-        //進入頁面時，變更背景顏色
-        beforeCreate () {
-        document.querySelector('body').setAttribute('style', 'background:#F8F5EE')
-        },
-    }
-
+    data() {
+        return {};
+    },
+    //進入頁面時，變更背景顏色
+    beforeCreate() {
+        document.querySelector('body').setAttribute('style', 'background:#F8F5EE');
+    },
+    methods: {
+    },
+    components: { 
+        ProfileDashBoard 
+    },
+}
 </script>
 
 <template>
     <div class="content">
-        <div class="dashboardArea">
-            <div class="notification">
-                <i class="fa-solid fa-bell"></i>
-                <p>Notification</p>
-            </div>
-            <div class="setting">
-                <i class="fa-solid fa-user-gear"></i>
-                <p>Settings</p>
-            </div>
-            <div class="pet">
-                <i class="fa-solid fa-dog"></i>
-                <p>My Pet</p>
-            </div>
-            <div class="article">
-                <i class="fa-solid fa-pencil"></i>
-                <p>My Articles</p>
-            </div>
-            <div class="adopt">
-                <i class="fa-solid fa-user-tie"></i>
-                <p>My Adopt</p>
-            </div>
-            <div class="chat">
-                <i class="fa-brands fa-rocketchat"></i>
-                <p>Chat</p>
-            </div>
+    <!-- 側邊功能區 -->
+        <div class="dashBoardArea">
+            <ProfileDashBoard />
         </div>
+    <!-- 使用者資料區 -->
         <div class="profileArea">
+    <!-- 使用者名稱和ID -->
             <div class="usernameAndid">
                 <p>User Name</p>
                 <i class="fa-solid fa-circle-user"></i>
                 <p>@Example1117</p>
             </div>
+    <!-- 使用者簡介 -->
             <div class="userinfo">
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat assumenda suscipit tempora quo quaerat libero? Perferendis, ab est assumenda, natus modi deserunt autem saepe facilis iure omnis esse, at veniam.</p>
             </div>
+    <!-- 使用者寵物專區 -->
             <div class="mypetArea">
                 <div class="title">
                     <p>My Pet</p>
+    <!-- 寵物狀態區域 -->
                     <div class="state">
                         <div class="regular">
                         </div>
@@ -66,6 +53,7 @@
                         <i class="fa-solid fa-pen"></i>
                     </div>
                 </div>
+    <!-- 寵物圖示區域 -->
                 <div class="petimg">
                     <div class="ruby">
                         <p>Ruby</p>
@@ -81,10 +69,12 @@
                     </div>
                 </div>
             </div>
+    <!-- 其他區域 -->
             <div class="otherArea">
             </div>
         </div>
     </div>
+    <RouterView />
 </template>
 
 <style lang="scss" scoped>
@@ -96,62 +86,7 @@
         display: flex;
         justify-content: space-around;
 
-        .dashboardArea{
-            width: 10vw;
-            height: 35vh;
-            background-color: white;
-            border-radius: 10px;
-            color: #978989;
-            font-size: 13pt;
-            box-shadow: 3px 3px 3px gray;
-
-            i{
-                margin-right: 1vmin
-            }
-            .notification{
-                height: 5vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-top: 2vmin;
-            }
-
-            .setting{
-                height: 5vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .pet{
-                height: 5vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .article{
-                height: 5vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .adopt{
-                height: 5vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .chat{
-                height: 5vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-        }
-
+        //使用者資料區
         .profileArea{
             width: 80vw;
             height: 195vh;
@@ -160,6 +95,7 @@
             text-align: center;
             box-shadow: 3px 3px 3px gray;
 
+            //使用者名稱和ID
             .usernameAndid{
                 width: 55vw;
                 height: 15vh;
@@ -184,9 +120,9 @@
                     font-size: 100pt;
                     margin-left: 7vmin;
                 }
-
             }
 
+            //使用者簡介 
             .userinfo{
                 width: 65vw;
                 height: 30vh;
@@ -198,6 +134,7 @@
                 padding: 5vmin;
             }
 
+            //使用者寵物專區
             .mypetArea{
                 width: 65vw;
                 height: 40vh;
@@ -220,6 +157,7 @@
                         margin: 0;
                     }
 
+                    //寵物狀態區域
                     .state{
                         height: 5vh;
                         display: flex;
@@ -231,6 +169,7 @@
                             margin-right: 1vmin;
                         }
 
+                        //狀態 : 正常
                         .regular{
                             width: 3vmin;
                             height: 3vmin;
@@ -239,6 +178,7 @@
                             margin-right: 1vmin;
                         }
 
+                        //狀態 : 送養中
                         .ing{
                             width: 3vmin;
                             height: 3vmin;
@@ -247,6 +187,7 @@
                             margin-right: 1vmin;
                         }
 
+                         //狀態 : 已送養                    
                         .finish{
                             width: 3vmin;
                             height: 3vmin;
@@ -262,10 +203,12 @@
                     }
                 }
 
+                //寵物圖示區域
                 .petimg{
                     display: flex;
                     justify-content: space-around;
 
+                    //ruby
                     .ruby{
                         width: 40vmin;
                         height: 20vmin;
@@ -288,6 +231,7 @@
                         }
                     }
 
+                    //kiwi
                     .kiwi{
                         width: 40vmin;
                         height: 20vmin;
@@ -310,6 +254,7 @@
                         }
                     }
 
+                    //lucky
                     .lucky{
                         width: 40vmin;
                         height: 20vmin;
@@ -332,9 +277,9 @@
                         }
                     }
                 }
-
             }
-
+            
+            //其他區域
             .otherArea{
                 width: 65vw;
                 height: 30vh;
@@ -344,10 +289,7 @@
                 margin-left: 12vmin;
                 margin-top: 10vmin;
                 padding: 5vmin;
-
             }
         }
-
-
     }
 </style>
