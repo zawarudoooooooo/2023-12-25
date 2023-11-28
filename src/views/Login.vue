@@ -8,6 +8,9 @@
         methods:{
             goSignUp(){
                 this.$router.push('/SignUp')
+            },
+            goProfile(){
+                this.$router.push('/Profile')
             }
         }
     }
@@ -27,7 +30,7 @@
             </div>
             <div class="buttonArea">
                 <h3 @click="goSignUp">Sign Up ?</h3>
-                <button type="button">Login</button>
+                <button type="button" @click="goProfile">Login</button>
             </div>
         </div>
     </div>
