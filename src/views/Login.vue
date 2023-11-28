@@ -53,6 +53,7 @@
             border-radius: 10px;
             margin: auto;
             padding: 1px;
+            box-shadow: 3px 3px 3px gray;
 
                 h1{
                     text-align: center;
