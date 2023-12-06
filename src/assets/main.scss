@@ -4,7 +4,25 @@
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
 
 
+// colors
+// 主色
+$primary: #E9D2A6;
+$primaryBgc: #F8F5EE;
+// 論壇
+$forum: #6E75A8;
+$forumBgc: #DDDFEE;
+// 領養
+$adoption: #B2D2CB;
+$adoptionBgc: #EDFDF9;
+// 送養
+$give: #C79CA4;
+$giveBgc: #F7E1E5;
+// 突出色
+$specialBlue: #6E75A8;
+$specialRed: #A63A50;
+
 body{
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #978989;
 }
