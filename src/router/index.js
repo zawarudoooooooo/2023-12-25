@@ -34,6 +34,32 @@ const router = createRouter({
       path: '/MyPet',
       name: 'MyPet',
       component: () => import('../views/Profile_MyPets/MyPet.vue'),
+    },
+<<<<<<< HEAD
+    {
+      path: '/edit_myArticle',
+      name: 'edit_myArticle',
+      component: () => import('../views/negi/edit_myArticle.vue'),
+    },
+    {
+      path: '/pre_myArticle',
+      name: 'pre_myArticle',
+      component: () => import('../views/negi/pre_myArticle.vue'),
+    }
+=======
+
+
+    //從這裡開始路由是yxz的
+    {
+      path: '/PlatformEntrance',
+      name: 'PlatformEntrance',
+      component: () => import('../views/yxz/PlatformEntrance.vue'),
+    },
+    {
+      path: '/ForumEntrance',
+      name: 'ForumEntrance',
+      component: () => import('../views/yxz/ForumEntrance.vue'),
+>>>>>>> yxzB
     }
   ]
 })
