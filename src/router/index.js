@@ -34,7 +34,7 @@ const router = createRouter({
       path: '/MyPet',
       name: 'MyPet',
       component: () => import('../views/Profile_MyPets/MyPet.vue'),
-    },
+},
 <<<<<<< HEAD
     {
       path: '/edit_myArticle',
