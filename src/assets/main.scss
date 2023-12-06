@@ -25,3 +25,21 @@ body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #978989;
 }
+
+// 寬高自己寫，可以用以下的尺寸
+.btn{
+    padding-left: 15px;
+    padding-top: 5px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+    border-radius: 30px;
+    background-color: $primary;
+    box-shadow: 0 0 3px 2px lightgray;
+
+}
+
+.btn-big{
+    width: auto;
+    height: 40px;
+    font-size: 15pt;
+}

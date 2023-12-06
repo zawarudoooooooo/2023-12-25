@@ -45,12 +45,12 @@
 <style lang="scss" scoped>
     .dashboardArea{
         width: 160px;
-        height: 300px;
+        height: auto;
         background-color: white;
-        border-radius: 10px;
+        border-radius: 15px;
         color: #978989;
         font-size: 13pt;
-        box-shadow: 3px 3px 3px gray;
+        box-shadow: 0 0 3px 2px lightgray;
         padding: 20px;
         padding-left: 30px;
         i{
