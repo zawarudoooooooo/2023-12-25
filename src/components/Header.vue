@@ -17,6 +17,8 @@ export default{
         <RouterLink to="/Login">Log In</RouterLink>
         <RouterLink to="/SignUp">Sign Up</RouterLink>
         <RouterLink to="/Profile">Profile</RouterLink>
+        <RouterLink to="/edit_myArticle">edit_myArticle</RouterLink>
+        <RouterLink to="/pre_myArticle">pre_myArticle</RouterLink>
     </div>
 </template>
 
