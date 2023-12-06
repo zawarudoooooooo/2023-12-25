@@ -34,16 +34,6 @@ const router = createRouter({
       path: '/MyPet',
       name: 'MyPet',
       component: () => import('../views/Profile_MyPets/MyPet.vue'),
-    },
-    {
-      path: '/edit_myArticle',
-      name: 'edit_myArticle',
-      component: () => import('../views/negi/edit_myArticle.vue'),
-    },
-    {
-      path: '/pre_myArticle',
-      name: 'pre_myArticle',
-      component: () => import('../views/negi/pre_myArticle.vue'),
     }
   ]
 })
