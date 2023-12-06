@@ -34,6 +34,19 @@ const router = createRouter({
       path: '/MyPet',
       name: 'MyPet',
       component: () => import('../views/Profile_MyPets/MyPet.vue'),
+    },
+
+
+    //從這裡開始路由是yxz的
+    {
+      path: '/PlatformEntrance',
+      name: 'PlatformEntrance',
+      component: () => import('../views/yxz/PlatformEntrance.vue'),
+    },
+    {
+      path: '/ForumEntrance',
+      name: 'ForumEntrance',
+      component: () => import('../views/yxz/ForumEntrance.vue'),
     }
   ]
 })
