@@ -21,6 +21,7 @@ export default{
         <RouterLink to="/pre_myArticle">pre_myArticle</RouterLink>
         <RouterLink to="/PlatformEntrance">PlatformEntrance</RouterLink>
         <RouterLink to="/ForumEntrance">ForumEntrance</RouterLink>
+        <RouterLink to="/mapSearch">mapSearch</RouterLink>
     </div>
 </template>
 

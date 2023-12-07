@@ -57,7 +57,15 @@ const router = createRouter({
       path: '/ForumEntrance',
       name: 'ForumEntrance',
       component: () => import('../views/yxz/ForumEntrance.vue'),
-    }
+    },
+
+    
+    //這是Mebice的
+    {
+      path: '/mapSearch',
+      name: 'mapSearch',
+      component: () => import('../views/Mebice/mapSearch.vue'),
+    },
   ]
 })
 
