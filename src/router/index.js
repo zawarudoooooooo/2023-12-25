@@ -45,6 +45,16 @@ const router = createRouter({
       name: 'pre_myArticle',
       component: () => import('../views/negi/pre_myArticle.vue'),
     },
+    {
+      path: '/view_Article',
+      name: 'view_Article',
+      component: () => import('../views/negi/view_Article.vue'),
+    },
+    {
+      path: '/create_Article',
+      name: 'create_Article',
+      component: () => import('../views/negi/create_Article.vue'),
+    },
 
 
     //從這裡開始路由是yxz的

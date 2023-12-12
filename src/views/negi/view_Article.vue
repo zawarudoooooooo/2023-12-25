@@ -1,14 +1,4 @@
-<script>
-import view_Article from './view_Article.vue';
-import create_Article from './create_Article.vue';
-export default {
-
-    components:{view_Article,create_Article}
-}
-</script>
-
-
-<!-- 發文的人看自己發的文章 -->
+<!-- 論談的人來看文章 -->
 <template>
     <div class="all">
         <!-- <div class="div-2"></div> -->
@@ -23,21 +13,22 @@ export default {
                                 <i class="fa-solid fa-plus plus_icon"></i>
                             <div class="dashboard_btn_text">我要發文</div>
                         </button>
-
                     </div>
                 </div>
                 <div class="out_article_area">
                     <div class="in_article_area">
-                        <div class="function_icon_area">
-                            <!-- <img loading="lazy"
+                        <!-- <div class="function_icon_area">
+                            <img loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/0ff7096d667a444bfee3e58c74bcb7c887b73fbe23c5ab5d518081b07a882fcf?"
-                                class="img-2" /> -->
-                                <i class="fa-solid fa-trash-can img-2"></i>
-                                <!-- <img loading="lazy"
+                                class="img-2" /> 
+                                <i class="fa-solid fa-right-from-bracket img-2"></i>
+                                <i class="fa-solid fa-trash-can img-2"></i> 
+                                <img loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/92ac77e2db42db1011e0d83c7bedd38c0d20f66a14115177c96e2b0a532073bf?"
-                                class="img-3" /> -->
+                                class="img-3" /> 
+                                <i class="fa-solid fa-floppy-disk img-3"></i>
                                 <i class="fa-solid fa-pen img-3"></i>
-                        </div>
+                        </div> -->
                         <div class="article">
                             <div class="poster_area">
                                 <div class="poster">
@@ -129,8 +120,6 @@ export default {
             </div>
         </div>
     </div>
-    <!-- <create_Article></create_Article> -->
-    <!-- <view_Article></view_Article> -->
 </template>
   
   
