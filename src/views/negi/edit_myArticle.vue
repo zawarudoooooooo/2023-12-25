@@ -1,88 +1,101 @@
+<!-- 發文的人編輯自己發的文章 -->
 <template>
-    <div class="div">
-        <div class="div-2"></div>
-        <div class="div-3">
-            <div class="div-4">
-                <div class="column">
-                    <div class="div-5">
-                        <div class="div-6">
+    <div class="all">
+        <!-- <div class="div-2"></div> -->
+        <div class="out_contain">
+            <div class="in_contain">
+                <div class="dashboard">
+                    <div class="dashboard_area">
+                        <div class="dashboard_text">
                             論壇首頁<br />科普版<br />閒聊版<br />MY ARTICLE
                         </div>
-                        <div class="div-7">
-                            <img loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/63b36bbca1c643856fbf2055020cbb70138b7bbab25f53fb6c0712e573ba7646?"
-                                class="img" />
-                            <div class="div-8">我要發文</div>
-                        </div>
+                        <button class="dashboard_btn">
+                                <i class="fa-solid fa-plus plus_icon"></i>
+                            <div class="dashboard_btn_text">我要發文</div>
+                        </button>
                     </div>
                 </div>
-                <div class="column-2">
-                    <div class="div-9">
-                        <div class="div-10">
-                            <img loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/b418320d3f737d9b5768a8ff7a9093328663500320d92e134ffd9ad410b7b27f?"
-                                class="img-2" /><img loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/fbd1c2d61bd33be9b042fd0cdcff0230e8b0b58f79e7555ce44ee435db6ab7fa?"
-                                class="img-3" />
+                <div class="out_article_area">
+                    <div class="in_article_area">
+                        <div class="function_icon_area">
+                            <!-- <img loading="lazy"
+                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/0ff7096d667a444bfee3e58c74bcb7c887b73fbe23c5ab5d518081b07a882fcf?"
+                                class="img-2" /> -->
+                                <i class="fa-solid fa-right-from-bracket img-2"></i>
+                                <!-- <i class="fa-solid fa-trash-can img-2"></i> -->
+                                <!-- <img loading="lazy"
+                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/92ac77e2db42db1011e0d83c7bedd38c0d20f66a14115177c96e2b0a532073bf?"
+                                class="img-3" /> -->
+                                <i class="fa-solid fa-floppy-disk img-3"></i>
+                                <!-- <i class="fa-solid fa-pen img-3"></i> -->
                         </div>
-                        <div class="div-11">
-                            <div class="div-12">
-                                <div class="div-13">
-                                    <div class="column-3">
+                        <div class="article">
+                            <div class="poster_area">
+                                <div class="poster">
+                                    <div class="div-13">
                                         <div class="div-14">
                                             <img loading="lazy"
-                                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/722d97a1bfb885c4d4e0d5e4dfe458b41e62e5581ba19e6b218b962d13f480f0?"
-                                                class="img-4" />
-                                            <div class="div-15">短腿貓的爸<br />@wei0113__</div>
+                                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/1a90f93bf046cb34155d14545eaf092cbb5340f95d7851405d718068990aeece?"
+                                                class="poster_icon" />
+                                            <div class="poster_data">
+                                                <p class="poster_name">短腿貓的爸</p>
+                                                <!-- 短腿貓的爸<br /> -->
+                                                <p class="poster_userId">@wei0113__</p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="column-4">
                                         <div class="div-16">
-                                            <div class="div-17">with</div>
-                                            <div class="div-18">
-                                                <div class="div-19">Kiwi</div>
+                                            <div class="pet_state">with</div>
+                                            <div class="pet">
+                                                <div class="pet_name">Kiwi</div>
                                                 <img loading="lazy"
-                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/b98ee66292a8d8df2af998353457daae6d0fa325c66e5662214968d867b39a8f?"
-                                                    class="img-5" />
+                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/5229e6b9f8129729e04753274f9898cd171972f078ea719bd686b4bf738bc61a?"
+                                                    class="pet_type" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="div-20"></div>
-                            <div class="div-21">好像養了一隻迷因貓</div>
-                            <img loading="lazy" srcSet="..." class="img-6" />
-                            <div class="div-22">
-                                先上最愛的一張照片，<br />快樂迷因仔，<br />不知道是不是腿短又肥肥的，<br />每次覺得睡覺阿腿都很可愛<br />就是一隻小笨貓<br />哈哈
+                            <div class="article_title">好像養了一隻迷因貓</div>
+                            <img loading="lazy" srcSet="..." class="article_img" />
+                            <div class="article_contain">
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus fugiat odio nostrum tempore, quisquam incidunt, reiciendis quas eveniet mollitia deleniti eos dolore aliquam quibusdam consequuntur totam possimus asperiores, unde maiores.</p>
+                                <!-- 先上最愛的一張照片，<br />快樂迷因仔，<br />不知道是不是腿短又肥肥的，<br />每次覺得睡覺阿腿都很可愛<br />就是一隻小笨貓<br />哈哈 -->
                             </div>
                             <div class="div-23">Comment</div>
                             <div class="div-24"></div>
-                            <div class="div-25">
-                                <img loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/90a7b1e78b5efecaa340c91a9bcbd4a44401c738482d2d93e101f95b3ef986fc?"
-                                    class="img-7" />
-                                <div class="div-26">
-                                    <div class="div-27">短腿貓的爸<br />@wei0113__</div>
-                                    <div class="div-28">笑死，這隻貓也太可愛</div>
+
+                            <div class="reply">
+                                <div class="replier">
+                                    <img loading="lazy"
+                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/cd14f0e97fc248c0848764be5bceb2595c5aaaa043bb11f500f16b3769856a4b?"
+                                        class="replier_img" />
+                                    <div class="replier_data">
+                                        <p class="replier_name">短腿貓的爸</p>
+                                        <p class="replier_userId">@wei0113__</p>
+                                        <div class="replier_text">笑死，這隻貓也太可愛</div>
+                                        <p>回覆</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="div-29">
-                                <img loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/b7f136a6baad3854675063893a29010d38fc0656ee3890370fb6ebb844a51ef9?"
-                                    class="img-8" /><img loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/102d5dc74ef3cdd9e136eb304a797de378f552775f4698b70e57d995853dc0db?"
-                                    class="img-9" /><img loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/01c70fda5ed54f1a2b6706267352d538987115be56d97cd430547e61ec1ec33b?"
-                                    class="img-10" />
-                                <div class="div-30">
-                                    <div class="div-31">短腿貓的爸<br />@wei0113__</div>
-                                    <div class="div-32">哈哈謝拉&gt;&lt;</div>
+                                <div class="replier_replier">
+                                    <img loading="lazy"
+                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/325bf2b6904cc722a9fe82991fb721b3d31e009fcdf5fd2018580e2ecd595986?"
+                                    class="replier_replier_img" />
+                                    <div class="replier_data">
+                                        <p class="replier_name">短腿貓的爸</p>
+                                        <p class="replier_userId">@wei0113__</p>
+                                        <div class="replier_text">笑死，這隻貓也太可愛</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="div-33"></div>
-                            <div class="div-34">
+
+                            <!-- 
+                                <div class="div-34">
                                 <img loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/cf0d8c3832c67190c7f1bb67eff4f5a433ae2ee5047da972caad5ac2ef6ba853?"
+                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/3f8cc4acf7419613095ee74541d1abf1dddcf182a6560d010288138c4f21a17f?"
                                     class="img-11" />
                                 <div class="div-35">
                                     <div class="div-36">短腿貓的爸<br />@wei0113__</div>
@@ -92,13 +105,15 @@
                             <div class="div-38"></div>
                             <div class="div-39">
                                 <img loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/cad0685797d6fcf53a2d8830f41bba36595e07631fd7b99b3ce44a96bcf380f2?"
+                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/27656a259e5bdeb35ab4aa638b3b6a86263452cfb1d13822e7ec2f55adc2dfec?"
                                     class="img-12" />
                                 <div class="div-40">
                                     <div class="div-41">短腿貓的爸<br />@wei0113__</div>
                                     <div class="div-42">笑死，這隻貓也太可愛</div>
                                 </div>
                             </div>
+                            -->
+
                         </div>
                     </div>
                 </div>
@@ -106,9 +121,11 @@
         </div>
     </div>
 </template>
-
+  
+  
+  
 <style scoped>
-.div {
+.all {
     background-color: #dddfee;
     display: flex;
     padding-top: 6px;
@@ -130,7 +147,7 @@
     }
 }
 
-.div-3 {
+.out_contain {
     align-self: center;
     margin-top: 46px;
     width: 100%;
@@ -138,26 +155,26 @@
 }
 
 @media (max-width: 991px) {
-    .div-3 {
+    .out_contain {
         max-width: 100%;
         margin-top: 40px;
     }
 }
 
-.div-4 {
+.in_contain {
     gap: 20px;
     display: flex;
 }
 
 @media (max-width: 991px) {
-    .div-4 {
+    .in_contain {
         flex-direction: column;
         align-items: stretch;
         gap: 0px;
     }
 }
 
-.column {
+.dashboard {
     display: flex;
     flex-direction: column;
     line-height: normal;
@@ -166,12 +183,12 @@
 }
 
 @media (max-width: 991px) {
-    .column {
+    .dashboard {
         width: 100%;
     }
 }
 
-.div-5 {
+.dashboard_area {
     border-radius: 37px;
     box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25);
     background-color: #fff;
@@ -180,56 +197,58 @@
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
-    padding: 50px 21px 27px;
+    padding: 50px 20px 27px;
 }
 
 @media (max-width: 991px) {
-    .div-5 {
+    .dashboard_area {
         margin-top: 40px;
-        padding-right: 20px;
     }
 }
 
-.div-6 {
+.dashboard_text {
     color: #978989;
     font: 400 28px Lexend, sans-serif;
 }
 
-.div-7 {
+.dashboard_btn {
     border-radius: 35px;
     box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
     background-color: #6e75a8;
     align-self: stretch;
     display: flex;
     margin-top: 111px;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
     gap: 11px;
-    padding: 17px 20px;
+    padding: 17px 21px;
 }
 
 @media (max-width: 991px) {
-    .div-7 {
+    .dashboard_btn {
         padding-left: 20px;
         margin-top: 40px;
     }
 }
 
-.img {
-    aspect-ratio: 1.03;
+.plus_icon {
+    /* aspect-ratio: 1.03;
     object-fit: contain;
     object-position: center;
     width: 32px;
     overflow: hidden;
-    max-width: 100%;
+    max-width: 100%; */
+    font-size: 18pt;
+    color: white;
 }
 
-.div-8 {
+.dashboard_btn_text {
     color: #fff;
     text-align: right;
     font: 800 31px Lexend, sans-serif;
 }
 
-.column-2 {
+.out_article_area {
     display: flex;
     flex-direction: column;
     line-height: normal;
@@ -238,12 +257,12 @@
 }
 
 @media (max-width: 991px) {
-    .column-2 {
+    .out_article_area {
         width: 100%;
     }
 }
 
-.div-9 {
+.in_article_area {
     border-radius: 35px;
     box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
     background-color: #fff;
@@ -252,91 +271,80 @@
     flex-direction: column;
     align-items: end;
     width: 100%;
-    padding: 50px 0;
+    padding: 45px 0;
 }
 
 @media (max-width: 991px) {
-    .div-9 {
+    .in_article_area {
         max-width: 100%;
         margin-top: 40px;
     }
 }
 
-.div-10 {
+.function_icon_area {
     display: flex;
-    width: 130px;
+    margin-right: 60px;
+    width: 119px;
     max-width: 100%;
     padding-right: 5px;
-    align-items: start;
     justify-content: space-between;
     gap: 20px;
-    margin: 5px 72px 0 0;
 }
 
 @media (max-width: 991px) {
-    .div-10 {
+    .function_icon_area {
         margin-right: 10px;
     }
 }
 
 .img-2 {
-    aspect-ratio: 1.33;
-    object-fit: contain;
-    object-position: center;
-    width: 100%;
-    overflow: hidden;
-    margin-top: 5px;
-    flex: 1;
+    font-size: 32pt;
 }
 
 .img-3 {
-    aspect-ratio: 1;
-    object-fit: contain;
-    object-position: center;
-    width: 100%;
-    overflow: hidden;
-    flex: 1;
+    font-size: 32pt;
 }
 
-.div-11 {
+.article {
     align-self: stretch;
     display: flex;
     flex-direction: column;
-    margin: 40px 0 4px;
-    padding: 0 17px;
+    margin: 57px 0 4px;
+    padding: 0 18px;
 }
 
 @media (max-width: 991px) {
-    .div-11 {
+    .article {
         max-width: 100%;
+        margin-top: 40px;
     }
 }
 
-.div-12 {
+.poster_area {
     align-self: stretch;
 }
 
 @media (max-width: 991px) {
-    .div-12 {
+    .poster_area {
         max-width: 100%;
         padding-right: 20px;
     }
 }
 
-.div-13 {
+.poster {
     gap: 20px;
     display: flex;
 }
 
 @media (max-width: 991px) {
-    .div-13 {
+    .poster {
         flex-direction: column;
         align-items: stretch;
         gap: 0px;
     }
 }
 
-.column-3 {
+.div-13 {
     display: flex;
     flex-direction: column;
     line-height: normal;
@@ -345,7 +353,7 @@
 }
 
 @media (max-width: 991px) {
-    .column-3 {
+    .div-13 {
         width: 100%;
     }
 }
@@ -353,7 +361,7 @@
 .div-14 {
     display: flex;
     margin-top: 16px;
-    gap: 17px;
+    gap: 18px;
 }
 
 @media (max-width: 991px) {
@@ -362,7 +370,7 @@
     }
 }
 
-.img-4 {
+.poster_icon {
     aspect-ratio: 1.03;
     object-fit: contain;
     object-position: center;
@@ -371,7 +379,7 @@
     max-width: 100%;
 }
 
-.div-15 {
+.poster_data {
     color: #978989;
     margin: auto 0;
     font: 800 32px Lexend, sans-serif;
@@ -406,7 +414,7 @@
     }
 }
 
-.div-17 {
+.pet_state {
     color: #978989;
     margin-top: 69px;
     flex-grow: 1;
@@ -415,13 +423,13 @@
 }
 
 @media (max-width: 991px) {
-    .div-17 {
+    .pet_state {
         margin-top: 40px;
         white-space: initial;
     }
 }
 
-.div-18 {
+.pet {
     border-radius: 37px;
     background-color: #e9d2a6;
     align-self: stretch;
@@ -429,16 +437,16 @@
     align-items: start;
     justify-content: space-between;
     gap: 4px;
-    padding: 14px 13px 0 23px;
+    padding: 14px 12px 0 24px;
 }
 
 @media (max-width: 991px) {
-    .div-18 {
+    .pet {
         padding-left: 20px;
     }
 }
 
-.div-19 {
+.pet_name {
     color: #fff;
     flex-grow: 1;
     white-space: nowrap;
@@ -446,12 +454,12 @@
 }
 
 @media (max-width: 991px) {
-    .div-19 {
+    .pet_name {
         white-space: initial;
     }
 }
 
-.img-5 {
+.pet_type {
     aspect-ratio: 1.27;
     object-fit: contain;
     object-position: center;
@@ -476,7 +484,7 @@
     }
 }
 
-.div-21 {
+.article_title {
     color: #978989;
     align-self: start;
     white-space: nowrap;
@@ -485,41 +493,41 @@
 }
 
 @media (max-width: 991px) {
-    .div-21 {
+    .article_title {
         margin-left: 10px;
         white-space: initial;
     }
 }
 
-.img-6 {
-    aspect-ratio: 0.9;
+.article_img {
+    aspect-ratio: 0.91;
     object-fit: contain;
     object-position: center;
-    width: 367px;
+    width: 369px;
     box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
     overflow: hidden;
     align-self: start;
     max-width: 100%;
-    margin: 24px 0 0 67px;
+    margin: 24px 0 0 66px;
 }
 
 @media (max-width: 991px) {
-    .img-6 {
+    .article_img {
         margin-left: 10px;
     }
 }
 
-.div-22 {
+.article_contain {
     color: #978989;
     align-self: start;
     width: 325px;
     max-width: 100%;
-    margin: 36px 0 0 76px;
+    margin: 36px 0 0 75px;
     font: 800 21px Lexend, sans-serif;
 }
 
 @media (max-width: 991px) {
-    .div-22 {
+    .article_contain {
         margin-left: 10px;
     }
 }
@@ -528,7 +536,7 @@
     color: #978989;
     align-self: start;
     white-space: nowrap;
-    margin: 151px 0 0 24px;
+    margin: 151px 0 0 23px;
     font: 800 28px Lexend, sans-serif;
 }
 
@@ -552,21 +560,22 @@
     }
 }
 
-.div-25 {
+.reply {
     align-self: start;
     display: flex;
     align-items: start;
     gap: 17px;
-    margin: 34px 0 0 24px;
+    margin: 34px 0 0 23px;
+    flex-direction: column;
 }
 
 @media (max-width: 991px) {
-    .div-25 {
+    .reply {
         margin-left: 10px;
     }
 }
 
-.img-7 {
+.replier_img {
     aspect-ratio: 1.04;
     object-fit: contain;
     object-position: center;
@@ -575,35 +584,35 @@
     max-width: 100%;
 }
 
-.div-26 {
+.replier {
     display: flex;
     flex-grow: 1;
     flex-basis: 0%;
-    flex-direction: column;
+    /* flex-direction: column; */
 }
 
-.div-27 {
+.replier_data {
     color: #978989;
     font: 800 12px Lexend, sans-serif;
 }
 
-.div-28 {
+.replier_text {
     color: #978989;
     margin-top: 12px;
     font: 800 21px Lexend, sans-serif;
 }
 
-.div-29 {
+.replier_replier {
     align-self: start;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 0px;
-    margin: 8px 0 0 58px;
+    margin: 8px 0 0 90px;
 }
 
 @media (max-width: 991px) {
-    .div-29 {
+    .replier_replier {
         margin-left: 10px;
         justify-content: center;
     }
@@ -640,7 +649,7 @@
     }
 }
 
-.img-10 {
+.replier_replier_img {
     aspect-ratio: 1.03;
     object-fit: contain;
     object-position: center;
@@ -651,7 +660,7 @@
     max-width: 100%;
 }
 
-.div-30 {
+.replier_replier_data {
     align-self: center;
     display: flex;
     flex-grow: 1;
@@ -689,7 +698,7 @@
     display: flex;
     align-items: start;
     gap: 17px;
-    margin: 24px 0 0 24px;
+    margin: 24px 0 0 23px;
 }
 
 @media (max-width: 991px) {
@@ -743,7 +752,7 @@
     display: flex;
     align-items: start;
     gap: 17px;
-    margin: 30px 0 0 24px;
+    margin: 30px 0 0 23px;
 }
 
 @media (max-width: 991px) {

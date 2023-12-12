@@ -1,14 +1,21 @@
 <script>
-import view_Article from './view_Article.vue';
-import create_Article from './create_Article.vue';
 export default {
-
-    components:{view_Article,create_Article}
+    data(){
+        return{
+            isCheckPage:false
+        }
+    },
+    methods:{
+        switch_check_page(){
+            this.isCheckPage = !this.isCheckPage
+        }
+    },
+    
 }
 </script>
 
 
-<!-- 發文的人看自己發的文章 -->
+<!-- 論談的人來看文章 -->
 <template>
     <div class="all">
         <!-- <div class="div-2"></div> -->
@@ -19,25 +26,10 @@ export default {
                         <div class="dashboard_text">
                             論壇首頁<br />科普版<br />閒聊版<br />MY ARTICLE
                         </div>
-                        <button class="dashboard_btn">
-                                <i class="fa-solid fa-plus plus_icon"></i>
-                            <div class="dashboard_btn_text">我要發文</div>
-                        </button>
-
                     </div>
                 </div>
                 <div class="out_article_area">
                     <div class="in_article_area">
-                        <div class="function_icon_area">
-                            <!-- <img loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/0ff7096d667a444bfee3e58c74bcb7c887b73fbe23c5ab5d518081b07a882fcf?"
-                                class="img-2" /> -->
-                                <i class="fa-solid fa-trash-can img-2"></i>
-                                <!-- <img loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/92ac77e2db42db1011e0d83c7bedd38c0d20f66a14115177c96e2b0a532073bf?"
-                                class="img-3" /> -->
-                                <i class="fa-solid fa-pen img-3"></i>
-                        </div>
                         <div class="article">
                             <div class="poster_area">
                                 <div class="poster">
@@ -67,75 +59,109 @@ export default {
                                 </div>
                             </div>
                             <div class="div-20"></div>
-                            <div class="article_title">好像養了一隻迷因貓</div>
+                            <input class="article_title" type="text" placeholder="輸入標題" />
+                            <!-- <div class="article_title">好像養了一隻迷因貓</div> -->
                             <img loading="lazy" srcSet="..." class="article_img" />
+                            <input class="article_file" type="file" />
                             <div class="article_contain">
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus fugiat odio nostrum tempore, quisquam incidunt, reiciendis quas eveniet mollitia deleniti eos dolore aliquam quibusdam consequuntur totam possimus asperiores, unde maiores.</p>
+                                <input class="article_text" type="text" placeholder="輸入內文" />
+                                <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus fugiat odio nostrum tempore, quisquam incidunt, reiciendis quas eveniet mollitia deleniti eos dolore aliquam quibusdam consequuntur totam possimus asperiores, unde maiores.</p> -->
                                 <!-- 先上最愛的一張照片，<br />快樂迷因仔，<br />不知道是不是腿短又肥肥的，<br />每次覺得睡覺阿腿都很可愛<br />就是一隻小笨貓<br />哈哈 -->
                             </div>
-                            <div class="div-23">Comment</div>
-                            <div class="div-24"></div>
-
-                            <div class="reply">
-                                <div class="replier">
-                                    <img loading="lazy"
-                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/cd14f0e97fc248c0848764be5bceb2595c5aaaa043bb11f500f16b3769856a4b?"
-                                        class="replier_img" />
-                                    <div class="replier_data">
-                                        <p class="replier_name">短腿貓的爸</p>
-                                        <p class="replier_userId">@wei0113__</p>
-                                        <div class="replier_text">笑死，這隻貓也太可愛</div>
-                                        <p>回覆</p>
-                                    </div>
-                                </div>
-                                <div class="replier_replier">
-                                    <img loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/325bf2b6904cc722a9fe82991fb721b3d31e009fcdf5fd2018580e2ecd595986?"
-                                    class="replier_replier_img" />
-                                    <div class="replier_data">
-                                        <p class="replier_name">短腿貓的爸</p>
-                                        <p class="replier_userId">@wei0113__</p>
-                                        <div class="replier_text">笑死，這隻貓也太可愛</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="div-33"></div>
-
-                            <!-- 
-                                <div class="div-34">
-                                <img loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/3f8cc4acf7419613095ee74541d1abf1dddcf182a6560d010288138c4f21a17f?"
-                                    class="img-11" />
-                                <div class="div-35">
-                                    <div class="div-36">短腿貓的爸<br />@wei0113__</div>
-                                    <div class="div-37">笑死，這隻貓也太可愛</div>
-                                </div>
-                            </div>
-                            <div class="div-38"></div>
-                            <div class="div-39">
-                                <img loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/27656a259e5bdeb35ab4aa638b3b6a86263452cfb1d13822e7ec2f55adc2dfec?"
-                                    class="img-12" />
-                                <div class="div-40">
-                                    <div class="div-41">短腿貓的爸<br />@wei0113__</div>
-                                    <div class="div-42">笑死，這隻貓也太可愛</div>
-                                </div>
-                            </div>
-                            -->
-
+                            <button class="dashboard_btn">
+                                <i class="fa-solid fa-plus plus_icon"></i>
+                                <div class="dashboard_btn_text" @click="switch_check_page()">我要發文</div>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- <create_Article></create_Article> -->
-    <!-- <view_Article></view_Article> -->
+
+    <div class="check_post" v-if="isCheckPage == true">
+        <div class="bg">
+            <div class="check_area">
+                <div class="check_text">
+                    <p>確定送出?</p>
+                </div>
+                <div class="check_btn">
+                    <button class="cancal" @click="switch_check_page()">再考慮一下</button>
+                    <button class="ok">好!現在就發</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
-  
-  
-  
+
 <style scoped>
+.check_post {
+
+    /* position: relative; */
+    .bg {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        background-color: #eaeaea62;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .check_area {
+        width: 60%;
+        height: 50%;
+        border: 1px solid black;
+        border-radius: 20px;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        /* position: absolute; */
+        /* left: 500px; */
+        .check_text {
+            font-size: 26pt;
+            /* margin-bottom: 250px; */
+        }
+
+        .check_btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .cancal{
+            border-radius: 35px;
+            /* box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28); */
+            color: white;
+            align-self: stretch;
+            display: flex;
+            margin: 110px 80px;
+            justify-content: center;
+            align-items: center;
+            gap: 11px;
+            padding: 17px 21px;
+            background-color: #a2a3ab;
+        }
+        .ok{
+            border-radius: 35px;
+            /* box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28); */
+            color: white;
+            align-self: stretch;
+            display: flex;
+            margin: 110px 80px;
+            justify-content: center;
+            align-items: center;
+            gap: 11px;
+            padding: 17px 21px;
+            background-color: #6e75a8;
+        }
+    }
+}
+
 .all {
     background-color: #dddfee;
     display: flex;
@@ -510,6 +536,14 @@ export default {
     }
 }
 
+.article_file {
+    margin-left: 65px;
+}
+
+.article_text {
+    
+}
+
 .article_img {
     aspect-ratio: 0.91;
     object-fit: contain;
@@ -797,4 +831,5 @@ export default {
     color: #978989;
     margin-top: 12px;
     font: 800 21px Lexend, sans-serif;
-}</style>
+}
+</style>
