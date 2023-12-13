@@ -33,5 +33,8 @@ export default{
         height: 15vh;
         background-color: white;
         justify-content: space-between;
+        .routerLink{
+            margin: 10px;
+        }
     }
 </style>

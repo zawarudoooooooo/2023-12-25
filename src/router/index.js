@@ -36,6 +36,16 @@ const router = createRouter({
       component: () => import('../views/Profile_MyPets/MyPet.vue'),
     },
     {
+      path: '/PetDetail',
+      name: "PetDetail",
+      component: () => import('../views/Profile_MyPets/PetDetail.vue'),
+    },
+    {
+      path: '/check',
+      name: 'check',
+      component: () => import('../views/Profile_MyPets/OnlyforCheck.vue'),
+    },
+    {
       path: '/edit_myArticle',
       name: 'edit_myArticle',
       component: () => import('../views/negi/edit_myArticle.vue'),
