@@ -5,20 +5,21 @@
 
 
 // colors
-// 主色
-$primaryBgc: #F8F5EE;
-// 論壇
-$forum: #6E75A8;
-$forumBgc: #DDDFEE;
-// 領養
-$adoption: #B2D2CB;
+// 主色-黃色
+$primary:     #E9D2A6;
+$primaryBgc:  #F8F5EE;
+// 論壇-藍色
+$forum:       #6E75A8;
+$forumBgc:    #DDDFEE;
+// 領養-綠色
+$adoption:    #B2D2CB;
 $adoptionBgc: #EDFDF9;
-// 送養
-$give: #C79CA4;
-$giveBgc: #F7E1E5;
+// 送養-紅色
+$give:        #C79CA4;
+$giveBgc:     #F7E1E5;
 // 突出色
 $specialBlue: #6E75A8;
-$specialRed: #A63A50;
+$specialRed:  #A63A50;
 
 body{
     margin: 0;
@@ -42,4 +43,18 @@ body{
     width: auto;
     height: 40px;
     font-size: 15pt;
+}
+
+.btn-specialBlue{
+    background-color: $specialBlue;
+    &:hover{
+        background-color: $forumBgc;
+    }
+}
+
+.btn-specialRed{
+    background-color: $specialRed;
+    &:hover{
+        background-color: $give;
+    }
 }

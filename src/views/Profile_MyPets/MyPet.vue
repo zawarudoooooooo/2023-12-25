@@ -7,34 +7,118 @@ export default{
             cat: "M83.3225 39.3704C77.5361 39.3704 52.6931 39.847 36.7016 60.0611V39.3704C36.7016 26.6261 24.3546 16.2603 9.17467 16.2603C4.108 16.2603 -0.000976562 19.7099 -0.000976562 23.9636C-0.000976562 28.2173 4.108 31.667 9.17467 31.667C14.2328 31.667 18.3503 35.1239 18.3503 39.3704V100.997C18.3503 109.495 26.5797 116.404 36.7016 116.404H87.1677C89.7025 116.404 91.7555 114.68 91.7555 112.552V108.701C91.7555 104.447 87.6466 100.997 82.5799 100.997H73.4042L110.107 77.8872V112.552C110.107 114.68 112.16 116.404 114.695 116.404H123.87C126.405 116.404 128.458 114.68 128.458 112.552V62.9282C125.508 63.571 122.468 64.0211 119.282 64.0211C101.559 64.0211 86.7319 53.417 83.3225 39.3704ZM128.458 16.2603H110.107L91.7555 0.853516V33.2077C91.7555 45.9712 104.08 56.3178 119.282 56.3178C134.485 56.3178 146.809 45.9712 146.809 33.2077V0.853516L128.458 16.2603ZM107.813 35.5187C105.278 35.5187 103.225 33.795 103.225 31.667C103.225 29.5389 105.278 27.8153 107.813 27.8153C110.348 27.8153 112.401 29.5389 112.401 31.667C112.401 33.795 110.348 35.5187 107.813 35.5187ZM130.752 35.5187C128.217 35.5187 126.164 33.795 126.164 31.667C126.164 29.5389 128.217 27.8153 130.752 27.8153C133.287 27.8153 135.34 29.5389 135.34 31.667C135.34 33.795 133.287 35.5187 130.752 35.5187Z",
             pets: [
                 {
-                    name: "Ruby",
-                    type: "dog",
-                    status: "normal"
+                    pet_id: "",
+                    user_id: "",
+                    pet_name: "Ruby",
+                    adopter_list: "",
+                    final_adopter: "",
+                    pet_breed: "",
+                    pet_status: "很健康; 親人親貓; 貪吃",
+                    adoption_status: "正常",
+                    adoption_conditions: "",
+                    age: "三歲九個月",
+                    vaccine: "",
+                    pet_profile: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cum assumenda cumque amet molestias sapiente id provident perferendis voluptatibus aliquid quia ea praesentium totam eveniet aspernatur, nobis, quod.",
+                    ligation: false,
+                    type: "狗",
+                    pet_photo: "",
+                    pet_other_phote: "",
+                    location: "",
                 },
                 {
-                    name: "Kiwi",
-                    type: "cat",
-                    status: "adopting"
+                    pet_id: "",
+                    user_id: "",
+                    pet_name: "Ruby",
+                    adopter_list: "",
+                    final_adopter: "",
+                    pet_breed: "",
+                    pet_status: "",
+                    adoption_status: "送養中",
+                    adoption_conditions: "",
+                    age: "三歲",
+                    vaccine: "",
+                    pet_profile: "",
+                    ligation: false,
+                    type: "貓",
+                    pet_photo: "",
+                    pet_other_phote: "",
+                    location: "",
                 },
                 {
-                    name: "Ruby",
-                    type: "dog",
-                    status: "adopted"
+                    pet_id: "",
+                    user_id: "",
+                    pet_name: "Ruby",
+                    adopter_list: "",
+                    final_adopter: "",
+                    pet_breed: "",
+                    pet_status: "",
+                    adoption_status: "已送養",
+                    adoption_conditions: "",
+                    age: "三歲",
+                    vaccine: "",
+                    pet_profile: "",
+                    ligation: false,
+                    type: "狗",
+                    pet_photo: "",
+                    pet_other_phote: "",
+                    location: "",
                 },
                 {
-                    name: "Ruby",
-                    type: "dog",
-                    status: "adpoted"
+                    pet_id: "",
+                    user_id: "",
+                    pet_name: "Ruby",
+                    adopter_list: "",
+                    final_adopter: "",
+                    pet_breed: "",
+                    pet_status: "",
+                    adoption_status: "送養中",
+                    adoption_conditions: "",
+                    age: "三歲",
+                    vaccine: "",
+                    pet_profile: "",
+                    ligation: false,
+                    type: "狗",
+                    pet_photo: "",
+                    pet_other_phote: "",
+                    location: "",
                 },
                 {
-                    name: "by",
-                    type: "cat",
-                    status: "normal"
+                    pet_id: "",
+                    user_id: "",
+                    pet_name: "Ruby",
+                    adopter_list: "",
+                    final_adopter: "",
+                    pet_breed: "",
+                    pet_status: "",
+                    adoption_status: "正常",
+                    adoption_conditions: "",
+                    age: "三歲",
+                    vaccine: "",
+                    pet_profile: "",
+                    ligation: false,
+                    type: "狗",
+                    pet_photo: "",
+                    pet_other_phote: "",
+                    location: "",
                 },
                 {
-                    name: "Kiwi",
-                    type: "cat",
-                    status: "adopting"
+                    pet_id: "",
+                    user_id: "",
+                    pet_name: "Ruby",
+                    adopter_list: "",
+                    final_adopter: "",
+                    pet_breed: "",
+                    pet_status: "",
+                    adoption_status: "送養中",
+                    adoption_conditions: "",
+                    age: "三歲",
+                    vaccine: "",
+                    pet_profile: "",
+                    ligation: false,
+                    type: "貓",
+                    pet_photo: "",
+                    pet_other_phote: "",
+                    location: "",
                 },
             ],
         }
@@ -44,16 +128,17 @@ export default{
     },
     methods: {
         getPath(type){
-            if(type == "dog"){
+            if(type == "狗"){
                 return this.dog;
             }
-            if(type == "cat"){
+            if(type == "貓"){
                 return this.cat;
             }
         },
-        goTo(){
-            console.log("enter!")
-            this.$router.push("/PetDetail");
+        emitGo(item){
+            console.log(item)
+            this.$emit("petInfo", item);
+            this.$router.push('/PetDetail');
         }
     }
 }
@@ -92,8 +177,8 @@ export default{
         <!-- pet area -->
         <div class="middle" >
             <div class="showCard" v-for="(item, index) in pets">
-                <div :class="{'yellowCard' : item.status == 'normal'}, {'redCard' : item.status == 'adopting'}, {'greenCard' : item.status == 'adopted'}" class="middleCard" @click="goTo">
-                    <h3>{{ item.name }}</h3>
+                <div :class="{'yellowCard' : item.adoption_status == '正常'}, {'redCard' : item.adoption_status == '送養中'}, {'greenCard' : item.adoption_status == '已送養'}" class="middleCard" @click="emitGo(item)">
+                    <h3>{{ item.pet_name }}</h3>
                     <svg width="155" height="142" viewBox="0 0 155 142" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path :d="getPath(item.type)" fill="white"/>
                     </svg>
@@ -107,33 +192,11 @@ export default{
 
 <style lang="scss" scoped>
 @import '../../assets/main.scss';
+@import '../../assets/RStyle.scss';
 
 .content{
-    width: 100vw;
-    height: 85vh;
-    padding-top: 3vmin;
-    padding-left: 3rem;
-    padding-right: 3rem;
-    padding-bottom: 5vmin;
-    display: flex;
-    justify-content: space-between;
     background-color: $adoptionBgc;
-    .showBoard{
-        width: 80vw;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: white;
-        border-radius: 15px;
-        color: #978989;
-        font-size: 13pt;
-        box-shadow: 0 0 3px 2px lightgray;
-        padding: 20px 30px 20px 30px ;
-    }
 }
-
-
 .top{
     width: 90%;
     height: 50px;
