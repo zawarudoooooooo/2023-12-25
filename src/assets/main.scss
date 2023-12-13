@@ -36,7 +36,6 @@ body{
     border-radius: 30px;
     background-color: $primary;
     box-shadow: 0 0 3px 2px lightgray;
-
 }
 
 .btn-big{
@@ -49,6 +48,7 @@ body{
     background-color: $specialBlue;
     &:hover{
         background-color: $forumBgc;
+        transition: 0.3s;
     }
 }
 
@@ -56,5 +56,6 @@ body{
     background-color: $specialRed;
     &:hover{
         background-color: $give;
+        transition: 0.3s;
     }
 }

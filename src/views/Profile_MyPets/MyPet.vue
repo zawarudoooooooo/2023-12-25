@@ -10,7 +10,7 @@ export default{
                     pet_id: "",
                     user_id: "",
                     pet_name: "Ruby",
-                    adopter_list: "",
+                    adopter_list: "a; b; c; d",
                     final_adopter: "",
                     pet_breed: "",
                     pet_status: "很健康; 親人親貓; 貪吃",
@@ -191,7 +191,6 @@ export default{
 
 
 <style lang="scss" scoped>
-@import '../../assets/main.scss';
 @import '../../assets/RStyle.scss';
 
 .content{

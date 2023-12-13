@@ -15,7 +15,6 @@ export default{
   methods: { 
     getPetInfo(obj){
       this.petInfo = obj;
-
     }
   }
 }

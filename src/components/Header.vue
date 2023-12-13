@@ -14,9 +14,10 @@ export default{
 
 <template>
     <div class="header">
-        <RouterLink to="/Login">Log In</RouterLink>
-        <RouterLink to="/SignUp">Sign Up</RouterLink>
-        <RouterLink to="/Profile">Profile</RouterLink>
+        <RouterLink class="routerLink" to="/Login">Log In</RouterLink>
+        <RouterLink class="routerLink" to="/SignUp">Sign Up</RouterLink>
+        <RouterLink class="routerLink" to="/Profile">Profile</RouterLink>
+        <RouterLink class="routerLink" to="/check">check</RouterLink>
     </div>
 </template>
 
@@ -26,5 +27,8 @@ export default{
         height: 15vh;
         background-color: white;
         justify-content: space-between;
+        .routerLink{
+            margin: 10px;
+        }
     }
 </style>

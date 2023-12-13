@@ -1,3 +1,5 @@
+@import './main.scss';
+
 @mixin mobile{
     @media (max-width: 767px) {
         font-size: 12pt;
@@ -60,3 +62,7 @@ p{
         overflow: hidden;
     }
 }
+
+$modal-content-border-color:        null;
+$modal-header-border-color:         null;
+$modal-footer-border-color:         null;

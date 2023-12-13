@@ -39,6 +39,11 @@ const router = createRouter({
       path: '/PetDetail',
       name: "PetDetail",
       component: () => import('../views/Profile_MyPets/PetDetail.vue'),
+    },
+    {
+      path: '/check',
+      name: 'check',
+      component: () => import('../views/Profile_MyPets/OnlyforCheck.vue'),
     }
   ]
 })
