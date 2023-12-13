@@ -62,9 +62,9 @@ export default {
                         // 在userInfoList中寻找对应的用户并存储到sessionStorage中
                         const foundUser = this.userInfoList.find(user => user.account === enteredAccount);
                         if (foundUser) {
-                            sessionStorage.setItem('foundUser', JSON.stringify(foundUser));
+                            sessionStorage.setItem('foundUserId', JSON.stringify(foundUser.userId));
                         }
-
+                        this.$router.push('/Profile')
 
                         // 在此处执行登录后的操作，比如导航到其他页面
                     } else {

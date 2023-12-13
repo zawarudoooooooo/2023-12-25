@@ -50,7 +50,7 @@ export default {
                 .catch(error => console.error('Error:', error));
 
             alert("註冊成功");
-
+            this.$router.push('/login')
         },
 
     }
