@@ -79,6 +79,14 @@ const router = createRouter({
       component: () => import('../views/yxz/ForumEntrance.vue'),
     },
 
+    //12.14 BE for admin
+    {
+      path: '/BeManagement',
+      name: 'BeManagement',
+      component: () => import('../views/yxz/BeManagement.vue'),
+    },
+
+
     
     //這是Mebice的
     {

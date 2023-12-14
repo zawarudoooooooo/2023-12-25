@@ -38,7 +38,8 @@ export default {
                 })
         },
 
-        //12.12新增 前端登入邏輯 加上密碼驗證邏輯 
+        //12.12新增 前端登入邏輯 加上密碼驗證邏輯
+        //12.14 foundUserInfo containning userId & permission 
         login() {
             const enteredAccount = this.Account;
             const enteredPassword = this.password;
@@ -62,7 +63,11 @@ export default {
                         // 在userInfoList中寻找对应的用户并存储到sessionStorage中
                         const foundUser = this.userInfoList.find(user => user.account === enteredAccount);
                         if (foundUser) {
-                            sessionStorage.setItem('foundUserId', JSON.stringify(foundUser.userId));
+                            sessionStorage.setItem('foundUserInfo', JSON.stringify({
+                                userId: foundUser.userId,
+                                permission: foundUser.permission,
+                                // 其他你需要存儲的用戶信息...
+                            }));
                         }
                         this.$router.push('/Profile')
 
@@ -98,7 +103,7 @@ export default {
             </div>
             <div class="buttonArea">
                 <h3 @click="goSignUp">Sign Up ?</h3>
-                <!-- <button type="button" @click="goProfile">Login</button> -->
+                <h3></h3>
                 <button type="button" @click="login()">登入</button>
             </div>
         </div>
