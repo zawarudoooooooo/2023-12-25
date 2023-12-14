@@ -1,11 +1,17 @@
 <script>
 import { RouterLink } from 'vue-router';
-export default{
-    date(){
-        return{
-
+export default {
+    data() {
+        return {
         }
     },
+    mounted() {
+    },
+
+    methods: {
+
+    },
+
     components: {
         RouterLink
     }
@@ -28,13 +34,14 @@ export default{
 </template>
 
 <style lang="scss" scoped>
-    .header{
-        width: 100vw;
-        height: 15vh;
-        background-color: white;
-        justify-content: space-between;
-        .routerLink{
-            margin: 10px;
-        }
+.header {
+    width: 100vw;
+    height: 15vh;
+    background-color: white;
+    justify-content: space-between;
+
+    .routerLink {
+        margin: 10px;
     }
+}
 </style>

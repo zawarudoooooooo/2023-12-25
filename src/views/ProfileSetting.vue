@@ -4,7 +4,7 @@ import ProfileDashBoard from '../components/ProfileDashBoard.vue'
 export default {
     data() {
         return {
-            foundUserId: JSON.parse(sessionStorage.getItem('foundUserId')),
+            foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
 
             foundUser: null,
             userInfoList: null,
@@ -64,7 +64,7 @@ export default {
                     console.log(this.userInfoList)
 
                     // 根據 foundUserId 找到對應的 foundUser
-                    const foundUser = this.userInfoList.find(user => user.userId === this.foundUserId);
+                    const foundUser = this.userInfoList.find(user => user.userId === this.foundUserInfo.userId);
 
                     // 如果找到了對應的 foundUser，你可以做一些操作
                     if (foundUser) {
@@ -134,6 +134,7 @@ export default {
 <template>
     <div class="content" v-if="foundUser">
         <!-- 側邊功能區 -->
+
         <div class="dashBoardArea">
             <ProfileDashBoard />
         </div>
