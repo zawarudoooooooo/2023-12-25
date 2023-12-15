@@ -38,8 +38,9 @@ export default {
                 })
         },
 
-        //12.12新增 前端登入邏輯 加上密碼驗證邏輯
+        //12.12 新增 前端登入邏輯 加上密碼驗證邏輯
         //12.14 foundUserInfo containning userId & permission 
+        //12.15 change data form to String
         login() {
             const enteredAccount = this.Account;
             const enteredPassword = this.password;
@@ -53,14 +54,21 @@ export default {
                     'Content-Type': 'application/json'
                 }
             })
-                .then(response => response.json())
+                .then(response => response.text()) // use response.text() to progress String
                 .then(data => {
-                    if (data) {
-                        // 登录成功
-                        console.log('登录成功');
-                        alert('登录成功');
+                    console.log(data);
 
-                        // 在userInfoList中寻找对应的用户并存储到sessionStorage中
+                    if (data === '找不到帳號') {
+                        console.log('找不到帳號，登入失敗');
+                        alert('找不到帳號，登入失敗');
+                    } else if (data === '密碼錯誤，登入失敗') {
+                        console.log('密碼錯誤，登入失敗');
+                        alert('密碼錯誤，登入失敗');
+                    } else if (data === '成功登入') {
+                        console.log('成功登入');
+                        alert('成功登入');
+
+
                         const foundUser = this.userInfoList.find(user => user.account === enteredAccount);
                         if (foundUser) {
                             sessionStorage.setItem('foundUserInfo', JSON.stringify({
@@ -69,9 +77,7 @@ export default {
                                 // 其他你需要存儲的用戶信息...
                             }));
                         }
-                        this.$router.push('/Profile')
-
-                        // 在此处执行登录后的操作，比如导航到其他页面
+                        this.$router.push('/Profile');
                     } else {
                         // 登录失败
                         console.log('登录失败，账户或密码错误');
@@ -83,6 +89,7 @@ export default {
                     alert('登录过程中出现错误');
                 });
         }
+
 
 
     }
