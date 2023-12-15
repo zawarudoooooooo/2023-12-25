@@ -12,16 +12,16 @@ export default {
             foundFileName: null,
 
             ///更新資料 For V-model
-            userName:null,
-            profile:null,
-            jobOccupation:null,
-            address:null,
-            phone:null,
-            familyStatus:null,
-            sentenceToAdopter:null,
-            userRealName:null,
-            age:null,
-            gender:null,
+            userName: null,
+            profile: null,
+            jobOccupation: null,
+            address: null,
+            phone: null,
+            familyStatus: null,
+            sentenceToAdopter: null,
+            userRealName: null,
+            age: null,
+            gender: null,
 
         }
     },
@@ -87,15 +87,15 @@ export default {
                 ///這裡開始 會修改
                 userName: this.userName,
                 userPhoto: this.imageUrl,
-                profile:this.profile,
-                jobOccupation:this.jobOccupation,
-                address:this.address,
-                phone:this.phone,
-                familyStatus:this.familyStatus,
-                sentenceToAdopter:this.sentenceToAdopter,
-                userRealName:this.userRealName,
-                age:this.age,
-                gender:this.gender,
+                profile: this.profile,
+                jobOccupation: this.jobOccupation,
+                address: this.address,
+                phone: this.phone,
+                familyStatus: this.familyStatus,
+                sentenceToAdopter: this.sentenceToAdopter,
+                userRealName: this.userRealName,
+                age: this.age,
+                gender: this.gender,
 
             };
 
@@ -132,6 +132,11 @@ export default {
 </script>
 
 <template>
+    <!--12.14 router for admin 需要登入後才能使用的屬性 暫時放這裡-->
+    <div class="BE line" v-if="foundUserInfo.permission >= 20">
+        <i class="fa-solid fa-gear"></i>
+        <RouterLink to="/BeManagement" class="router-link-custom">後台管理</RouterLink>
+    </div>
     <div class="content" v-if="foundUser">
         <!-- 側邊功能區 -->
 
@@ -147,9 +152,10 @@ export default {
             </div>
             <!-- 使用者名稱和ID -->
             <div class="usernameAndid">
-                <input type="text" name="" id="" style="border:none;" :placeholder=foundUser.userName v-model="this.userName">
+                <input type="text" name="" id="" style="border:none;" :placeholder=foundUser.userName
+                    v-model="this.userName">
                 <img :src="'../../public/' + foundFileName" alt="" style="border-radius: 50%;" height="120px" width="120px">
-                <p>{{foundUser.account}}</p>
+                <p>{{ foundUser.account }}</p>
             </div>
             <div>
                 <input type="file" @change="onFileChange">
@@ -175,7 +181,8 @@ export default {
                         <div class="userinfo">
                             <div class="name">
                                 <span>真實姓名 : </span>
-                                <input type="text" name="" id="" :placeholder=foundUser.userRealName v-model="this.userRealName">
+                                <input type="text" name="" id="" :placeholder=foundUser.userRealName
+                                    v-model="this.userRealName">
                             </div>
                             <div class="age">
                                 <span>年齡 : </span>
@@ -183,7 +190,7 @@ export default {
                             </div>
                             <div class="gender">
                                 <span>性別 : </span>
-                                {{foundUser.gender  }}
+                                {{ foundUser.gender }}
                                 <select :placeholder=foundUser.gender v-model="this.gender">
                                     <option value="男性">男性</option>
                                     <option value="女性">女性</option>
@@ -192,7 +199,8 @@ export default {
                             </div>
                             <div class="work">
                                 <span>職業 : </span>
-                                <input type="text" name="" id="" :placeholder=foundUser.jobOccupation v-model="this.jobOccupation">
+                                <input type="text" name="" id="" :placeholder=foundUser.jobOccupation
+                                    v-model="this.jobOccupation">
                             </div>
                         </div>
                     </div>
@@ -205,7 +213,7 @@ export default {
                                 <input type="text" name="" id="" :placeholder=foundUser.address v-model="this.address">
                             </div>
                             <div class="email">
-                                <p>信箱 :  {{foundUser.email}}</p>
+                                <p>信箱 : {{ foundUser.email }}</p>
                             </div>
                             <div class="phone">
                                 <span>聯絡電話 : </span>
@@ -221,7 +229,8 @@ export default {
                         <label for="">家庭狀況</label>
                         <div class="familyinfo">
                             <div class="familydetail">
-                                <textarea name="" id="" cols="30" rows="6" :placeholder=foundUser.familyStatus v-model="this.familyStatus"></textarea>
+                                <textarea name="" id="" cols="30" rows="6" :placeholder=foundUser.familyStatus
+                                    v-model="this.familyStatus"></textarea>
                             </div>
                         </div>
                     </div>
@@ -230,7 +239,8 @@ export default {
                 <div class="memo">
                     <label for="">給送養人的一句話</label>
                     <div class="memoArea">
-                        <textarea name="" id="" cols="80" rows="6" :placeholder=foundUser.sentenceToAdopter v-model="this.sentenceToAdopter"></textarea>
+                        <textarea name="" id="" cols="80" rows="6" :placeholder=foundUser.sentenceToAdopter
+                            v-model="this.sentenceToAdopter"></textarea>
                     </div>
                 </div>
             </div>
@@ -420,5 +430,4 @@ export default {
             }
         }
     }
-}
-</style>
+}</style>

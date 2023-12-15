@@ -40,11 +40,6 @@ export default {
             <p>Chat</p>
         </div>
 
-        <!--12.14 router for admin 需要登入後才能使用的屬性 暫時放這裡-->
-        <div class="BE line" v-if="foundUserInfo.permission >= 20">
-            <i class="fa-solid fa-gear"></i>
-            <RouterLink to="/BeManagement" class="router-link-custom">後台管理</RouterLink>
-        </div>
     </div>
 </template>
 

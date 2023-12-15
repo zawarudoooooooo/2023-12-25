@@ -21,6 +21,7 @@ export default {
         },
 
         //12.12 新增使用者註冊邏輯
+        //12.14 新增驗證碼邏輯
         signup() {
             const newuserInfo = {
                 account:this.account,
@@ -49,7 +50,7 @@ export default {
                 })
                 .catch(error => console.error('Error:', error));
 
-            alert("註冊成功");
+            alert("註冊成功，待開通帳號");
             this.$router.push('/login')
         },
 
