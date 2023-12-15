@@ -30,20 +30,34 @@ const router = createRouter({
       name: 'ProfileSetting',
       component: () => import('../views/ProfileSetting.vue')
     },
+    // profile_mypet
     {
       path: '/MyPet',
       name: 'MyPet',
       component: () => import('../views/Profile_MyPets/MyPet.vue'),
     },
+    // profile_mypet_detail
     {
       path: '/PetDetail',
       name: "PetDetail",
       component: () => import('../views/Profile_MyPets/PetDetail.vue'),
     },
+    // only for check sth
     {
       path: '/check',
       name: 'check',
       component: () => import('../views/Profile_MyPets/OnlyforCheck.vue'),
+    },
+    // profile_myadopt
+    {
+      path: '/MyAdopt',
+      name: 'MyAdopt',
+      component: () => import('../views/Profile_MyAdopt/MyAdopt.vue'),
+    },
+    {
+      path: '/AdoptPetDetail',
+      name: 'AdoptPetDetail',
+      component: () => import('../views/Profile_MyAdopt/AdoptPetDetail.vue'),
     },
     {
       path: '/edit_myArticle',

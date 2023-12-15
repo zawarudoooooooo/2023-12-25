@@ -38,86 +38,7 @@ export default{
                 "5",
                 "6",
             ],
-            adopterInfo: {},
             isShowModal: false,
-            pets: [
-                {
-                    pet_id: "",
-                    user_id: "",
-                    pet_name: "Ruby",
-                    adopter_list: "a; b; c; d",
-                    final_adopter: "",
-                    pet_breed: "",
-                    pet_status: "很健康; 親人親貓; 貪吃",
-                    adoption_status: "正常",
-                    adoption_conditions: "",
-                    age: "三歲九個月",
-                    vaccine: "",
-                    pet_profile: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cum assumenda cumque amet molestias sapiente id provident perferendis voluptatibus aliquid quia ea praesentium totam eveniet aspernatur, nobis, quod.",
-                    ligation: false,
-                    type: "狗",
-                    pet_photo: "",
-                    pet_other_phote: "",
-                    location: "",
-                },
-                {
-                    pet_id: "",
-                    user_id: "",
-                    pet_name: "Ruby",
-                    adopter_list: "",
-                    final_adopter: "",
-                    pet_breed: "",
-                    pet_status: "",
-                    adoption_status: "已送養",
-                    adoption_conditions: "",
-                    age: "三歲",
-                    vaccine: "",
-                    pet_profile: "",
-                    ligation: false,
-                    type: "狗",
-                    pet_photo: "",
-                    pet_other_phote: "",
-                    location: "",
-                },
-                {
-                    pet_id: "",
-                    user_id: "",
-                    pet_name: "Ruby",
-                    adopter_list: "",
-                    final_adopter: "",
-                    pet_breed: "",
-                    pet_status: "",
-                    adoption_status: "正常",
-                    adoption_conditions: "",
-                    age: "三歲",
-                    vaccine: "",
-                    pet_profile: "",
-                    ligation: false,
-                    type: "狗",
-                    pet_photo: "",
-                    pet_other_phote: "",
-                    location: "",
-                },
-                {
-                    pet_id: "",
-                    user_id: "",
-                    pet_name: "Ruby",
-                    adopter_list: "",
-                    final_adopter: "",
-                    pet_breed: "",
-                    pet_status: "",
-                    adoption_status: "送養中",
-                    adoption_conditions: "",
-                    age: "三歲",
-                    vaccine: "",
-                    pet_profile: "",
-                    ligation: false,
-                    type: "貓",
-                    pet_photo: "",
-                    pet_other_phote: "",
-                    location: "",
-                },
-            ],
         }
     },
     props: [
@@ -125,6 +46,14 @@ export default{
     ],
     mounted(){
         console.log("pet info", this.petInfo)
+    },
+    computed: {
+        checkAdopted(){
+            if(this.petInfo.final_adopter == this.userInfo.account){
+                return true;
+            }
+            return false;
+        },
     },
     methods: {
         getPath(type){
@@ -151,13 +80,12 @@ export default{
             }
             return bgc;
         },
-        showModal(item){
-            this.adopterInfo = item;
+        showModal(){
             this.isShowModal = true;
         },
         closeMoal(){
             this.isShowModal = false;
-        }
+        },
     }
 }
 </script>
@@ -178,8 +106,65 @@ export default{
                 </div>
             </div>
             <div class="topRight">
-                <i class="fa-solid fa-trash"></i>
-                <i class="fa-solid fa-pen"></i>
+                <button class="btn btn-specialRed modal-btn" data-bs-toggle="modal" data-bs-target="#quitModal">
+                    <i class="fa-solid fa-xmark" style="color: white;"></i>
+                    <p style="color: white;">取消申請</p>
+                </button>
+                <button v-if="checkAdopted" class="btn btn-green modal-btn" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                    <i class="fa-solid fa-check" style="color: white"></i>
+                    <p style="color: white;">確定領養</p>
+                </button>
+                <button v-if="!checkAdopted" class="btn btn-specialBlue modal-btn">
+                    <i class="fa-solid fa-comments" style="color: white;"></i>
+                    <p style="color: white;">聊聊了解</p>
+                </button>
+            </div>
+
+            <!-- Modal -->
+            <div  class="modal fade" id="quitModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h4>確定要取消認養 {{ this.petInfo.pet_name }} 的申請嗎？</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-specialBlue modal-btn">
+                                <i class="fa-solid fa-chevron-right" style="color: white;"></i>
+                                <p style="color: white;">再想一下</p>
+                            </button>
+                            <button class="btn btn-specialRed modal-btn">
+                                <i class="fa-solid fa-xmark" style="color: white;"></i>
+                                <p style="color: white;">取消申請</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div  class="modal fade" id="confirmModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h4>確定要接受認養 {{ this.petInfo.pet_name }} 的申請嗎？</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-specialBlue modal-btn">
+                                <i class="fa-solid fa-chevron-right" style="color: white;"></i>
+                                <p style="color: white;">再想一下</p>
+                            </button>
+                            <button v-if="!this.isGived" class="btn btn-green modal-btn">
+                                <i class="fa-solid fa-check" style="color: white"></i>
+                                <p style="color: white;">接受送養</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -235,110 +220,6 @@ export default{
             </div>
         </div>
 
-        <!-- 送養資訊 -->
-        <div v-if="isAdopted" class="middleAdoption">
-            <div class="condition">
-                <div class="conditionTop blockTitle">
-                    <div class="circle"></div>
-                    <h5>認養條件</h5>
-                </div>
-                <div class="conditionContent">
-                    <p>{{ this.petInfo.adoption_conditions }}</p>
-                </div>
-            </div>
-            <div class="adopter">
-                <div class="adopterTop blockTitle">
-                    <div class="circle"></div>
-                    <h5>申請認養</h5>
-                </div>
-                <!-- v-for -->
-                <div class="adopterContent">
-                    <div class="adopterFile" v-for="(item, index) in adopterList">
-                        <div class="adopterFileTop">
-                            <div class="adopterPhoto">
-                                <div class="circle"></div>
-                            </div>
-                            <div class="adopterText">
-                                <p>someone</p>
-                                <p>@someone01</p>
-                            </div>
-                        </div>
-
-                        <div class="adopterFileMiddle">
-                            <p>someone's description is here.</p>
-                        </div>
-
-                        <div class="adopterFileBtn">
-                            <button class="btn btn-specialRed" data-bs-toggle="modal" data-bs-target="#detailModal"  @click="showModal(item)">
-                                <i class="fa-solid fa-circle-info" style="color: white;"></i>
-                                <p style="color: white;">查看詳細</p>
-                            </button>
-                            <button class="btn btn-specialBlue">
-                                <i class="fa-solid fa-comments" style="color: white;"></i>
-                                <p style="color: white;">聊聊了解</p>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Modal -->
-                <div  class="modal fade" id="detailModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal()"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="modalBodyTop">
-                                    <div class="usernameAndid">
-                                        <p>User Name</p>
-                                        <i class="fa-solid fa-circle-user"></i>
-                                        <p>@Example1117</p>
-                                    </div>
-                                </div>
-                                <div class="modalBodyMiddle">
-                                    <div class="modalBodyMiddleText">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum perferendis exercitationem quis neque natus.</p>
-                                    </div>
-                                </div>
-                                <div class="modalBodyLast">
-                                    <div class="modalBodyLastShow">
-                                        <div class="modalBodyLastTitle">
-                                            <h6>My Pet</h6>
-                                        </div>
-                                        <!-- v-for -->
-                                        <div class="modalBodyLastPet">
-                                            <div class="showCard" v-for="(item, index) in pets">
-                                                <div :class="{'yellowCard' : item.adoption_status == '正常'}, {'redCard' : item.adoption_status == '送養中'}, {'greenCard' : item.adoption_status == '已送養'}" class="middleCard">
-                                                    <svg viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path :d="getPath(item.type)" fill="white"/>
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button v-if="!this.isGived" class="btn btn-specialRed modal-btn">
-                                    <i class="fa-solid fa-xmark" style="color: white;"></i>
-                                    <p style="color: white;">拒絕送養</p>
-                                </button>
-                                <button v-if="!this.isGived" class="btn btn-green modal-btn">
-                                    <i class="fa-solid fa-check" style="color: white"></i>
-                                    <p style="color: white;">接受送養</p>
-                                </button>
-                                <button class="btn btn-specialBlue modal-btn">
-                                    <i class="fa-solid fa-comments" style="color: white;"></i>
-                                    <p style="color: white;">聊聊了解</p>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- 寵物照片 -->
         <div class="last">
             <div class="picArea">
@@ -387,9 +268,24 @@ export default{
             .topRight{
                 display: flex;
                 align-items: center;
-                i{
-                    font-size: 16pt;
-                    margin: 0px 10px 0px 10px;
+                .btn{
+                    width: 150px;
+                    height: 50px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 14pt;
+                    margin-right: 20px;
+                    i{
+                        margin-right: 10px;
+                    }
+                }
+                .btn-green{
+                    background-color: $adoption;
+                    &:hover{
+                        background-color: $adoptionBgc;
+                        transition: 0.3s;
+                    }
                 }
             }
         }
@@ -632,82 +528,6 @@ export default{
         display: flex;
         flex-direction: column;
         justify-content: center;
-        .modalBodyTop{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            margin-bottom: 20px;
-            .usernameAndid{
-                width: 85%;
-                height: 50px;
-                background-color: white;
-                border-radius: 10px;
-                padding: 10px 10px 10px 10px;
-                box-shadow: 3px 3px 3px 3px gray;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-size: 16pt;
-                i{
-                    color: #E9D2A6;
-                    font-size: 35pt;
-                    position: absolute;
-                    left: 200px;
-                }
-            }
-        }
-        .modalBodyMiddle{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            .modalBodyMiddleText{
-                width: 90%;
-                height: 100px;
-                background-color: white;
-                border-radius: 10px;
-                padding: 10px 10px 10px 10px;
-                box-shadow: 3px 3px 3px 3px gray;
-                overflow: hidden;
-                font-size: 12pt;
-            }
-        }
-        .modalBodyLast{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            .modalBodyLastShow{
-                width: 90%;
-                height: auto;
-                background-color: white;
-                border-radius: 10px;
-                padding: 10px 10px 10px 10px;
-                box-shadow: 3px 3px 3px 3px gray;
-                font-size: 12pt;
-                .modalBodyLastPet{
-                    width: 100%;
-                    height: auto;
-                    display: flex;
-                    justify-content: center;
-                    flex-wrap: wrap;
-                    .middleCard{
-                        width: 65px;
-                        height: 50px;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        border-radius: 10px;
-                        margin: 10px 5px 5px 5px;
-                        color: white;
-                        svg{
-                            width: 50px;
-                            height: 45px;
-                        }
-                    }
-                }
-            }
-        }
     }
     .modal-footer{
         width: 90%;
