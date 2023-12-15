@@ -20,16 +20,16 @@ export default {
 
 <template>
     <div class="header">
-        <RouterLink to="/Login">Log In</RouterLink>
-        <RouterLink to="/SignUp">Sign Up</RouterLink>
-        <RouterLink to="/Profile">Profile</RouterLink>
-        <RouterLink to="/edit_myArticle">edit_myArticle</RouterLink>
-        <RouterLink to="/pre_myArticle">pre_myArticle</RouterLink>
-        <RouterLink to="/PlatformEntrance">PlatformEntrance</RouterLink>
-        <RouterLink to="/ForumEntrance">ForumEntrance</RouterLink>
-        <RouterLink to="/mapSearch">mapSearch</RouterLink>
-        <RouterLink to="/view_Article">view_Article</RouterLink>
-        <RouterLink to="/create_Article">create_Article</RouterLink>
+        <RouterLink class="routerLink" to="/Login">Log In</RouterLink>
+        <RouterLink class="routerLink" to="/SignUp">Sign Up</RouterLink>
+        <RouterLink class="routerLink" to="/Profile">Profile</RouterLink>
+        <RouterLink class="routerLink" to="/edit_myArticle">edit_myArticle</RouterLink>
+        <RouterLink class="routerLink" to="/pre_myArticle">pre_myArticle</RouterLink>
+        <RouterLink class="routerLink" to="/PlatformEntrance">PlatformEntrance</RouterLink>
+        <RouterLink class="routerLink" to="/ForumEntrance">ForumEntrance</RouterLink>
+        <RouterLink class="routerLink" to="/mapSearch">mapSearch</RouterLink>
+        <RouterLink class="routerLink" to="/view_Article">view_Article</RouterLink>
+        <RouterLink class="routerLink" to="/create_Article">create_Article</RouterLink>
     </div>
 </template>
 

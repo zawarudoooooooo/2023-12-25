@@ -33,7 +33,7 @@ export default {
         </div>
         <div class="adopt line">
             <i class="fa-solid fa-user-tie"></i>
-            <p>My Adopt</p>
+            <p @click="goTo('/MyAdopt')">My Adopt</p>
         </div>
         <div class="chat line">
             <i class="fa-brands fa-rocketchat"></i>

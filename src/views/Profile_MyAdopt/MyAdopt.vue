@@ -10,8 +10,8 @@ export default{
                     pet_id: "",
                     user_id: "",
                     pet_name: "Ruby",
-                    adopter_list: "a; b; c; d",
-                    final_adopter: "",
+                    adopter_list: "a; b; c; d; @wei0113__",
+                    final_adopter: "@wei0113__",
                     pet_breed: "",
                     pet_status: "很健康; 親人親貓; 貪吃",
                     adoption_status: "正常",
@@ -30,7 +30,7 @@ export default{
                     user_id: "",
                     pet_name: "Ruby",
                     adopter_list: "",
-                    final_adopter: "",
+                    final_adopter: "admin",
                     pet_breed: "",
                     pet_status: "",
                     adoption_status: "送養中",
@@ -121,12 +121,33 @@ export default{
                     location: "",
                 },
             ],
+            userInfo: {
+                user_name: "短腿貓的爸",
+                account: "@wei0113__",
+                password: "",
+                email: "",
+                phone: "",
+                address: "",
+                profile: "",
+                age: 0,
+                birthday: "",
+                gender: "",
+                job_occupation: "",
+                family_status: "",
+                user_photo: "",
+            },
         }
     },
     components: {
         ProfileDashBoard
     },
     methods: {
+        checkAdopted(adopter){
+            if(adopter == this.userInfo.account){
+                return true;
+            }
+            return false;
+        },
         getPath(type){
             if(type == "狗"){
                 return this.dog;
@@ -138,7 +159,7 @@ export default{
         emitGo(item){
             console.log(item)
             this.$emit("petInfo", item);
-            this.$router.push('/PetDetail');
+            this.$router.push('/AdoptPetDetail');
         }
     }
 }
@@ -154,36 +175,44 @@ export default{
 
     <!-- 主顯示頁面 -->
     <div class="showBoard">
-        <div class="top">
-            <!-- 顏色 -->
-            <div class="colorSpace">
-                <div class="yellowCircle"></div>
-                <p>正常</p>
-                <div class="redCircle"></div>
-                <p>送養中</p>
-                <div class="greenCircle"></div>
-                <p>已送養</p>
-            </div>
-
-            <!-- 標題 -->
-            <div class="title">
-                <h1>My Pets</h1>
-            </div>
-
-            <!-- btn -->
-            <button class="btn btn-big">+ add pet</button>
+        <!-- title -->
+        <div class="title">
+            <h1>My Adopt</h1>
         </div>
 
-        <!-- pet area -->
-        <div class="middle" >
-            <div class="showCard" v-for="(item, index) in pets">
-                <div :class="{'yellowCard' : item.adoption_status == '正常'}, {'redCard' : item.adoption_status == '送養中'}, {'greenCard' : item.adoption_status == '已送養'}" class="middleCard" @click="emitGo(item)">
-                    <h3>{{ item.pet_name }}</h3>
-                    <svg width="155" height="142" viewBox="0 0 155 142" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path :d="getPath(item.type)" fill="white"/>
-                    </svg>
+        <!-- v-for the card -->
+        <div class="showCardArea" >
+            <div class="showCard" v-for="(item, index) in pets" @click="emitGo(item)">
+                <div class="cardTop">
+                    <div class="cardTopSvg" :class="{'yellowCard' : item.adoption_status == '正常'}, {'redCard' : item.adoption_status == '送養中'}, {'greenCard' : item.adoption_status == '已送養'}">
+                        <svg class="svg" width="155" height="142" viewBox="0 0 155 142" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path :d="getPath(item.type)" fill="white"/>
+                        </svg>
+                    </div>
+                    <h4 style="color: #978989;">{{ item.pet_name }}</h4>
+                </div>
+                <div class="cardMiddle">
+                    <div class="cardMiddlePhoto"></div>
+                    <div class="cardMiddleDescription">
+                        <p>{{ item.pet_status }}</p>
+                    </div>
+                </div>
+                <div class="cardLast">
+                    <button class="btn btn-specialRed modal-btn">
+                        <i class="fa-solid fa-xmark" style="color: white;"></i>
+                        <p style="color: white;">取消申請</p>
+                    </button>
+                    <button v-if="checkAdopted(item.final_adopter)" class="btn btn-green modal-btn">
+                        <i class="fa-solid fa-check" style="color: white"></i>
+                        <p style="color: white;">確定領養</p>
+                    </button>
+                    <button v-if="!checkAdopted(item.final_adopter)" class="btn btn-specialBlue modal-btn">
+                        <i class="fa-solid fa-comments" style="color: white;"></i>
+                        <p style="color: white;">聊聊了解</p>
+                    </button>
                 </div>
             </div>
+            
         </div>
     </div>
 </div>
@@ -196,91 +225,110 @@ export default{
 .content{
     background-color: $primaryBgc;
 }
-.top{
-    width: 90%;
-    height: 50px;
+.showBoard{
+    height: auto;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    margin-bottom: 50px;
-    .colorSpace{
+    .showCardArea{
+        width: 100%;
+        height: auto;
         display: flex;
-        position: absolute;
-        left: 0px;
-        .yellowCircle{
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: $primary;
-            margin-top: 3px;
-            margin-right: 10px;
-            margin-left: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding-top: 20px;
+        .showCard{
+            width: 300px;
+            height: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 30px;
+            padding: 20px 20px 20px 20px;
+            margin: 20px 15px 25px 15px;
+            background-color: white;
+            color: #978989;
+            font-size: 14pt;
+            box-shadow: 0 0 3px 2px lightgray;
+            color: white;
+            &:hover{
+                box-shadow: 3px 3px 5px gray;
+                transition: 0.8s;
+            }
+            .cardTop{
+                width: 90%;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+                .cardTopSvg{
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    padding: 10px 0px 0px 0px;
+                    margin-right: 10px;
+                    .svg{
+                        width: 50px;
+                        height: 45px;
+                    }
+                }
+            }
+            .cardMiddle{
+                width: 100%;
+                height: 250px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .cardMiddlePhoto{
+                    width: 90%;
+                    height: 120px;
+                    background-color: aliceblue;
+                }
+                .cardMiddleDescription{
+                    width: 90%;
+                    height: 100px;
+                    color: #978989;
+                    font-size: 12pt;
+                    padding: 5px 5px 5px 5px;
+                }
+            }
+            .cardLast{
+                width: 85%;
+                height: 50px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .btn{
+                    width: 100px;
+                    height: 30px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 9pt;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    i{
+                        margin-right: 5px;
+                    }
+                }
+                .btn-green{
+                    background-color: $adoption;
+                    &:hover{
+                        background-color: $adoptionBgc;
+                        transition: 0.3s;
+                    }
+                }
+            }
         }
-        .redCircle{
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: $give;
-            margin-top: 3px;
-            margin-right: 10px;
-            margin-left: 10px;
-        }
-        .greenCircle{
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: $adoption;
-            margin-top: 3px;
-            margin-right: 10px;
-            margin-left: 10px;
-        }
-    }
-    .title{
-        position: absolute;
-        left: 45%;
-    }
-    .btn{
-        background-color: $forum;
-        position: absolute;
-        right: 0px;
-        color: white;
     }
 }
 
-.middle{
-    width: 90%;
-    display: flex;
-    flex-wrap: wrap;
-    .middleCard{
-        width: 250px;
-        height: 150px;
-        display: flex;
-        border-radius: 30px;
-        padding: 20px 20px 20px 20px;
-        margin: 15px 25px 15px 25px;
-        color: white;
-    }
-    .yellowCard{
-        background-color: $primary;
-        &:hover{
-            background-color: $primaryBgc;
-            transition: 0.5s;
-        }
-    }
-    .redCard{
-        background-color: $give;
-        &:hover{
-            background-color: $giveBgc;
-            transition: 0.5s;
-        }
-    }
-    .greenCard{
-        background-color: $adoption;
-        &:hover{
-            background-color: $adoptionBgc;
-            transition: 0.5s;
-        }
-    }
+
+.yellowCard{
+    background-color: $primary;
+}
+.redCard{
+    background-color: $give;
+}
+.greenCard{
+    background-color: $adoption;
 }
 </style>
