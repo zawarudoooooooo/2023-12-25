@@ -45,16 +45,14 @@ export default {
 
 <style lang="scss" scoped>
 .dashboardArea {
-    width: 160px;
+    width: 100%;
     height: auto;
     background-color: white;
     border-radius: 15px;
     color: #978989;
-    font-size: 13pt;
+    font-size: 16pt;
     box-shadow: 0 0 3px 2px lightgray;
     padding: 20px;
-    padding-left: 30px;
-
     i {
         margin-bottom: 10px;
         margin-right: 1vmin

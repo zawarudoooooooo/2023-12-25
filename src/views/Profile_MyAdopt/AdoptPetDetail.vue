@@ -195,7 +195,7 @@ export default{
                             </div>
                         </div>
                         <div class="blockVaccine">
-                            <p>疫苗</p>
+                            <p>醫療狀態</p>
                             <div class="block blockVaccineContent">
                                 <!-- 待轉成動態識別 -->
                                 <p>{{  }} 五合一疫苗</p>

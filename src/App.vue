@@ -6,6 +6,7 @@ export default{
   data(){
     return{
       petInfo: {},
+      userPetInfo: {},
     }
   },
   components: {
@@ -15,6 +16,9 @@ export default{
   methods: { 
     getPetInfo(obj){
       this.petInfo = obj;
+    },
+    getUserPetInfo(obj){
+      this.userPetInfo = obj;
     }
   }
 }
@@ -27,7 +31,9 @@ export default{
   </div>
   
   <div class="content">
-    <RouterView @petInfo="getPetInfo" :petInfo="petInfo"/>
+    <RouterView 
+    @petInfo="getPetInfo" :petInfo="petInfo"
+    @userPetInfo="getUserPetInfo" :userPetInfo="userPetInfo"/>
   </div>
 </div>
 </template>

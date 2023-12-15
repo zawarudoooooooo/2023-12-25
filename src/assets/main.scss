@@ -59,3 +59,19 @@ body{
         transition: 0.3s;
     }
 }
+
+// input外觀
+input{
+    padding: 0px 3px 0px 3px;
+    border-radius: 5px;
+}
+
+// input填寫時外邊框
+input:focus{
+    outline: $primary solid 3px;
+}
+
+// textarea填寫時外邊框
+textarea:focus{
+    outline: $primary solid 3px;
+}

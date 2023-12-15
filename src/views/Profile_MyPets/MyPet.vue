@@ -16,8 +16,8 @@ export default{
                     pet_status: "很健康; 親人親貓; 貪吃",
                     adoption_status: "正常",
                     adoption_conditions: "",
-                    age: "三歲九個月",
-                    vaccine: "",
+                    age: "三個月",
+                    vaccine: "三合一疫苗, 狂犬病疫苗",
                     pet_profile: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cum assumenda cumque amet molestias sapiente id provident perferendis voluptatibus aliquid quia ea praesentium totam eveniet aspernatur, nobis, quod.",
                     ligation: false,
                     type: "狗",
@@ -36,9 +36,9 @@ export default{
                     adoption_status: "送養中",
                     adoption_conditions: "",
                     age: "三歲",
-                    vaccine: "",
+                    vaccine: "五合一疫苗, 狂犬病疫苗",
                     pet_profile: "",
-                    ligation: false,
+                    ligation: true,
                     type: "貓",
                     pet_photo: "",
                     pet_other_phote: "",
@@ -139,6 +139,9 @@ export default{
             console.log(item)
             this.$emit("petInfo", item);
             this.$router.push('/PetDetail');
+        },
+        goTo(x){
+            this.$router.push(x);
         }
     }
 }
@@ -171,7 +174,7 @@ export default{
             </div>
 
             <!-- btn -->
-            <button class="btn btn-big">+ add pet</button>
+            <button class="btn btn-big" @click="goTo('/PetCreate')">+ add pet</button>
         </div>
 
         <!-- pet area -->

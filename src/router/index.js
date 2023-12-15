@@ -36,11 +36,23 @@ const router = createRouter({
       name: 'MyPet',
       component: () => import('../views/Profile_MyPets/MyPet.vue'),
     },
+    // profile_mypet_create
+    {
+      path: '/PetCreate',
+      name: "PetCreate",
+      component: () => import('../views/Profile_MyPets/PetCreate.vue'),
+    },
     // profile_mypet_detail
     {
       path: '/PetDetail',
       name: "PetDetail",
       component: () => import('../views/Profile_MyPets/PetDetail.vue'),
+    },
+    // profile_mypet_detail_modify
+    {
+      path: '/PetDetailModify',
+      name: "PetDetailModify",
+      component: () => import('../views/Profile_MyPets/PetDetailModify.vue'),
     },
     // only for check sth
     {
