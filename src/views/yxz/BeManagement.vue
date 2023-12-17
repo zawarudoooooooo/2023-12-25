@@ -19,5 +19,4 @@ export default {
     if String pattern != "^(?=.*[a-z])(?=.*[A-Z]).{8,}$" → forceChangePassword at profile.vue 
 
     </textarea>
-       
 </template>

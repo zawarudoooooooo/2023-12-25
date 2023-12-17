@@ -2,13 +2,11 @@
 export default {
     data() {
         return {
-
-            //12.12新增變數
-            account: null,
-            password: null,
+            userName: null,
             email: null,
-            birth: null
-
+            password: null,
+            birth: null,
+            authenticationCode: null,
         }
     },
     //進入頁面時，變更背景顏色
@@ -17,21 +15,20 @@ export default {
     },
     methods: {
         goLogin() {
-            this.$router.push('/')
+            this.$router.push('/login')
         },
 
-        //12.12 新增使用者註冊邏輯
-        //12.14 新增驗證碼邏輯
-        signup() {
+        //發送認證碼
+        sendAuthenticationCode() {
             const newuserInfo = {
-                account:this.account,
-                password:this.password,
-                email:this.email,
-                birth:this.birth,
+                userName: this.userName,
+                email: this.email,
+                password: this.password,
+                birth: this.birth,
             };
 
             console.log(newuserInfo)
-            // 
+
             fetch('http://localhost:8080/api/adoption/userInfo/createUserInfo', {
                 method: 'POST',
                 headers: {
@@ -49,10 +46,43 @@ export default {
                     console.log(data);
                 })
                 .catch(error => console.error('Error:', error));
+            alert("已寄送認證信");
+        },
 
-            alert("註冊成功，待開通帳號");
+        //註冊邏輯
+        signup() {
+            const newuserInfo = {
+                userName: this.userName,
+                email: this.email,
+                password: this.password,
+                birth: this.birth,
+                authenticationCode: this.authenticationCode
+            };
+
+            console.log(newuserInfo)
+
+            fetch('http://localhost:8080/api/adoption/userInfo/compare', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userInfo: newuserInfo })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => console.error('Error:', error));
+
+            alert("註冊成功，帳號已成功開通");
             this.$router.push('/login')
         },
+
 
     }
 }
@@ -66,25 +96,26 @@ export default {
                 <h1>Sign Up</h1>
             </div>
             <div class="inputArea">
-                <!-- ID -->
-                <h3>Account</h3>
-                <div class="idinput">
-                    <p>@</p>
-                    <input type="text" v-model="this.account">
-                </div>
-                <!-- 密碼 -->
-                <h3>Password</h3>
-                <input type="password" v-model="this.password">
+
+                <!--多一個填寫資料-->
+                <h3>User Name</h3>
+                <input type="text" v-model="this.userName">
                 <!-- 電子郵件 -->
                 <h3>Email</h3>
-                <input type="text" v-model="this.email">
+                <input type="email" id="email" v-model="this.email">
+                <!-- 密碼 -->
+                <h3>Password</h3>
+                    <input type="password" v-model="this.password" placeholder="含英文大小寫8碼以上">
                 <!-- 生日 -->
                 <h3>Birthday</h3>
                 <input type="date" v-model="this.birth">
+                <!-- 認證碼填寫欄位 -->
+                <h3>Authentication Code</h3>
+                <input type="text" v-model="this.authenticationCode" style="width: 100px;">
+                <button type="button" @click="sendAuthenticationCode()">發送認證碼</button>
             </div>
-            <div class="buttonArea">
+            <div class="buttonArea" style="margin-top: 55px;">
                 <h3 @click="goLogin">Log in ?</h3>
-                <!-- <button type="button" @click="goLogin">Sign Up</button> -->
                 <button type="button" @click="signup()">註冊</button>
             </div>
         </div>
@@ -156,6 +187,18 @@ export default {
                 outline: none;
                 padding-left: 2vmin;
             }
+
+            button {
+                margin-left: 45px;
+                width: 15vmin;
+                height: 5vmin;
+                border-radius: 10px;
+                border-style: none;
+                background-color: #B2D2CD;
+                color: white;
+                font-size: 13pt;
+                font-weight: bold;
+            }
         }
 
         .buttonArea {
@@ -181,4 +224,5 @@ export default {
             }
         }
     }
-}</style>
+}
+</style>

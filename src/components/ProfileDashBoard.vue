@@ -8,6 +8,11 @@ export default {
     methods: {
         goTo(x) {
             this.$router.push(x);
+        },
+        logout(){
+            sessionStorage.removeItem('foundUserInfo');
+            alert("成功登出")
+            this.$router.push('/Login')
         }
     }
 }
@@ -38,6 +43,10 @@ export default {
         <div class="chat line">
             <i class="fa-brands fa-rocketchat"></i>
             <p>Chat</p>
+        </div>
+        <div class="chat line">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <p @click="logout()">登出</p>
         </div>
 
     </div>
