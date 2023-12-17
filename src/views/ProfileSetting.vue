@@ -152,14 +152,23 @@ export default {
             </div>
             <!-- 使用者名稱和ID -->
             <div class="usernameAndid">
-                <input type="text" name="" id="" style="border:none;" :placeholder=foundUser.userName
-                    v-model="this.userName">
-                <img :src="'../../public/' + foundFileName" alt="" style="border-radius: 50%;" height="120px" width="120px">
+                <span>使用者名稱</span>
+                <input type="text" name="" id="" style="border:none; width: 150px;" :placeholder=foundUser.userName
+                    v-model="this.userName" >
+                <!-- 使用 v-if 條件來顯示不同的圖片 -->
+                <img v-if="!imageUrl" :src="'../../public/' + foundFileName" alt="" style="border-radius: 50%;"
+                    height="120px" width="120px">
+                <img v-if="imageUrl" :src="imageUrl" alt="Uploaded Image" style="border-radius: 50%;" height="120px"
+                    width="120px">
                 <p>{{ foundUser.account }}</p>
             </div>
             <div>
-                <input type="file" @change="onFileChange">
-                <img :src="imageUrl" alt="Uploaded Image" v-if="imageUrl">
+                <div>
+                    <label for="imageInput" class="custom-file-upload">
+                        選擇圖片
+                    </label>
+                    <input type="file" accept="image/*" @change="onFileChange" id="imageInput" style="display: none;">
+                </div>
             </div>
             <button @click="update()">確定更新</button>
             <!-- 使用者簡介 -->
@@ -430,4 +439,16 @@ export default {
             }
         }
     }
-}</style>
+}
+
+/* 自訂樣式，讓 label 看起來像是一個按鈕 */
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 15px;
+    cursor: pointer;
+    background: #ccc;
+    border: 1px solid #999;
+    border-radius: 5px;
+}
+
+</style>

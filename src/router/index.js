@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
+import ForgetPassword from '../views/ForgetPassword.vue'
+import ForceChangePassword from '../views/ForceChangePassword.vue'
 import Home from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -14,6 +16,16 @@ const router = createRouter({
       path: '/Login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/ForgetPassword',
+      name: 'ForgetPassword',
+      component: ForgetPassword
+    },
+    {
+      path: '/ForceChangePassword',
+      name: 'ForceChangePassword',
+      component: ForceChangePassword
     },
     {
       path: '/SignUp',

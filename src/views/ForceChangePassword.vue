@@ -4,9 +4,10 @@ export default {
         return {
             foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
 
+            foundUser: null,
             userInfoList: null,
-            email: null,
-            password: null,
+            newPassword: null,
+            confirmPassword: null,
         }
     },
     //進入頁面時，變更背景顏色
@@ -40,16 +41,29 @@ export default {
                 .then(data => {
                     console.log(data);
                     this.userInfoList = data.userInfoList;
+
+                    // 根據 foundUserId 找到對應的 foundUser
+                    const foundUser = this.userInfoList.find(user => user.userId === this.foundUserInfo.userId);
+
+                    // 如果找到了對應的 foundUser，你可以做一些操作
+                    if (foundUser) {
+                        console.log('找到了對應的使用者:', foundUser);
+                        this.foundUser = foundUser
+                    } else {
+                        console.log('找不到對應的使用者');
+                    }
+
+
                 })
         },
 
-        login() {
-            const enteredEmail = this.email;
-            const enteredPassword = this.password;
-
-            const url = `http://localhost:8080/api/adoption/userInfo/login?email=${enteredEmail}&password=${enteredPassword}`;
-
+        savedNewPassword() {
+            const enteredEmail =this.foundUser.email;
+            const enteredNewPassword = this.newPassword;
+            const enteredConfirmPassword = this.confirmPassword;
             
+            const url = `http://localhost:8080/api/adoption/userInfo/forceChangePassword?email=${enteredEmail}&newPassword=${enteredNewPassword}&confirmPassword=${enteredConfirmPassword}`;
+        
             fetch(url, {
                 method: 'GET',
                 headers: {
@@ -58,47 +72,18 @@ export default {
             })
                 .then(response => response.text())
                 .then(data => {
+                    console.log(data)
                     if (data === '找不到信箱') {
-                        console.log('找不到信箱，登入失敗');
-                        alert('找不到信箱，登入失敗');
-                    } else if (data === '密碼錯誤，登入失敗') {
-                        console.log('密碼錯誤，登入失敗');
-                        alert('密碼錯誤，登入失敗');
-                    } else if (data === '成功登入') {
-                        console.log('成功登入');
-                        alert('成功登入');
-
-                        const foundUser = this.userInfoList.find(user => user.email === enteredEmail);
-                        if (foundUser) {
-                            sessionStorage.setItem('foundUserInfo', JSON.stringify({
-                                userId: foundUser.userId,
-                                permission: foundUser.permission,
-                            }));
-                        }
-
-                        // 定義你的密碼規則（英文大小寫、8位字符的規則）
-                        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-
-                        if (!passwordRegex.test(enteredPassword)) {
-                            // 如果密碼不符合規則，導向強制修改密碼的頁面
-                            this.$router.push('/ForceChangePassword');
-
-                        }else{
-                            this.$router.push('/Profile');
-                        }
-
-                    } else {
-                        console.log('登录失败，账户或密码错误');
-                        alert('登录失败，账户或密码错误');
+                        console.log('找不到信箱');
+                        alert('找不到信箱');
+                    } else if (data === '成功更新密碼，請重新登入') {
+                        console.log('成功更新密碼，請重新登入');
+                        alert('已成功更新密碼，請重新登入');
+                        sessionStorage.removeItem('foundUserInfo');
+                        this.$router.push('/Login')
                     }
                 })
-                .catch(error => {
-                    console.error('登录过程中出现错误:', error);
-                    alert('登录过程中出现错误');
-                });
         }
-
-
 
 
 
@@ -110,21 +95,18 @@ export default {
     <div class="content">
         <div class="loginArea">
             <div class="title">
-                <h1>Login</h1>
+                <h1>ForceChangePassword</h1>
             </div>
             <div class="inputArea">
-                <h3>Email</h3>
-                <input type="email" id="email" v-model="this.email">
-                <h3>Password</h3>
-                <input type="password" v-model="this.password">
+                <h4>Key in New Password</h4>
+                <input type="password" v-model="this.newPassword" placeholder="含英文大小寫8碼以上">
+                <h4>Confirm New Password</h4>
+                <input type="password" v-model="this.confirmPassword" placeholder="再次輸入密碼">
             </div>
             <div class="buttonArea">
                 <h3 @click="goSignUp">Sign Up ?</h3>
                 <h3></h3>
-                <button type="button" @click="login()">登入</button>
-            </div>
-            <div class="buttonArea">
-                <h3 @click="goForgetPassword">Forget Password ?</h3>
+                <button type="button" @click="savedNewPassword()">儲存新密碼</button>
             </div>
         </div>
     </div>
@@ -183,8 +165,8 @@ export default {
             }
 
             button {
-                width: 10vmin;
-                height: 4vmin;
+                width: 15vmin;
+                height: 6vmin;
                 border-radius: 10px;
                 border-style: none;
                 background-color: #E9D2A6;
