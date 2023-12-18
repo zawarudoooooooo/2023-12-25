@@ -1,4 +1,5 @@
 <script>
+import Swal from 'sweetalert2'
 export default {
     data() {
         return {
@@ -23,8 +24,19 @@ export default {
 
 
         sendAuthenticationCode() {
+
             const enteredEmail = this.email;
             console.log(enteredEmail)
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!enteredEmail) {
+                Swal.fire('請輸入信箱');
+                return; // 停止函數執行
+            } else if (!emailPattern.test(enteredEmail)) {
+                Swal.fire('請輸入有效的信箱地址');
+                return; // 停止函數執行
+            }
 
             const url = `http://localhost:8080/api/adoption/userInfo/userFogetPassword?email=${enteredEmail}`;
 
@@ -38,12 +50,16 @@ export default {
                 .then(data => {
                     console.log(data)
                     if (data === '找不到信箱') {
-                        console.log('找不到信箱，寄送認證碼失敗');
-                        alert('找不到信箱，寄送認證碼失敗');
+                        Swal.fire('找不到信箱，寄送認證碼失敗');
                     } else if (data === '已發送認證碼至信箱') {
-                        console.log('已發送認證碼至信箱');
-                        alert('已發送認證碼至信箱，請查看信件內容');
-                        this.$router.push('/Login')
+                        Swal.fire({
+                            title: "已發送認證碼至信箱，請查看信件內容",
+                            icon: "success"
+                        }).then((result) => {
+                            if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                                this.$router.push('/Login');
+                            }
+                        });
                     }
                 })
         }
@@ -99,6 +115,7 @@ export default {
             margin: auto;
 
             h3 {
+                margin-top: 30px;
                 color: #978989;
                 margin-bottom: 0;
             }
@@ -114,8 +131,8 @@ export default {
             }
 
             button {
-                margin-top: 15px;
-                margin-left: 70px;
+                margin-top: 30px;
+                margin-left: 280px;
                 width: 15vmin;
                 height: 6vmin;
                 border-radius: 10px;
@@ -134,7 +151,8 @@ export default {
 
             h3 {
                 color: #978989;
-                margin-right: 10%;
+                margin-right: 43%;
+                cursor: pointer;
             }
 
             button {

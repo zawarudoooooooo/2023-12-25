@@ -115,6 +115,8 @@ export default {
                 })
                 .then(data => {
                     console.log('User information created/updated:', data);
+                    window.location.reload(); // 重新載入頁面
+                    alert("成功更新個人資料")
                 })
                 .catch(error => {
                     console.error('Error creating/updating user information:', error);
@@ -148,7 +150,7 @@ export default {
             <!-- 右上icon區 -->
             <div class="logoutAndsave">
                 <i class="fa-solid fa-right-from-bracket"></i>
-                <i class="fa-solid fa-floppy-disk"></i>
+                <i class="fa-solid fa-floppy-disk" @click="update()"></i>
             </div>
             <!-- 使用者名稱和ID -->
             <div class="usernameAndid">
@@ -170,7 +172,6 @@ export default {
                     <input type="file" accept="image/*" @change="onFileChange" id="imageInput" style="display: none;">
                 </div>
             </div>
-            <button @click="update()">確定更新</button>
             <!-- 使用者簡介 -->
             <div class="profileinfo">
                 使用者簡介

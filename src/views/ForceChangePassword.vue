@@ -1,4 +1,5 @@
 <script>
+import Swal from 'sweetalert2'
 export default {
     data() {
         return {
@@ -58,12 +59,26 @@ export default {
         },
 
         savedNewPassword() {
-            const enteredEmail =this.foundUser.email;
+            const enteredEmail = this.foundUser.email;
             const enteredNewPassword = this.newPassword;
             const enteredConfirmPassword = this.confirmPassword;
             
+            if (!enteredNewPassword) {
+                Swal.fire('請輸入新密碼');
+                return; // 停止函數執行
+            }
+            if (!enteredConfirmPassword) {
+                Swal.fire('請輸入確認密碼');
+                return; // 停止函數執行
+            }
+
+            if (enteredNewPassword != enteredConfirmPassword) {
+                Swal.fire('請輸入一樣的密碼');
+                return; // 停止函數執行
+            }
+
             const url = `http://localhost:8080/api/adoption/userInfo/forceChangePassword?email=${enteredEmail}&newPassword=${enteredNewPassword}&confirmPassword=${enteredConfirmPassword}`;
-        
+
             fetch(url, {
                 method: 'GET',
                 headers: {
@@ -74,13 +89,17 @@ export default {
                 .then(data => {
                     console.log(data)
                     if (data === '找不到信箱') {
-                        console.log('找不到信箱');
-                        alert('找不到信箱');
+                        Swal.fire('找不到信箱');
                     } else if (data === '成功更新密碼，請重新登入') {
-                        console.log('成功更新密碼，請重新登入');
-                        alert('已成功更新密碼，請重新登入');
                         sessionStorage.removeItem('foundUserInfo');
-                        this.$router.push('/Login')
+                        Swal.fire({
+                            title: "已成功更新密碼，請重新登入",
+                            icon: "success"
+                        }).then((result) => {
+                            if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                                this.$router.push('/Login');
+                            }
+                        });
                     }
                 })
         }
