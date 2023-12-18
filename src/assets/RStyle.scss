@@ -25,14 +25,17 @@
     padding-bottom: 5vmin;
     display: flex;
     justify-content: space-between;
+    .dashBoardArea{
+        width: 13vw;
+    }
     .showBoard{
-        width: 80vw;
+        width: 78vw;
         height: auto;
         display: flex;
         flex-direction: column;
         align-items: center;
         background-color: white;
-        border-radius: 15px;
+        border-radius: 20px;
         color: #978989;
         font-size: 14pt;
         box-shadow: 0 0 3px 2px lightgray;

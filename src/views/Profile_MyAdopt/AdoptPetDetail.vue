@@ -180,7 +180,11 @@ export default{
             <!-- 寵物資訊 -->
             <div class="middleRight">
                 <div class="middleRightTop">
-                    <div class="circle"></div>
+                    <div :class="{'yellowCard' : this.petInfo.adoption_status == '正常'}, {'redCard' : this.petInfo.adoption_status == '送養中'}, {'greenCard' : this.petInfo.adoption_status == '已送養'}" class="circle">
+                        <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path :d="getPath(this.petInfo.type)" fill="white"/>
+                        </svg>
+                    </div>
                     <h5>{{ this.petInfo.pet_name }}</h5>
                 </div>
                 <div class="middleRightContent">
@@ -195,7 +199,7 @@ export default{
                             </div>
                         </div>
                         <div class="blockVaccine">
-                            <p>疫苗</p>
+                            <p>醫療狀態</p>
                             <div class="block blockVaccineContent">
                                 <!-- 待轉成動態識別 -->
                                 <p>{{  }} 五合一疫苗</p>
@@ -554,6 +558,20 @@ export default{
                 margin-right: 5px;
             }
         }
+    }
+}
+
+.circle{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    svg{
+        width: 50px;
+        height: 45px;
     }
 }
 
