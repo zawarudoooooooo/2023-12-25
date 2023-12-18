@@ -510,6 +510,7 @@ $inputBorder: #e2dbca;
                     margin-bottom: 10px;
                 }
             }
+        }
         .last{
             width: 90%;
             min-height: 400px;
