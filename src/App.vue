@@ -5,6 +5,7 @@ import Header from './components/Header.vue'
 export default{
   data(){
     return{
+      userInfo: {},
       petInfo: {},
       userPetInfo: {},
     }
@@ -14,6 +15,9 @@ export default{
     Header,
   },
   methods: { 
+    getUserInfo(obj){
+      this.userInfo = obj;
+    },
     getPetInfo(obj){
       this.petInfo = obj;
     },
@@ -32,6 +36,7 @@ export default{
   
   <div class="content">
     <RouterView 
+    @userInfo="getUserInfo" :userInfo="userInfo"
     @petInfo="getPetInfo" :petInfo="petInfo"
     @userPetInfo="getUserPetInfo" :userPetInfo="userPetInfo"/>
   </div>

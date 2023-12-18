@@ -41,6 +41,7 @@ export default {
                     // 如果找到了對應的 foundUser，你可以做一些操作
                     if (foundUser) {
                         console.log('找到了對應的使用者:', foundUser);
+                        this.$emit("userInfo", foundUser);
                         this.foundUser = foundUser
                     } else {
                         console.log('找不到對應的使用者');

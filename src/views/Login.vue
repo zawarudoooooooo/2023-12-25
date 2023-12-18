@@ -42,6 +42,9 @@ export default {
                     console.log(data);
                     this.userInfoList = data.userInfoList;
                 })
+                .catch(error =>{
+                    console.error(error)
+                })
         },
 
         login() {
@@ -74,6 +77,7 @@ export default {
             })
                 .then(response => response.text())
                 .then(data => {
+                    console.log(data)
                     if (data === '找不到信箱') {
                         Swal.fire('找不到信箱，登入失敗');
                     } else if (data === '密碼錯誤，登入失敗') {
