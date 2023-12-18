@@ -1,4 +1,6 @@
 <script>
+import axios from 'axios';
+
 export default{
     data(){
         return{
@@ -21,25 +23,29 @@ export default{
                 user_photo: "",
             },
             petInfo: {
-                pet_id: "",
-                user_id: "",
+                user_id: 0,
                 pet_name: "",
-                adopter_list: "",
-                final_adopter: "",
                 pet_breed: "",
                 pet_status: "",
                 adoption_status: "正常",
                 adoption_conditions: "",
                 age: "",
-                vaccine: [],
+                vaccine: "",
                 pet_profile: "",
                 ligation: false,
-                type: "",
+                type: "狗",
                 pet_photo: "",
-                pet_other_phote: "",
                 location: "",
             },
+            vaccineArr: [],
+            petWaterfall: [],
+            // 待接user info進來
+            userId: 8,
         }
+    },
+    mounted(){
+        // 待接user info進來
+        this.petInfo.user_id = this.userId;
     },
     watch: {
         isAdopted(){
@@ -49,7 +55,7 @@ export default{
                 this.petInfo.adoption_status = "正常";
             }
             console.log(this.petInfo.adoption_status)
-        }
+        },
     },
     methods: {
         getPath(type){
@@ -69,29 +75,30 @@ export default{
                 this.isAdopted = true;
                 bgc = '#F7E1E5';
             }
-            if(this.petInfo.adoption_status == '已送養'){
-                this.isAdopted = true;
-                this.isGived = true;
-                bgc = '#EDFDF9';
-            }
             return bgc;
         },
         isChecked(checkVaccine){
-            if(this.petInfo.vaccine == []){
+            if(this.vaccineArr == []){
                 return false;
             }
-            return this.petInfo.vaccine.includes(checkVaccine);
+            return this.vaccineArr.includes(checkVaccine);
+        },
+        changeType(){
+            if(this.petInfo.type == "狗"){
+                this.petInfo.type = "貓";
+            } else if(this.petInfo.type == "貓"){
+                this.petInfo.type = "狗";
+            }
         },
         changeVaccine(vaccine){
-            const index = this.petInfo.vaccine.indexOf(vaccine);
+            const index = this.vaccineArr.indexOf(vaccine);
 
             if (index !== -1) {
-                this.petInfo.vaccine.splice(index, 1);
+                this.vaccineArr.splice(index, 1);
             } else {
-                this.petInfo.vaccine.push(vaccine);
+                this.vaccineArr.push(vaccine);
             }
-            
-            console.log("new vaccine arr", this.petInfo.vaccine)
+            console.log("new vaccine arr", this.vaccineArr)
         },
         changeLigation(){
             this.petInfo.ligation = !this.petInfo.ligation;
@@ -108,7 +115,29 @@ export default{
             }
             reader.readAsDataURL(fileInput.files[0]);
             console.log("file changed!!")
-        }
+        },
+        createData(){
+            if(this.petInfo.pet_name == null || this.petInfo.pet_name.trim() == ""){
+                alert("請輸入該寵物的名字！")
+                return;
+            }
+
+            this.petInfo.vaccine = this.vaccineArr.join(',')
+            console.log("create pet", this.petInfo)
+
+            axios.post('http://localhost:8080/api/adoption/petInfo/createPetInfo', 
+                {
+                    petInfo: this.petInfo
+                }
+            )
+            .then( response => {
+                console.log(response.data)
+                this.$router.push('/MyPet')
+            })
+            .catch( error => {
+                console.error(error);
+            })
+        },
     },
 }
 </script>
@@ -129,8 +158,7 @@ export default{
                 </div>
             </div>
             <div class="topRight">
-                <i class="fa-solid fa-trash" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>
-                <i class="fa-solid fa-floppy-disk"></i>
+                <i class="fa-solid fa-floppy-disk" @click="createData()"></i>
             </div>
         </div>
         <!-- Modal -->
@@ -173,7 +201,11 @@ export default{
             <!-- 寵物資訊 -->
             <div class="middleRight">
                 <div class="middleRightTop">
-                    <div class="circle" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Bottom popover"></div>
+                    <div :class="{'yellowCard' : this.petInfo.adoption_status == '正常'}, {'redCard' : this.petInfo.adoption_status == '送養中'}, {'greenCard' : this.petInfo.adoption_status == '已送養'}" class="circle" @click="changeType()">
+                        <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path :d="getPath(this.petInfo.type)" fill="white" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Bottom popover"/>
+                        </svg>
+                    </div>
                     <input class="inputTextName" type="text" placeholder="寵物名字" v-model="this.petInfo.pet_name">
                     <div class="isAdopt">
                         <input type="checkbox" id="isAdoptAnimal" v-model="isAdopted">
@@ -237,11 +269,26 @@ export default{
             </div>
         </div>
 
+        <!-- 送養資訊 -->
+        <div v-if="isAdopted" class="middleAdoption">
+            <div class="condition">
+                <div class="conditionTop blockTitle">
+                    <div :class="{'yellowCard' : this.petInfo.adoption_status == '正常'}, {'redCard' : this.petInfo.adoption_status == '送養中'}, {'greenCard' : this.petInfo.adoption_status == '已送養'}" class="circle">
+                        <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path :d="getPath(this.petInfo.type)" fill="white"/>
+                        </svg>
+                    </div>
+                    <h5>認養條件</h5>
+                </div>
+                <textarea class="block blockDescription conditionContent" name="" id="" cols="80" rows="3" v-model="this.petInfo.adoption_conditions"></textarea>
+            </div>
+        </div>
+
         <!-- 寵物照片 -->
         <div class="last">
             <div class="picArea">
                 <!-- 接到資料後改為陣列 -->
-                <ul v-for="item in petWaterfall">
+                <ul v-for="item in this.petWaterfall">
                     <li>
                         <img class="img" :src="item" alt="">
                     </li>
@@ -437,6 +484,32 @@ $inputBorder: #e2dbca;
                 }
             }
         }
+        .middleAdoption{
+            width: 90%;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .condition{
+                width: 100%;
+                height: 280px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                background-color: #fff;
+                border-radius: 20px;
+                box-shadow: 0 0 2px 2px lightgray;
+                margin-bottom: 30px;
+                padding: 10px 10px 10px 10px;
+                .conditionContent{
+                    width: 85%;
+                    height: 150px;
+                    padding: 10px 10px 10px 10px;
+                    border: 2px solid lightgray;
+                    border-radius: 10px;
+                    margin-bottom: 10px;
+                }
+            }
         .last{
             width: 90%;
             min-height: 400px;
@@ -599,6 +672,21 @@ $inputBorder: #e2dbca;
                 margin-right: 5px;
             }
         }
+    }
+}
+
+.circle{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    svg{
+        width: 50px;
+        height: 45px;
+        pointer-events: none;
     }
 }
 

@@ -1,4 +1,6 @@
 <script>
+import axios from 'axios'
+
 export default{
     data(){
         return{
@@ -116,11 +118,30 @@ export default{
             let vaccineArr = this.petInfo.vaccine.split(',').map(vaccine => vaccine.trim());
             return vaccineArr.includes(checkVaccine);
         },
+        deleteData(){
+            axios.post('http://localhost:8080/api/adoption/petInfo/deletePetInfo', 
+                {
+                    "userId": this.petInfo.user_id,
+                    "petId": this.petInfo.pet_id
+                }
+            )
+            .then( response => {
+                console.log(response.data)
+            })
+            .catch( error => {
+                console.error(error);
+            })
+
+            this.$router.push('/MyPet')
+        },
         emitGo(){
             let objInfo = Object.assign({}, {userInfo: this.userInfo}, {petInfo: this.petInfo})
             console.log("emit from pet detail", objInfo)
             this.$emit("userPetInfo", objInfo);
             this.$router.push('/PetDetailModify')
+        },
+        goTo(x){
+            this.$router.push(x)
         }
     },
 }
@@ -161,7 +182,7 @@ export default{
                                 <i class="fa-solid fa-chevron-right" style="color: white;"></i>
                                 <p style="color: white;">再想一下</p>
                             </button>
-                            <button class="btn btn-specialRed modal-btn">
+                            <button class="btn btn-specialRed modal-btn" data-bs-dismiss="modal" aria-label="Close" @click="deleteData()">
                                 <i class="fa-solid fa-xmark" style="color: white;"></i>
                                 <p style="color: white;">刪除資料</p>
                             </button>
@@ -182,8 +203,8 @@ export default{
             <!-- 寵物資訊 -->
             <div class="middleRight">
                 <div class="middleRightTop">
-                    <div :class="{'yellowCard' : this.petInfo.adoption_status == '正常'}, {'redCard' : this.petInfo.adoption_status == '送養中'}, {'greenCard' : this.petInfo.adoption_status == '已送養'}" class="middleRightTopCircle">
-                        <svg viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <div :class="{'yellowCard' : this.petInfo.adoption_status == '正常'}, {'redCard' : this.petInfo.adoption_status == '送養中'}, {'greenCard' : this.petInfo.adoption_status == '已送養'}" class="circle">
+                        <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path :d="getPath(this.petInfo.type)" fill="white"/>
                         </svg>
                     </div>
@@ -246,7 +267,11 @@ export default{
         <div v-if="isAdopted" class="middleAdoption">
             <div class="condition">
                 <div class="conditionTop blockTitle">
-                    <div class="circle"></div>
+                    <div :class="{'yellowCard' : this.petInfo.adoption_status == '正常'}, {'redCard' : this.petInfo.adoption_status == '送養中'}, {'greenCard' : this.petInfo.adoption_status == '已送養'}" class="circle">
+                        <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path :d="getPath(this.petInfo.type)" fill="white"/>
+                        </svg>
+                    </div>
                     <h5>認養條件</h5>
                 </div>
                 <div class="conditionContent">
@@ -255,7 +280,11 @@ export default{
             </div>
             <div class="adopter">
                 <div class="adopterTop blockTitle">
-                    <div class="circle"></div>
+                    <div :class="{'yellowCard' : this.petInfo.adoption_status == '正常'}, {'redCard' : this.petInfo.adoption_status == '送養中'}, {'greenCard' : this.petInfo.adoption_status == '已送養'}" class="circle">
+                        <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path :d="getPath(this.petInfo.type)" fill="white"/>
+                        </svg>
+                    </div>
                     <h5>申請認養</h5>
                 </div>
                 <!-- v-for -->
@@ -358,7 +387,13 @@ export default{
             </div>
         </div>
 
-        <!-- <div class="clear_fix"></div> -->
+        <!-- btn -->
+        <div class="btnArea">
+            <button class="btn btn-big btn-specialBlue" @click="goTo('/MyPet')">
+                <i class="fa-solid fa-right-to-bracket" style="color: white"></i>
+                <p style="color: white;">回到列表</p>
+            </button>
+        </div>
     </div>
 </div>
 </template>
@@ -442,11 +477,6 @@ export default{
                     display: flex;
                     align-items: center;
                     margin: 10px 0px 10px 0px;
-                    .middleRightTopCircle{
-                        width: 50px;
-                        height: 50px;
-                        border-radius: 50%;
-                    }
                 }
                 .middleRightContent{
                     width: 85%;
@@ -633,6 +663,18 @@ export default{
                 }
             }
         }
+        .btnArea{
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .btn{
+                i{
+                    margin-right: 10px;
+                }
+            }
+        }
     }
 }
 
@@ -642,6 +684,20 @@ export default{
     border: 2px solid lightgray;
     border-radius: 10px;
     margin: 10px 0px 10px 0px;
+}
+
+.circle{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    svg{
+        width: 50px;
+        height: 45px;
+    }
 }
 
 

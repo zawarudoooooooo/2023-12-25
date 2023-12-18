@@ -1,5 +1,11 @@
 <script>
 import ProfileDashBoard from '../../components/profiledashboard.vue';
+// pinia
+import { mapState, mapActions } from 'pinia';
+import indexState from '../../stores/indexState';
+// axios
+import axios from 'axios';
+
 export default{
     data(){
         return{
@@ -121,12 +127,37 @@ export default{
                     location: "",
                 },
             ],
+            // 待接到user資訊
+            userId: 8,
         }
     },
     components: {
         ProfileDashBoard
     },
+    mounted(){
+        this.getData()
+    },
+    computed:{
+        // ...mapState('indexState', ["res"])
+    },
     methods: {
+        // ...mapActions('indexState', ["getPets"]),
+        getData(){
+            this.pets = [];
+
+            axios.get('http://localhost:8080/api/adoption/petInfo/getPetInfo', {
+                params: {
+                    "userId": this.userId
+                }
+            })
+            .then( response => {
+                console.log(response.data)
+                this.pets = response.data.petInfoList
+            })
+            .catch( error => {
+                console.error(error);
+            })
+        },
         getPath(type){
             if(type == "狗"){
                 return this.dog;

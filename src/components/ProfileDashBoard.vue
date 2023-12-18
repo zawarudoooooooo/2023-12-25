@@ -48,7 +48,7 @@ export default {
     width: 100%;
     height: auto;
     background-color: white;
-    border-radius: 15px;
+    border-radius: 20px;
     color: #978989;
     font-size: 16pt;
     box-shadow: 0 0 3px 2px lightgray;

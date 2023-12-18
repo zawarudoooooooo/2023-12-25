@@ -184,8 +184,8 @@ export default{
         <div class="showCardArea" >
             <div class="showCard" v-for="(item, index) in pets" @click="emitGo(item)">
                 <div class="cardTop">
-                    <div class="cardTopSvg" :class="{'yellowCard' : item.adoption_status == '正常'}, {'redCard' : item.adoption_status == '送養中'}, {'greenCard' : item.adoption_status == '已送養'}">
-                        <svg class="svg" width="155" height="142" viewBox="0 0 155 142" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <div :class="{'yellowCard' : item.adoption_status == '正常'}, {'redCard' : item.adoption_status == '送養中'}, {'greenCard' : item.adoption_status == '已送養'}" class="circle">
+                        <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path :d="getPath(item.type)" fill="white"/>
                         </svg>
                     </div>
@@ -318,6 +318,20 @@ export default{
                 }
             }
         }
+    }
+}
+
+.circle{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    svg{
+        width: 50px;
+        height: 45px;
     }
 }
 

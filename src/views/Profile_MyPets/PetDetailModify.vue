@@ -1,4 +1,6 @@
 <script>
+import axios from 'axios'
+
 export default{
     data(){
         return{
@@ -66,11 +68,12 @@ export default{
         "userPetInfo"
     ],
     mounted(){
+        // 接emit回來使用
         this.userPet = this.userPetInfo;
         console.log("user and pet info", this.userPet)
 
         this.vaccineArr = this.userPet.petInfo.vaccine.split(',').map(vaccine => vaccine.trim());
-        console.log("vaccine arr", this.vaccineArr)
+        // console.log("vaccine arr", this.vaccineArr)
 
         if(this.userPet.petInfo.adoption_status == "正常"){
             this.isAdopted = false;
@@ -118,6 +121,13 @@ export default{
             }
             return this.vaccineArr.includes(checkVaccine);
         },
+        changeType(){
+            if(this.userPetInfo.petInfo.type == "狗"){
+                this.userPetInfo.petInfo.type = "貓";
+            } else if(this.userPetInfo.petInfo.type == "貓"){
+                this.userPetInfo.petInfo.type = "狗";
+            }
+        },
         changeVaccine(vaccine){
             const index = this.vaccineArr.indexOf(vaccine);
 
@@ -141,6 +151,43 @@ export default{
             }
             reader.readAsDataURL(fileInput.files[0]);
             console.log("file changed!!")
+        },
+        updateData(){
+
+            if(this.userPet.petInfo.pet_name == null || this.userPet.petInfo.pet_name.trim() == ""){
+                alert("請輸入該寵物的名字！")
+                return;
+            }
+
+            axios.post('http://localhost:8080/api/adoption/petInfo/updatePetInfo', 
+                {
+                    "petInfo": this.userPet.petInfo
+                }
+            )
+            .then( response => {
+                console.log(response.data)
+            })
+            .catch( error => {
+                console.error(error);
+            })
+
+            this.$router.go(-1);
+        },
+        deleteData(){
+            axios.post('http://localhost:8080/api/adoption/petInfo/deletePetInfo', 
+                {
+                    "userId": this.userPet.petInfo.user_id,
+                    "petId": this.userPet.petInfo.pet_id
+                }
+            )
+            .then( response => {
+                console.log(response.data)
+            })
+            .catch( error => {
+                console.error(error);
+            })
+
+            this.$router.push('/MyPet')
         }
     },
 }
@@ -163,7 +210,7 @@ export default{
             </div>
             <div class="topRight">
                 <i class="fa-solid fa-trash" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>
-                <i class="fa-solid fa-floppy-disk"></i>
+                <i class="fa-solid fa-floppy-disk" @click="updateData()"></i>
             </div>
         </div>
         <!-- Modal -->
@@ -181,7 +228,7 @@ export default{
                                 <i class="fa-solid fa-chevron-right" style="color: white;"></i>
                                 <p style="color: white;">再想一下</p>
                             </button>
-                            <button class="btn btn-specialRed modal-btn">
+                            <button class="btn btn-specialRed modal-btn" data-bs-dismiss="modal" aria-label="Close" @click="deleteData()">
                                 <i class="fa-solid fa-xmark" style="color: white;"></i>
                                 <p style="color: white;">刪除資料</p>
                             </button>
@@ -206,7 +253,11 @@ export default{
             <!-- 寵物資訊 -->
             <div class="middleRight">
                 <div class="middleRightTop">
-                    <div class="circle"></div>
+                    <div :class="{'yellowCard' : this.userPetInfo.petInfo.adoption_status == '正常'}, {'redCard' : this.userPetInfo.petInfo.adoption_status == '送養中'}, {'greenCard' : this.userPetInfo.petInfo.adoption_status == '已送養'}" class="circle" @click="changeType()">
+                        <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path :d="getPath(this.userPetInfo.petInfo.type)" fill="white"/>
+                        </svg>
+                    </div>
                     <input class="inputTextName" type="text" :placeholder="this.userPetInfo.petInfo.pet_name" v-model="this.userPet.petInfo.pet_name">
                     <div class="isAdopt">
                         <input type="checkbox" id="isAdoptAnimal" v-model="isAdopted">
@@ -267,6 +318,21 @@ export default{
                         <textarea class="block blockDescription" name="" id="" cols="80" rows="3" :placeholder="this.userPetInfo.petInfo.pet_profile" v-model="this.userPet.petInfo.pet_profile"></textarea>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- 送養資訊 -->
+        <div v-if="isAdopted" class="middleAdoption">
+            <div class="condition">
+                <div class="conditionTop blockTitle">
+                    <div :class="{'yellowCard' : this.userPetInfo.petInfo.adoption_status == '正常'}, {'redCard' : this.userPetInfo.petInfo.adoption_status == '送養中'}, {'greenCard' : this.userPetInfo.petInfo.adoption_status == '已送養'}" class="circle">
+                        <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path :d="getPath(this.userPetInfo.petInfo.type)" fill="white"/>
+                        </svg>
+                    </div>
+                    <h5>認養條件</h5>
+                </div>
+                <textarea class="block blockDescription conditionContent" name="" id="" cols="80" rows="3" :placeholder="this.userPetInfo.petInfo.adoption_conditions" v-model="this.userPet.petInfo.adoption_conditions"></textarea>
             </div>
         </div>
 
@@ -470,6 +536,39 @@ $inputBorder: #e2dbca;
                 }
             }
         }
+        .middleAdoption{
+            width: 90%;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .condition{
+                width: 100%;
+                height: 280px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                background-color: #fff;
+                border-radius: 20px;
+                box-shadow: 0 0 2px 2px lightgray;
+                margin-bottom: 30px;
+                padding: 10px 10px 10px 10px;
+                .conditionContent{
+                    width: 85%;
+                    height: 150px;
+                    padding: 10px 10px 10px 10px;
+                    border: 2px solid lightgray;
+                    border-radius: 10px;
+                    margin-bottom: 10px;
+                }
+            }
+            .blockTitle{
+                width: 90%;
+                height: 80px;
+                display: flex;
+                align-items: center;
+            }
+        }
         .last{
             width: 90%;
             min-height: 400px;
@@ -513,6 +612,20 @@ $inputBorder: #e2dbca;
     margin: 10px 0px 10px 0px;
 }
 
+
+.circle{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    svg{
+        width: 50px;
+        height: 45px;
+    }
+}
 
 // modal
 .modal-content{
