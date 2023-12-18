@@ -77,8 +77,8 @@ export default {
 
             <!-- 使用者簡介 -->
             <div class="userinfo">
-                個人簡介
-                <p>{{ foundUser.profile ? foundUser.profile : '未填寫' }}</p>
+                <p style="text-align: center;" >個人簡介</p>
+                <p v-html="foundUser.profile ? foundUser.profile.replace(/\n/g, '<br>') : '未填寫'"></p>
             </div>
             <!-- 使用者寵物專區 -->
             <div class="mypetArea">
@@ -144,7 +144,7 @@ export default {
 
         //使用者名稱和ID
         .usernameAndid {
-            width: 55vw;
+            width: 65vw;
             height: 15vh;
             background-color: white;
             border-radius: 10px;
@@ -154,12 +154,16 @@ export default {
             align-items: center;
             font-size: 26pt;
             margin-top: 10vmin;
-            margin-left: 28vmin;
+            margin-left: 12vmin;
 
             p {
                 color: #978989;
                 font-weight: bold;
                 margin: 0;
+            }
+
+            img{
+                margin-left: 115px;
             }
 
             i {
@@ -171,6 +175,7 @@ export default {
 
         //使用者簡介 
         .userinfo {
+            text-align: left;
             width: 65vw;
             height: 30vh;
             background-color: white;

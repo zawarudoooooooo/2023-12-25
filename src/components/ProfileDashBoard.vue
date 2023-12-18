@@ -25,6 +25,10 @@ export default {
             <p>Notification</p>
         </div>
         <div class="setting line">
+            <i class="fa-solid fa-user"></i>
+            <p @click="goTo('/Profile')">Profile</p>
+        </div>
+        <div class="setting line">
             <i class="fa-solid fa-user-gear"></i>
             <p @click="goTo('/ProfileSetting')">Settings</p>
         </div>

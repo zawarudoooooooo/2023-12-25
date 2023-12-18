@@ -1,4 +1,5 @@
 <script>
+import Swal from 'sweetalert2'
 export default {
     data() {
         return {
@@ -47,9 +48,24 @@ export default {
             const enteredEmail = this.email;
             const enteredPassword = this.password;
 
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!enteredEmail) {
+                Swal.fire('請輸入信箱');
+                return; // 停止函數執行
+            } else if (!emailPattern.test(enteredEmail)) {
+                Swal.fire('請輸入有效的信箱地址');
+                return; // 停止函數執行
+            }
+
+            if (!enteredPassword) {
+                Swal.fire('請輸入密碼');
+                return; // 停止函數執行
+            }
+
             const url = `http://localhost:8080/api/adoption/userInfo/login?email=${enteredEmail}&password=${enteredPassword}`;
 
-            
+
             fetch(url, {
                 method: 'GET',
                 headers: {
@@ -59,42 +75,43 @@ export default {
                 .then(response => response.text())
                 .then(data => {
                     if (data === '找不到信箱') {
-                        console.log('找不到信箱，登入失敗');
-                        alert('找不到信箱，登入失敗');
+                        Swal.fire('找不到信箱，登入失敗');
                     } else if (data === '密碼錯誤，登入失敗') {
-                        console.log('密碼錯誤，登入失敗');
-                        alert('密碼錯誤，登入失敗');
+                        Swal.fire('密碼錯誤，登入失敗');
                     } else if (data === '成功登入') {
-                        console.log('成功登入');
-                        alert('成功登入');
+                        Swal.fire({
+                            title: "成功登入!",
+                            icon: "success"
+                        }).then((result) => {
+                            if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
 
-                        const foundUser = this.userInfoList.find(user => user.email === enteredEmail);
-                        if (foundUser) {
-                            sessionStorage.setItem('foundUserInfo', JSON.stringify({
-                                userId: foundUser.userId,
-                                permission: foundUser.permission,
-                            }));
-                        }
+                                const foundUser = this.userInfoList.find(user => user.email === enteredEmail);
+                                if (foundUser) {
+                                    sessionStorage.setItem('foundUserInfo', JSON.stringify({
+                                        userId: foundUser.userId,
+                                        permission: foundUser.permission,
+                                    }));
+                                }
 
-                        // 定義你的密碼規則（英文大小寫、8位字符的規則）
-                        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+                                // 定義你的密碼規則（英文大小寫、8位字符的規則）
+                                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
-                        if (!passwordRegex.test(enteredPassword)) {
-                            // 如果密碼不符合規則，導向強制修改密碼的頁面
-                            this.$router.push('/ForceChangePassword');
+                                if (!passwordRegex.test(enteredPassword)) {
+                                    // 如果密碼不符合規則，導向強制修改密碼的頁面
+                                    this.$router.push('/ForceChangePassword');
 
-                        }else{
-                            this.$router.push('/Profile');
-                        }
-
+                                } else {
+                                    this.$router.push('/Profile');
+                                }
+                            }
+                        });
                     } else {
-                        console.log('登录失败，账户或密码错误');
-                        alert('登录失败，账户或密码错误');
+                        Swal.fire('登入失敗，帳號或密碼錯誤');
                     }
                 })
                 .catch(error => {
-                    console.error('登录过程中出现错误:', error);
-                    alert('登录过程中出现错误');
+                    console.error('登入過程中出現錯誤:', error);
+                    Swal.fire('登入過程中出現錯誤');
                 });
         }
 
@@ -124,7 +141,7 @@ export default {
                 <button type="button" @click="login()">登入</button>
             </div>
             <div class="buttonArea">
-                <h3 @click="goForgetPassword">Forget Password ?</h3>
+                <h3 @click="goForgetPassword" style="margin-right: 155px;">Forget Password ?</h3>
             </div>
         </div>
     </div>
@@ -180,11 +197,14 @@ export default {
             h3 {
                 color: #978989;
                 margin-right: 10%;
+                cursor: pointer;
+
             }
 
             button {
+                margin-left: 70px;
                 width: 10vmin;
-                height: 4vmin;
+                height: 6vmin;
                 border-radius: 10px;
                 border-style: none;
                 background-color: #E9D2A6;

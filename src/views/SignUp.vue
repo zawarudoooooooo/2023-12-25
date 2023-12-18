@@ -1,4 +1,5 @@
 <script>
+import Swal from 'sweetalert2'
 export default {
     data() {
         return {
@@ -20,6 +21,50 @@ export default {
 
         //發送認證碼
         sendAuthenticationCode() {
+            if (!this.userName) {
+                Swal.fire("請輸入名字");
+                return; // 停止函數執行
+            }
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!this.email) {
+                Swal.fire('請輸入信箱');
+                return; // 停止函數執行
+            } else if (!emailPattern.test(this.email)) {
+                Swal.fire('請輸入有效的信箱地址');
+                return; // 停止函數執行
+            }
+            // 定義你的密碼規則（英文大小寫、8位字符的規則）
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
+            if (!this.password) {
+                Swal.fire("請輸入密碼");
+                return; // 停止函數執行
+            } else if (!passwordRegex.test(this.password)) {
+                Swal.fire("請輸入正確格式的密碼");
+                return; // 停止函數執行
+            }
+
+            if (!this.birth) {
+                Swal.fire("請輸入生日");
+                return; // 停止函數執行
+            }
+
+            // 獲取今天的日期
+            const today = new Date();
+
+            // 生日的日期對象
+            const birthDate = new Date(this.birth);
+
+            // 計算年齡
+            const age = today.getFullYear() - birthDate.getFullYear();
+
+            // 檢查年齡是否小於18歲
+            if (age < 18) {
+                Swal.fire("未成年");
+                return; // 停止函數執行
+            }
+
             const newuserInfo = {
                 userName: this.userName,
                 email: this.email,
@@ -46,11 +91,60 @@ export default {
                     console.log(data);
                 })
                 .catch(error => console.error('Error:', error));
-            alert("已寄送認證信");
+            Swal.fire("已寄送認證信");
         },
 
         //註冊邏輯
         signup() {
+            if (!this.userName) {
+                Swal.fire("請輸入名字");
+                return; // 停止函數執行
+            }
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!this.email) {
+                Swal.fire('請輸入信箱');
+                return; // 停止函數執行
+            } else if (!emailPattern.test(this.email)) {
+                Swal.fire('請輸入有效的信箱地址');
+                return; // 停止函數執行
+            }
+            // 定義你的密碼規則（英文大小寫、8位字符的規則）
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
+            if (!this.password) {
+                Swal.fire("請輸入密碼");
+                return; // 停止函數執行
+            } else if (!passwordRegex.test(this.password)) {
+                Swal.fire("請輸入正確格式的密碼");
+                return; // 停止函數執行
+            }
+
+            if (!this.birth) {
+                Swal.fire("請輸入生日");
+                return; // 停止函數執行
+            }
+
+            // 獲取今天的日期
+            const today = new Date();
+
+            // 生日的日期對象
+            const birthDate = new Date(this.birth);
+
+            // 計算年齡
+            const age = today.getFullYear() - birthDate.getFullYear();
+
+            // 檢查年齡是否小於18歲
+            if (age < 18) {
+                Swal.fire("未成年");
+                return; // 停止函數執行
+            }
+
+            if (!this.authenticationCode) {
+                Swal.fire("請輸入驗證碼");
+                return; // 停止函數執行
+            }
+
             const newuserInfo = {
                 userName: this.userName,
                 email: this.email,
@@ -79,8 +173,16 @@ export default {
                 })
                 .catch(error => console.error('Error:', error));
 
-            alert("註冊成功，帳號已成功開通");
-            this.$router.push('/login')
+            Swal.fire({
+                title: "註冊成功，帳號已成功開通",
+                icon: "success"
+            }).then((result) => {
+                if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                    this.$router.push('/Login');
+                }
+            });
+
+
         },
 
 
@@ -105,7 +207,7 @@ export default {
                 <input type="email" id="email" v-model="this.email">
                 <!-- 密碼 -->
                 <h3>Password</h3>
-                    <input type="password" v-model="this.password" placeholder="含英文大小寫8碼以上">
+                <input type="password" v-model="this.password" placeholder="含英文大小寫8碼以上">
                 <!-- 生日 -->
                 <h3>Birthday</h3>
                 <input type="date" v-model="this.birth">
@@ -128,7 +230,7 @@ export default {
     height: 75vh;
     margin-top: 15vmin;
 
-    //註冊
+    // 註冊
     .signupArea {
         width: 40vw;
         height: 70vh;
@@ -140,10 +242,10 @@ export default {
 
         h1 {
             text-align: center;
-            color: #978989;
+            color: #978989; // 修改標題顏色
         }
 
-        //輸入
+        // 輸入
         .inputArea {
             width: 26vw;
             height: 45vh;
@@ -154,7 +256,7 @@ export default {
                 margin-bottom: 0;
             }
 
-            //ID輸入
+            // ID輸入
             .idinput {
                 width: 25vw;
                 display: flex;
@@ -171,7 +273,7 @@ export default {
                     width: 21vw;
                     height: 5vh;
                     border-radius: 10px;
-                    background-color: #D4D2D2;
+                    background-color: #D4D2D2; // 修改輸入框背景色
                     border-style: none;
                     outline: none;
                     padding-left: 2vmin;
@@ -182,19 +284,19 @@ export default {
                 width: 25vw;
                 height: 5vh;
                 border-radius: 10px;
-                background-color: #D4D2D2;
+                background-color: #D4D2D2; // 修改輸入框背景色
                 border-style: none;
                 outline: none;
                 padding-left: 2vmin;
             }
 
             button {
-                margin-left: 45px;
+                margin-left: 185px;
                 width: 15vmin;
                 height: 5vmin;
                 border-radius: 10px;
                 border-style: none;
-                background-color: #B2D2CD;
+                background-color: #B2D2CD; // 修改按鈕背景色
                 color: white;
                 font-size: 13pt;
                 font-weight: bold;
@@ -209,15 +311,19 @@ export default {
 
             h3 {
                 color: #978989;
-                margin-right: 10%;
+                margin-right: 21%;
+                cursor: pointer;
+
             }
 
             button {
+                margin-left: 70px;
+                margin-right: 10px;
                 width: 13vmin;
                 height: 4vmin;
                 border-radius: 10px;
                 border-style: none;
-                background-color: #B2D2CD;
+                background-color: #B2D2CD; // 修改按鈕背景色
                 color: white;
                 font-size: 13pt;
                 font-weight: bold;
@@ -226,3 +332,4 @@ export default {
     }
 }
 </style>
+
