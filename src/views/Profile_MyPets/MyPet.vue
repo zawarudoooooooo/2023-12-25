@@ -128,9 +128,12 @@ export default{
                 },
             ],
             // 待接到user資訊
-            userId: 8,
+            userId: 55,
         }
     },
+    props: [
+        "userInfo"
+    ],
     components: {
         ProfileDashBoard
     },
@@ -143,7 +146,9 @@ export default{
     methods: {
         // ...mapActions('indexState', ["getPets"]),
         getData(){
+            this.userId = this.userInfo.userId;
             this.pets = [];
+            console.log("emit id", this.userId)
 
             axios.get('http://localhost:8080/api/adoption/petInfo/getPetInfo', {
                 params: {
@@ -171,8 +176,10 @@ export default{
             this.$emit("petInfo", item);
             this.$router.push('/PetDetail');
         },
-        goTo(x){
-            this.$router.push(x);
+        emitGoUser(){
+            console.log("emit go user", this.userInfo)
+            this.$emit("userInfo", this.userInfo)
+            this.$router.push('/PetCreate')
         }
     }
 }
@@ -205,7 +212,7 @@ export default{
             </div>
 
             <!-- btn -->
-            <button class="btn btn-big" @click="goTo('/PetCreate')">+ add pet</button>
+            <button class="btn btn-big" @click="emitGoUser()">+ add pet</button>
         </div>
 
         <!-- pet area -->
