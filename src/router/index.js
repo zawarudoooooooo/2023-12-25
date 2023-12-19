@@ -120,6 +120,13 @@ const router = createRouter({
       name: 'mapSearch',
       component: () => import('../views/Mebice/mapSearch.vue'),
     },
+
+    //科普
+    {
+      path: '/popScience',
+      name: 'popScience',
+      component: () => import('../views/popScience.vue'),
+    },
   ]
 })
 
