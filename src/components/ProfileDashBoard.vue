@@ -39,7 +39,7 @@ export default {
         </div>
         <div class="article line">
             <i class="fa-solid fa-pencil"></i>
-            <p>My Articles</p>
+            <p @click="goTo('/MyArticle')">My Articles</p>
         </div>
         <div class="adopt line">
             <i class="fa-solid fa-user-tie"></i>
@@ -59,8 +59,7 @@ export default {
 
 <style lang="scss" scoped>
 .dashboardArea {
-    width: 100%;
-    min-width: 175px;
+    width: 160px;
     height: auto;
     background-color: white;
     border-radius: 20px;
@@ -68,6 +67,8 @@ export default {
     font-size: 16pt;
     box-shadow: 0 0 3px 2px lightgray;
     padding: 20px;
+    padding-left: 30px;
+
     i {
         margin-bottom: 10px;
         margin-right: 1vmin

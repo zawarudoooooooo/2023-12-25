@@ -128,10 +128,16 @@ const router = createRouter({
     
     //這是Mebice的
     {
-      path: '/mapSearch',
-      name: 'mapSearch',
-      component: () => import('../views/Mebice/mapSearch.vue'),
+      path: '/MapSearch',
+      name: 'MapSearch',
+      component: () => import('../views/Mebice/MapSearch.vue'),
     },
+    {
+      path: '/MyArticle',
+      name: 'MyArticle',
+      component: () => import('../views/Mebice/MyArticle.vue'),
+    },
+
   ]
 })
 
