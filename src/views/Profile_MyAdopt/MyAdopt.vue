@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios';
 import ProfileDashBoard from '../../components/profiledashboard.vue';
 export default{
     data(){
@@ -141,7 +142,25 @@ export default{
     components: {
         ProfileDashBoard
     },
+    mounted(){
+        this.userInfo = JSON.parse(sessionStorage.getItem('foundUserInfo'));
+        this.getMyAdoptList()
+    },
     methods: {
+        getMyAdoptList(){
+            axios.get('http://localhost:8080/api/adoption/petInfo/getAdoptPetList', {
+                params: {
+                    "userId": this.userInfo.userId
+                }
+            })
+            .then(response => {
+                console.log("response adopted pet", response.data)
+                this.pets = response.data.petInfoList
+            })
+            .catch(error => {
+                console.error(error)
+            })
+        },
         checkAdopted(adopter){
             if(adopter == this.userInfo.account){
                 return true;
@@ -159,6 +178,7 @@ export default{
         emitGo(item){
             console.log(item)
             this.$emit("petInfo", item);
+            sessionStorage.setItem("adopt pet detail", JSON.stringify(item))
             this.$router.push('/AdoptPetDetail');
         }
     }
@@ -182,14 +202,14 @@ export default{
 
         <!-- v-for the card -->
         <div class="showCardArea" >
-            <div class="showCard" v-for="(item, index) in pets" @click="emitGo(item)">
+            <div class="showCard" v-for="(item, index) in pets">
                 <div class="cardTop">
                     <div :class="{'yellowCard' : item.adoption_status == '正常'}, {'redCard' : item.adoption_status == '送養中'}, {'greenCard' : item.adoption_status == '已送養'}" class="circle">
                         <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path :d="getPath(item.type)" fill="white"/>
                         </svg>
                     </div>
-                    <h4 style="color: #978989;">{{ item.pet_name }}</h4>
+                    <h4 class="petNameClick" style="color: #978989;" @click="emitGo(item)">{{ item.pet_name }}</h4>
                 </div>
                 <div class="cardMiddle">
                     <div class="cardMiddlePhoto"></div>
@@ -198,21 +218,101 @@ export default{
                     </div>
                 </div>
                 <div class="cardLast">
-                    <button class="btn btn-specialRed modal-btn">
+                    <!-- red btn -->
+                    <!-- cancel -->
+                    <button v-if="checkAdopted(item.final_adopter)" class="btn btn-specialRed modal-btn" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                        <i class="fa-solid fa-xmark" style="color: white"></i>
+                        <p style="color: white;">取消領養</p>
+                    </button>
+                    <!-- quit -->
+                    <button v-else class="btn btn-specialRed modal-btn" data-bs-toggle="modal" data-bs-target="#quitModal">
                         <i class="fa-solid fa-xmark" style="color: white;"></i>
                         <p style="color: white;">取消申請</p>
                     </button>
-                    <button v-if="checkAdopted(item.final_adopter)" class="btn btn-green modal-btn">
+                    
+                    <!-- green btn -->
+                    <!-- confirm -->
+                    <button v-if="checkAdopted(item.final_adopter)" class="btn btn-green modal-btn" data-bs-toggle="modal" data-bs-target="#confirmModal">
                         <i class="fa-solid fa-check" style="color: white"></i>
                         <p style="color: white;">確定領養</p>
                     </button>
-                    <button v-if="!checkAdopted(item.final_adopter)" class="btn btn-specialBlue modal-btn">
+                    <!-- blue btn -->
+                    <!-- chat -->
+                    <button v-else class="btn btn-specialBlue modal-btn">
                         <i class="fa-solid fa-comments" style="color: white;"></i>
                         <p style="color: white;">聊聊了解</p>
                     </button>
                 </div>
+                <!-- quit Modal -->
+                <div  class="modal fade" id="quitModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal()"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h4>確定要取消認養 {{ item.pet_name  }} 的申請嗎？</h4>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close" >
+                                    <i class="fa-solid fa-chevron-right" style="color: white;"></i>
+                                    <p style="color: white;">再想一下</p>
+                                </button>
+                                <button class="btn btn-specialRed modal-btn">
+                                    <i class="fa-solid fa-xmark" style="color: white;"></i>
+                                    <p style="color: white;">取消申請</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- confirm Modal -->
+                <div  class="modal fade" id="confirmModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal()"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h4>確定要接受 {{ item.pet_name  }} 的送養嗎？</h4>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close" >
+                                    <i class="fa-solid fa-chevron-right" style="color: white;"></i>
+                                    <p style="color: white;">再想一下</p>
+                                </button>
+                                <button v-if="!this.isGived" class="btn btn-green modal-btn">
+                                    <i class="fa-solid fa-check" style="color: white"></i>
+                                    <p style="color: white;">接受送養</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- cancel Modal -->
+                <div  class="modal fade" id="cancelModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal()"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h4>確定要放棄 {{ item.pet_name  }} 的領養嗎？</h4>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close" >
+                                    <i class="fa-solid fa-chevron-right" style="color: white;"></i>
+                                    <p style="color: white;">再想一下</p>
+                                </button>
+                                <button class="btn btn-specialRed modal-btn">
+                                    <i class="fa-solid fa-xmark" style="color: white;"></i>
+                                    <p style="color: white;">放棄領養</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
         </div>
     </div>
 </div>
@@ -268,6 +368,13 @@ export default{
                     .svg{
                         width: 50px;
                         height: 45px;
+                    }
+                }
+                .petNameClick{
+                    &:hover{
+                        color: $primary;
+                        text-decoration: underline;
+                        transition: 0.3s;
                     }
                 }
             }
@@ -332,6 +439,52 @@ export default{
     svg{
         width: 50px;
         height: 45px;
+    }
+}
+
+// modal
+.modal-content{
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 10px 10px 10px;
+    .modal-header{
+        width: 90%;
+        display: flex;
+        justify-content: end;
+    }
+    .modal-body{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #978989;
+    }
+    .modal-footer{
+        width: 90%;
+        display: flex;
+        justify-content: center;;
+        align-items: center;
+        .btn-green{
+            background-color: $adoption;
+            &:hover{
+                background-color: $adoptionBgc;
+                transition: 0.3s;
+            }
+        }
+        .modal-btn{
+            width: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: 12pt;
+            margin: 5px;
+            i{
+                margin-right: 5px;
+            }
+        }
     }
 }
 
