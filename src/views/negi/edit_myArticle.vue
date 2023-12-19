@@ -1,3 +1,19 @@
+<script>
+import ArticleDashBoard from '../../components/ArticleDashBoard.vue';
+export default {
+    data(){
+        return{
+            
+        }
+    },
+    components:{
+        ArticleDashBoard
+    },
+
+}
+</script>
+
+
 <!-- 發文的人編輯自己發的文章 -->
 <template>
     <div class="all">
@@ -5,29 +21,13 @@
         <div class="out_contain">
             <div class="in_contain">
                 <div class="dashboard">
-                    <div class="dashboard_area">
-                        <div class="dashboard_text">
-                            論壇首頁<br />科普版<br />閒聊版<br />MY ARTICLE
-                        </div>
-                        <button class="dashboard_btn">
-                                <i class="fa-solid fa-plus plus_icon"></i>
-                            <div class="dashboard_btn_text">我要發文</div>
-                        </button>
-                    </div>
+                    <ArticleDashBoard />
                 </div>
                 <div class="out_article_area">
                     <div class="in_article_area">
                         <div class="function_icon_area">
-                            <!-- <img loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/0ff7096d667a444bfee3e58c74bcb7c887b73fbe23c5ab5d518081b07a882fcf?"
-                                class="img-2" /> -->
-                                <i class="fa-solid fa-right-from-bracket img-2"></i>
-                                <!-- <i class="fa-solid fa-trash-can img-2"></i> -->
-                                <!-- <img loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/92ac77e2db42db1011e0d83c7bedd38c0d20f66a14115177c96e2b0a532073bf?"
-                                class="img-3" /> -->
-                                <i class="fa-solid fa-floppy-disk img-3"></i>
-                                <!-- <i class="fa-solid fa-pen img-3"></i> -->
+                            <i class="fa-solid fa-right-from-bracket img-2"></i>
+                            <i class="fa-solid fa-floppy-disk img-3"></i>
                         </div>
                         <div class="article">
                             <div class="poster_area">
@@ -121,37 +121,25 @@
         </div>
     </div>
 </template>
-  
-  
-  
+
+
+
 <style scoped>
 .all {
-    background-color: #dddfee;
+    width: 100vw;
+    height: auto;
+    padding-top: 3vmin;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-bottom: 5vmin;
     display: flex;
-    padding-top: 6px;
-    flex-direction: column;
-}
-
-.div-2 {
-    box-shadow: 0px 4px 49px 0px rgba(0, 0, 0, 0.28);
-    background-color: #fff;
-    display: flex;
-    min-height: 139px;
-    width: 100%;
-    flex-direction: column;
-}
-
-@media (max-width: 991px) {
-    .div-2 {
-        max-width: 100%;
-    }
+    justify-content: space-between;
+    background-color: #DDDFEE;
 }
 
 .out_contain {
     align-self: center;
-    margin-top: 46px;
     width: 100%;
-    max-width: 1290px;
 }
 
 @media (max-width: 991px) {
@@ -175,11 +163,7 @@
 }
 
 .dashboard {
-    display: flex;
-    flex-direction: column;
-    line-height: normal;
-    width: 20%;
-    margin-left: 0px;
+    width: 13vw;
 }
 
 @media (max-width: 991px) {
@@ -188,72 +172,12 @@
     }
 }
 
-.dashboard_area {
-    border-radius: 37px;
-    box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25);
-    background-color: #fff;
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 auto;
-    padding: 50px 20px 27px;
-}
-
-@media (max-width: 991px) {
-    .dashboard_area {
-        margin-top: 40px;
-    }
-}
-
-.dashboard_text {
-    color: #978989;
-    font: 400 28px Lexend, sans-serif;
-}
-
-.dashboard_btn {
-    border-radius: 35px;
-    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
-    background-color: #6e75a8;
-    align-self: stretch;
-    display: flex;
-    margin-top: 111px;
-    justify-content: center;
-    align-items: center;
-    gap: 11px;
-    padding: 17px 21px;
-}
-
-@media (max-width: 991px) {
-    .dashboard_btn {
-        padding-left: 20px;
-        margin-top: 40px;
-    }
-}
-
-.plus_icon {
-    /* aspect-ratio: 1.03;
-    object-fit: contain;
-    object-position: center;
-    width: 32px;
-    overflow: hidden;
-    max-width: 100%; */
-    font-size: 18pt;
-    color: white;
-}
-
-.dashboard_btn_text {
-    color: #fff;
-    text-align: right;
-    font: 800 31px Lexend, sans-serif;
-}
 
 .out_article_area {
     display: flex;
     flex-direction: column;
     line-height: normal;
     width: 80%;
-    margin-left: 20px;
 }
 
 @media (max-width: 991px) {
@@ -270,8 +194,12 @@
     flex-grow: 1;
     flex-direction: column;
     align-items: end;
-    width: 100%;
+    width: 78vw;
     padding: 45px 0;
+    height: auto;
+    color: #978989;
+    font-size: 14pt;
+    padding: 20px 30px 20px 30px ;
 }
 
 @media (max-width: 991px) {

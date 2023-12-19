@@ -27,11 +27,6 @@ export default {
             <div class="in_contain">
                 <div class="dashboard">
                     <ArticleDashBoard />
-                    <!-- <div class="dashboard_area">
-                        <div class="dashboard_text">
-                            論壇首頁<br />科普版<br />閒聊版<br />MY ARTICLE
-                        </div>
-                    </div> -->
                 </div>
                 <div class="out_article_area">
                     <div class="in_article_area">
@@ -100,6 +95,19 @@ export default {
 </template>
 
 <style scoped>
+
+.all {
+    width: 100vw;
+    height: auto;
+    padding-top: 3vmin;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-bottom: 5vmin;
+    display: flex;
+    justify-content: space-between;
+    background-color: #DDDFEE;
+}
+
 .check_post {
 
     /* position: relative; */
@@ -167,47 +175,9 @@ export default {
     }
 }
 
-.all {
-    background-color: #dddfee;
-    display: flex;
-    padding-top: 3vmin;
-    padding-left: 3rem;
-    padding-right: 3rem;
-    padding-bottom: 5vmin;
-    flex-direction: column;
-}
-
-/* .div-2 {
-    box-shadow: 0px 4px 49px 0px rgba(0, 0, 0, 0.28);
-    background-color: #fff;
-    display: flex;
-    min-height: 139px;
-    width: 100%;
-    flex-direction: column;
-}
-
-@media (max-width: 991px) {
-    .div-2 {
-        max-width: 100%;
-    }
-} */
-
-/* .out_contain {
-    align-self: center;
-    margin-top: 46px;
-    width: 100%;
-    max-width: 1290px;
-} */
-
-@media (max-width: 991px) {
-    .out_contain {
-        max-width: 100%;
-        margin-top: 40px;
-    }
-}
 
 .in_contain {
-    /* gap: 20px; */
+    gap: 20px;
     display: flex;
 }
 
@@ -220,14 +190,7 @@ export default {
 }
 
 .dashboard {
-    /* display: flex;
-    flex-direction: column;
-    line-height: normal;
-    width: 20%;
-    min-width: 185px;
-    max-width: 185px;
-    margin-left: 0px; */
-    height: 33%;
+    height: 13vw;
 }
 
 @media (max-width: 991px) {
@@ -235,29 +198,6 @@ export default {
         width: 100%;
     }
 }
-
-/* .dashboard_area {
-    border-radius: 37px;
-    box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25);
-    background-color: #fff;
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 auto;
-    padding: 50px 20px 27px;
-}
-
-@media (max-width: 991px) {
-    .dashboard_area {
-        margin-top: 40px;
-    }
-}
-
-.dashboard_text {
-    color: #978989;
-    font: 400 28px Lexend, sans-serif;
-} */
 
 .dashboard_btn {
     border-radius: 35px;
@@ -269,7 +209,6 @@ export default {
     justify-content: center;
     align-items: center;
     gap: 11px;
-    /* padding: 17px 21px; */
 }
 
 @media (max-width: 991px) {
@@ -294,8 +233,7 @@ export default {
     display: flex;
     flex-direction: column;
     line-height: normal;
-    /* width: 80%; */
-    margin-left: 60px;
+    width: 80%;
 }
 
 @media (max-width: 991px) {
@@ -314,6 +252,10 @@ export default {
     align-items: end;
     width: 78vw;
     padding: 45px 0;
+    height: auto;
+    color: #978989;
+    font-size: 14pt;
+    padding: 20px 30px 20px 30px ;
 }
 
 @media (max-width: 991px) {
