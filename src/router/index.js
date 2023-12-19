@@ -132,6 +132,14 @@ const router = createRouter({
       name: 'mapSearch',
       component: () => import('../views/Mebice/mapSearch.vue'),
     },
+
+
+    //
+    {
+      path: '/notification',
+      name: 'notification',
+      component: () => import('../views/negi/notification.vue'),
+    },
   ]
 })
 
