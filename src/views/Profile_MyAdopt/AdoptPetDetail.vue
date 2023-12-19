@@ -19,6 +19,21 @@ export default{
                 family_status: "",
                 user_photo: "",
             },
+            petInfo: {
+                user_id: 0,
+                pet_name: "",
+                pet_breed: "",
+                pet_status: "",
+                adoption_status: "正常",
+                adoption_conditions: "",
+                age: "",
+                vaccine: "",
+                pet_profile: "",
+                ligation: false,
+                type: "狗",
+                pet_photo: "",
+                location: "",
+            },
             isAdopted: false,
             isGived: false,
             // 待接到資料之後，由字串轉為陣列
@@ -45,7 +60,7 @@ export default{
         "petInfo"
     ],
     mounted(){
-        console.log("pet info", this.petInfo)
+        this.petInfo = JSON.parse(sessionStorage.getItem('adopt pet detail'));
     },
     computed: {
         checkAdopted(){
@@ -86,6 +101,10 @@ export default{
         closeMoal(){
             this.isShowModal = false;
         },
+        goTo(x){
+            sessionStorage.removeItem('adopt pet detail');
+            this.$router.push(x)
+        }
     }
 }
 </script>
@@ -236,7 +255,13 @@ export default{
             </div>
         </div>
 
-        <!-- <div class="clear_fix"></div> -->
+        <!-- btn -->
+        <div class="btnArea">
+            <button class="btn btn-big btn-specialBlue" @click="goTo('/MyAdopt')">
+                <i class="fa-solid fa-right-to-bracket" style="color: white"></i>
+                <p style="color: white;">回到列表</p>
+            </button>
+        </div>
     </div>
 </div>
 </template>
@@ -501,6 +526,18 @@ export default{
                         object-fit: contain;
                         margin-bottom: 20px;
                     }
+                }
+            }
+        }
+        .btnArea{
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .btn{
+                i{
+                    margin-right: 10px;
                 }
             }
         }

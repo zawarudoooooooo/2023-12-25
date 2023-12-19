@@ -129,6 +129,7 @@ export default{
             }
         },
         changeVaccine(vaccine){
+            console.log(this.vaccineArr)
             const index = this.vaccineArr.indexOf(vaccine);
 
             if (index !== -1) {

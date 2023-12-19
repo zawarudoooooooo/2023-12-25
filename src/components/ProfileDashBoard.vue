@@ -11,6 +11,7 @@ export default {
         },
         logout(){
             sessionStorage.removeItem('foundUserInfo');
+            sessionStorage.removeItem('petInfo');
             alert("成功登出")
             this.$router.push('/Login')
         }
@@ -59,6 +60,7 @@ export default {
 <style lang="scss" scoped>
 .dashboardArea {
     width: 100%;
+    min-width: 175px;
     height: auto;
     background-color: white;
     border-radius: 20px;
