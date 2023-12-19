@@ -75,52 +75,87 @@ export default {
                 <img v-if="foundUserInfo.userPhoto" :src="'../../public/' + foundFileName" alt="" style="border-radius: 50%;" height="100px" width="100px">
                 <div v-if="!foundUserInfo.userPhoto" style="border: 2px solid; height: 100px; width: 100px; border-radius: 50%;">
                 </div>
-                <p>{{ foundUser.account }}</p>
+                <p>@{{ foundUser.account }}</p>
             </div>
 
             <!-- 使用者簡介 -->
             <div class="userinfo">
-                <p style="text-align: center;" >個人簡介</p>
-                <p v-html="foundUser.profile ? foundUser.profile.replace(/\n/g, '<br>') : '未填寫'"></p>
+                <div class="userInfoTop">
+                    <h4 style="text-align: center;" >個人簡介</h4>
+                </div>
+                <div class="userInfoContent">
+                    <p v-html="foundUser.profile ? foundUser.profile.replace(/\n/g, '<br>') : '未填寫'"></p>
+                </div>
             </div>
-            <!-- 使用者寵物專區 -->
-            <div class="mypetArea">
+            <!-- 使用者領養資料 -->
+            <div class="adoptInformation">
                 <div class="title">
-                    <p>My Pet</p>
-                    <!-- 寵物狀態區域 -->
-                    <div class="state">
-                        <div class="regular">
+                    <p>我的領養資料</p>
+                    <h4>(以下資料僅提拱給送養人)</h4>
+                </div>
+                <!-- 詳細領養資料 -->
+                <div class="infoArea">
+                    <!-- 基本資料 -->
+                    <div class="user">
+                        <label for="">基本資料</label>
+                        <div class="userinfo">
+                            <div class="name">
+                                <span>真實姓名 : </span>
+                                <input class="blockSmall blockData" type="text" name="" id="" :placeholder=foundUser.userRealName
+                                    v-model="this.userRealName">
+                            </div>
+                            <div class="age">
+                                <span>年齡 : </span>
+                                <input class="blockSmall blockData" type="number" :placeholder=foundUser.age v-model="this.age">
+                            </div>
+                            <div class="gender">
+                                <span>性別 : </span>
+                                {{ foundUser.gender }}
+                                <select class="blockSmall blockData" :placeholder=foundUser.gender v-model="this.gender">
+                                    <option value="男性">男性</option>
+                                    <option value="女性">女性</option>
+                                    <option value="未填寫">未填寫</option>
+                                </select>
+                            </div>
+                            <div class="work">
+                                <span>職業 : </span>
+                                <input class="blockSmall blockData" type="text" name="" id="" :placeholder=foundUser.jobOccupation
+                                    v-model="this.jobOccupation">
+                            </div>
                         </div>
-                        <p>正常</p>
-                        <div class="ing">
+                    </div>
+                    <div class="infoRight">
+                        <!-- 聯絡方式 -->
+                        <div class="contact">
+                            <label for="">聯絡方式</label>
+                            <div class="contactinfo">
+                                <div class="address contactInfoInput">
+                                    <span>地址 : </span>
+                                    <input class="blockSmall blockContact" type="text" name="" id="" :placeholder=foundUser.address v-model="this.address">
+                                </div>
+                                <div class="email contactInfoInput">
+                                    <p>信箱 : {{ foundUser.email }}</p>
+                                </div>
+                                <div class="phone contactInfoInput">
+                                    <span>聯絡電話 : </span>
+                                    <input class="blockSmall blockContact" type="text" :placeholder=foundUser.phone v-model="this.phone">
+                                </div>
+                            </div>
                         </div>
-                        <p>送養中</p>
-                        <div class="finish">
+                        <!-- 家庭狀況 -->
+                        <div class="family">
+                            <label for="">家庭狀況</label>
+                            <textarea class="block familyinfo" name="" id="" cols="30" rows="6" :placeholder=foundUser.familyStatus
+                                v-model="this.familyStatus"></textarea>
                         </div>
-                        <p>已送養</p>
-                        <i class="fa-solid fa-pen"></i>
                     </div>
                 </div>
-                <!-- 寵物圖示區域 -->
-                <div class="petimg">
-                    <div class="ruby">
-                        <p>Ruby</p>
-                        <i class="fa-solid fa-dog"></i>
-                    </div>
-                    <div class="kiwi">
-                        <p>Kiwi</p>
-                        <i class="fa-solid fa-cat"></i>
-                    </div>
-                    <div class="lucky">
-                        <p>Lucky</p>
-                        <i class="fa-solid fa-dog"></i>
-                    </div>
-
+                <!-- 給送養人的一句話 -->
+                <div class="memo">
+                    <label for="">給送養人的一句話</label>
+                    <textarea class="block memoArea" name="" id="" cols="80" rows="6" :placeholder=foundUser.sentenceToAdopter
+                        v-model="this.sentenceToAdopter"></textarea>
                 </div>
-            </div>
-            <!-- 其他區域 -->
-            <div class="otherArea">
-
             </div>
         </div>
     </div>
@@ -128,21 +163,32 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+$inputBorder: #e2dbca;
 .content {
-    width: 95vw;
-    height: 200vh;
-    margin: auto;
-    margin-top: 3vmin;
+    width: 100vw;
+    height: auto;
+    padding-top: 3vmin;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-bottom: 5vmin;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    .dashBoardArea{
+        width: 13vw;
+    }
 
     //使用者資料區
     .profileArea {
-        width: 80vw;
-        height: 195vh;
+        width: 78vw;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         background-color: white;
-        border-radius: 10px;
-        text-align: center;
+        border-radius: 20px;
+        color: #978989;
+        font-size: 14pt;
+        padding: 20px 30px 20px 30px ;
         box-shadow: 3px 3px 3px gray;
 
         //使用者名稱和ID
@@ -157,7 +203,6 @@ export default {
             align-items: center;
             font-size: 26pt;
             margin-top: 10vmin;
-            margin-left: 12vmin;
 
             p {
                 color: #978989;
@@ -180,171 +225,145 @@ export default {
         .userinfo {
             text-align: left;
             width: 65vw;
-            height: 30vh;
+            height: 250px;
             background-color: white;
             border-radius: 10px;
             box-shadow: 3px 3px 3px 3px gray;
             margin-top: 10vmin;
-            margin-left: 12vmin;
-            padding: 5vmin;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .userInfoTop{
+                width: 90%;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                font-weight: bolder;
+                margin-top: 20px;
+            }
+            .userInfoContent{
+                width: 90%;
+                height: 150px;
+                margin-bottom: 15px;
+            }
         }
 
-        //使用者寵物專區
-        .mypetArea {
-            width: 65vw;
-            height: 40vh;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 3px 3px 3px 3px gray;
-            margin-top: 10vmin;
-            margin-left: 12vmin;
-            padding: 4vmin;
+        //使用者領養資料
+    .adoptInformation {
+        width: 65vw;
+        height: auto;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 3px 3px 3px 3px gray;
+        margin-top: 10vmin;
+        padding: 5vmin;
+        font-weight: bold;
 
-            .title {
-                height: 10vh;
-                display: flex;
-                justify-content: space-between;
+        p {
+            color: #978989;
+        }
 
-                p {
-                    color: #978989;
-                    font-weight: bold;
-                    font-size: 22pt;
-                    margin: 0;
-                }
+        label {
+            color: #978989;
+            font-weight: bold;
+            font-size: 16pt;
+            margin-left: 2vmin;
+        }
 
-                //寵物狀態區域
-                .state {
-                    height: 5vh;
+        .title {
+            height: 15vh;
+            text-align: center;
+
+            p {
+                font-size: 28pt;
+                margin: 0;
+            }
+
+            h4 {
+                color: #A63A50;
+                margin: 0;
+            }
+        }
+
+        //詳細領養資料
+        .infoArea {
+            width: 60vw;
+            height: auto;
+            display: flex;
+            justify-content: space-between;
+
+            //基本資料
+            .user {
+                width: 20vw;
+
+                .userinfo {
+                    width: 100%;
+                    height: 390px;
+                    border: 2.5px solid #978989;
+                    border-radius: 10px;
+                    margin-top: 1vmin;
+                    padding: 15px 25px 15px 25px;
                     display: flex;
-                    align-items: center;
-                    justify-content: space-around;
-
-                    p {
-                        font-size: 16pt;
-                        margin-right: 1vmin;
-                    }
-
-                    //狀態 : 正常
-                    .regular {
-                        width: 3vmin;
-                        height: 3vmin;
-                        border-radius: 50%;
-                        background-color: #E9D2A6;
-                        margin-right: 1vmin;
-                    }
-
-                    //狀態 : 送養中
-                    .ing {
-                        width: 3vmin;
-                        height: 3vmin;
-                        border-radius: 50%;
-                        background-color: #C79CA4;
-                        margin-right: 1vmin;
-                    }
-
-                    //狀態 : 已送養                    
-                    .finish {
-                        width: 3vmin;
-                        height: 3vmin;
-                        border-radius: 50%;
-                        background-color: #B2D2CB;
-                        margin-right: 1vmin;
-                    }
-
-                    i {
-                        color: #978989;
-                        font-size: 28pt;
+                    flex-direction: column;
+                    justify-content: center;
+                    .blockData{
+                        width: 95%;
                     }
                 }
             }
 
-            //寵物圖示區域
-            .petimg {
+            .infoRight{
                 display: flex;
-                justify-content: space-around;
+                flex-direction: column;
+                align-items: center;
+                //聯絡方式
+                .contact {
+                    width: 35vw;
+                    margin-bottom: 20px;
 
-                //ruby
-                .ruby {
-                    width: 40vmin;
-                    height: 20vmin;
-                    border-radius: 20px;
-                    background-color: #E9D2A6;
-                    display: flex;
-                    color: white;
-                    padding-left: 3vmin;
-                    margin-top: 1vmin;
-
-                    p {
-                        font-weight: bold;
-                        font-size: 26pt;
-                        margin-top: 0;
-                    }
-
-                    i {
-                        font-size: 135pt;
+                    .contactinfo {
+                        width: inherit;
+                        height: 230px;
+                        border: 2.5px solid #978989;
+                        border-radius: 10px;
                         margin-top: 1vmin;
+                        padding: 10px 25px 10px 25px;
+                        .contactInfoInput{
+                            display: flex;
+                            flex-direction: column;
+                            margin-bottom: 10px;
+                        }
                     }
                 }
-
-                //kiwi
-                .kiwi {
-                    width: 40vmin;
-                    height: 20vmin;
-                    border-radius: 20px;
-                    background-color: #C79CA4;
-                    display: flex;
-                    color: white;
-                    padding-left: 3vmin;
-                    margin-top: 1vmin;
-
-                    p {
-                        font-weight: bold;
-                        font-size: 26pt;
-                        margin-top: 0;
-                    }
-
-                    i {
-                        font-size: 135pt;
-                        margin-top: 1vmin;
-                    }
-                }
-
-                //lucky
-                .lucky {
-                    width: 40vmin;
-                    height: 20vmin;
-                    border-radius: 20px;
-                    background-color: #B2D2CB;
-                    display: flex;
-                    color: white;
-                    padding-left: 3vmin;
-                    margin-top: 1vmin;
-
-                    p {
-                        font-weight: bold;
-                        font-size: 26pt;
-                        margin-top: 0;
-                    }
-
-                    i {
-                        font-size: 135pt;
+                //家庭狀況
+                .family {
+                    width: 35vw;
+                    .familyinfo {
+                        width: inherit;
+                        height: 100px;
+                        border: 2.5px solid #978989;
+                        border-radius: 10px;
                         margin-top: 1vmin;
                     }
                 }
             }
+            
+
+            
         }
 
-        //其他區域
-        .otherArea {
-            width: 65vw;
-            height: 30vh;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 3px 3px 3px 3px gray;
-            margin-left: 12vmin;
-            margin-top: 10vmin;
-            padding: 5vmin;
+        //給送養人的一句話 
+        .memo {
+            margin-top: 20px;
+            .memoArea {
+                width: 60vw;
+                height: 120px;
+                border: 2.5px solid #978989;
+                border-radius: 10px;
+                margin-top: 1vmin;
+            }
         }
+    }
     }
 }
 </style>

@@ -68,7 +68,7 @@ export default {
 
 <style lang="scss" scoped>
 .dashboardArea {
-    width: 160px;
+    width: 170px;
     height: auto;
     background-color: white;
     border-radius: 20px;

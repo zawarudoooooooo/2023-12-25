@@ -156,12 +156,11 @@ export default {
         <div class="profileArea">
             <!-- 右上icon區 -->
             <div class="logoutAndsave">
-                <i class="fa-solid fa-right-from-bracket"></i>
                 <i class="fa-solid fa-floppy-disk" @click="update()"></i>
             </div>
             <!-- 使用者名稱和ID -->
             <div class="usernameAndid">
-                <input type="text" name="" id="" style="border:none; width: 150px;" :placeholder=foundUser.userName
+                <input class="block" type="text" name="" id="" style="width: 150px;" :placeholder=foundUser.userName
                     v-model="this.userName">
 
                 <div class="image-upload">
@@ -175,14 +174,16 @@ export default {
                     </div>
                 </div>
 
-                <p>{{ foundUser.account }}</p>
+                <p>@{{ foundUser.account }}</p>
             </div>
             <div>
             </div>
             <!-- 使用者簡介 -->
             <div class="profileinfo">
-                使用者簡介
-                <textarea name="" id="" cols="95" rows="6" :placeholder=foundUser.profile v-model="this.profile"></textarea>
+                <div class="profileInfoTop">
+                    <h4 style="text-align: center;" >個人簡介</h4>
+                </div>
+                <textarea class="block profileInfoContent" name="" id="" cols="95" rows="6" :placeholder=foundUser.profile v-model="this.profile"></textarea>
             </div>
             <!-- 使用者領養資料 -->
             <div class="adoptInformation">
@@ -198,17 +199,17 @@ export default {
                         <div class="userinfo">
                             <div class="name">
                                 <span>真實姓名 : </span>
-                                <input type="text" name="" id="" :placeholder=foundUser.userRealName
+                                <input class="blockSmall blockData" type="text" name="" id="" :placeholder=foundUser.userRealName
                                     v-model="this.userRealName">
                             </div>
                             <div class="age">
                                 <span>年齡 : </span>
-                                <input type="number" :placeholder=foundUser.age v-model="this.age">
+                                <input class="blockSmall blockData" type="number" :placeholder=foundUser.age v-model="this.age">
                             </div>
                             <div class="gender">
                                 <span>性別 : </span>
                                 {{ foundUser.gender }}
-                                <select :placeholder=foundUser.gender v-model="this.gender">
+                                <select class="blockSmall blockData" :placeholder=foundUser.gender v-model="this.gender">
                                     <option value="男性">男性</option>
                                     <option value="女性">女性</option>
                                     <option value="未填寫">未填寫</option>
@@ -216,49 +217,42 @@ export default {
                             </div>
                             <div class="work">
                                 <span>職業 : </span>
-                                <input type="text" name="" id="" :placeholder=foundUser.jobOccupation
+                                <input class="blockSmall blockData" type="text" name="" id="" :placeholder=foundUser.jobOccupation
                                     v-model="this.jobOccupation">
                             </div>
                         </div>
                     </div>
-                    <!-- 聯絡方式 -->
-                    <div class="contact">
-                        <label for="">聯絡方式</label>
-                        <div class="contactinfo">
-                            <div class="address">
-                                <span>地址 : </span>
-                                <input type="text" name="" id="" :placeholder=foundUser.address v-model="this.address">
-                            </div>
-                            <div class="email">
-                                <p>信箱 : {{ foundUser.email }}</p>
-                            </div>
-                            <div class="phone">
-                                <span>聯絡電話 : </span>
-                                <input type="text" :placeholder=foundUser.phone v-model="this.phone">
-                            </div>
-                            <div class="line">
-                                <p>Line ID : 000080000</p>
+                    <div class="infoRight">
+                        <!-- 聯絡方式 -->
+                        <div class="contact">
+                            <label for="">聯絡方式</label>
+                            <div class="contactinfo">
+                                <div class="address contactInfoInput">
+                                    <span>地址 : </span>
+                                    <input class="blockSmall blockContact" type="text" name="" id="" :placeholder=foundUser.address v-model="this.address">
+                                </div>
+                                <div class="email contactInfoInput">
+                                    <p>信箱 : {{ foundUser.email }}</p>
+                                </div>
+                                <div class="phone contactInfoInput">
+                                    <span>聯絡電話 : </span>
+                                    <input class="blockSmall blockContact" type="text" :placeholder=foundUser.phone v-model="this.phone">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- 家庭狀況 -->
-                    <div class="family">
-                        <label for="">家庭狀況</label>
-                        <div class="familyinfo">
-                            <div class="familydetail">
-                                <textarea name="" id="" cols="30" rows="6" :placeholder=foundUser.familyStatus
-                                    v-model="this.familyStatus"></textarea>
-                            </div>
+                        <!-- 家庭狀況 -->
+                        <div class="family">
+                            <label for="">家庭狀況</label>
+                            <textarea class="block familyinfo" name="" id="" cols="30" rows="6" :placeholder=foundUser.familyStatus
+                                v-model="this.familyStatus"></textarea>
                         </div>
                     </div>
                 </div>
                 <!-- 給送養人的一句話 -->
                 <div class="memo">
                     <label for="">給送養人的一句話</label>
-                    <div class="memoArea">
-                        <textarea name="" id="" cols="80" rows="6" :placeholder=foundUser.sentenceToAdopter
-                            v-model="this.sentenceToAdopter"></textarea>
-                    </div>
+                    <textarea class="block memoArea" name="" id="" cols="80" rows="6" :placeholder=foundUser.sentenceToAdopter
+                        v-model="this.sentenceToAdopter"></textarea>
                 </div>
             </div>
         </div>
@@ -267,207 +261,239 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@import '../assets/RStyle.scss';
+
 $inputBorder: #e2dbca;
 
-.content {
-    width: 95vw;
-    height: 200vh;
-    margin: auto;
-    margin-top: 3vmin;
-    display: flex;
-    justify-content: space-around;
 
-    //使用者資料區
-    .profileArea {
-        width: 80vw;
-        height: 195vh;
+//使用者資料區
+.profileArea {
+    width: 78vw;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    color: #978989;
+    font-size: 14pt;
+    padding: 20px 30px 20px 30px ;
+    box-shadow: 3px 3px 3px gray;
+
+    //右上icon區
+    .logoutAndsave {
+        width: 95%;
+        height: 70px;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        font-size: 30pt;
+        color: #978989;
+        margin-top: 20px;
+    }
+
+    //使用者名稱和ID
+    .usernameAndid {
+        width: 65vw;
+        height: 15vh;
         background-color: white;
         border-radius: 10px;
-        box-shadow: 3px 3px 3px gray;
+        box-shadow: 3px 3px 3px 3px gray;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        font-size: 26pt;
+        margin-top: 30px;
 
-        //右上icon區
-        .logoutAndsave {
-            font-size: 40pt;
-            color: #978989;
-            margin-left: 150vmin;
-            margin-top: 3vmin;
+        .image-upload {
+            position: relative;
+            display: inline-block;
+            margin-right: 20px;
+            /* 調整位置 */
 
-            i {
-                margin-right: 3vmin;
+            .add-icon {
+                position: absolute;
+                bottom: -10px;
+                /* 控制底部位置 */
+                right: -10px;
+                /* 控制右側位置 */
+                background-color: #ffffff;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
             }
         }
 
-        //使用者名稱和ID
-        .usernameAndid {
-            width: 65vw;
-            height: 15vh;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 3px 3px 3px 3px gray;
+        p {
+            color: #978989;
+            font-weight: bold;
+            margin: 0;
+        }
+
+    }
+
+    //使用者簡介
+    .profileinfo {
+        text-align: left;
+        width: 65vw;
+        height: 250px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 3px 3px 3px 3px gray;
+        margin-top: 10vmin;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .profileInfoTop{
+            width: 90%;
+            height: 50px;
             display: flex;
-            justify-content: space-around;
             align-items: center;
-            font-size: 26pt;
-            margin-top: 3vmin;
-            margin-left: 12vmin;
+            font-weight: bolder;
+            margin-top: 20px;
+        }
+        .profileInfoContent{
+            width: 90%;
+            height: 150px;
+            margin-bottom: 15px;
+            border: $inputBorder solid 2px;
+        }
+    }
 
-            .image-upload {
-                position: relative;
-                display: inline-block;
-                margin-right: 20px;
-                /* 調整位置 */
+    //使用者領養資料
+    .adoptInformation {
+        width: 65vw;
+        height: auto;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 3px 3px 3px 3px gray;
+        margin-top: 10vmin;
+        padding: 5vmin;
+        font-weight: bold;
 
-                .add-icon {
-                    position: absolute;
-                    bottom: -10px;
-                    /* 控制底部位置 */
-                    right: -10px;
-                    /* 控制右側位置 */
-                    background-color: #ffffff;
-                    border-radius: 50%;
-                    width: 40px;
-                    height: 40px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-                }
-            }
+        p {
+            color: #978989;
+        }
 
+        label {
+            color: #978989;
+            font-weight: bold;
+            font-size: 16pt;
+            margin-left: 2vmin;
+        }
 
+        .title {
+            height: 15vh;
+            text-align: center;
 
             p {
-                color: #978989;
-                font-weight: bold;
+                font-size: 28pt;
                 margin: 0;
             }
 
+            h4 {
+                color: #A63A50;
+                margin: 0;
+            }
         }
 
-        //使用者簡介
-        .profileinfo {
-            width: 65vw;
-            height: 30vh;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 3px 3px 3px 3px gray;
-            margin-top: 8vmin;
-            margin-left: 12vmin;
-            padding: 5vmin;
-        }
+        //詳細領養資料
+        .infoArea {
+            width: 60vw;
+            height: auto;
+            display: flex;
+            justify-content: space-between;
 
-        //使用者領養資料
-        .adoptInformation {
-            width: 65vw;
-            height: 85vh;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 3px 3px 3px 3px gray;
-            margin-top: 8vmin;
-            margin-left: 12vmin;
-            padding: 5vmin;
-            font-weight: bold;
+            //基本資料
+            .user {
+                width: 20vw;
 
-            p {
-                color: #978989;
-            }
-
-            label {
-                color: #978989;
-                font-weight: bold;
-                font-size: 16pt;
-                margin-left: 2vmin;
-            }
-
-            .title {
-                height: 15vh;
-                text-align: center;
-
-                p {
-                    font-size: 28pt;
-                    margin: 0;
-                }
-
-                h4 {
-                    color: #A63A50;
-                    margin: 0;
-                }
-            }
-
-            //詳細領養資料
-            .infoArea {
-                width: 60vw;
-                height: 35vh;
-                margin-left: 8vmin;
-                display: flex;
-
-                //基本資料
-                .user {
-                    width: 14vw;
-
-                    .userinfo {
-                        width: 13vw;
-                        height: 24vh;
-                        border: 2.5px solid #978989;
-                        border-radius: 10px;
-                        margin-top: 1vmin;
-
-                        p {
-                            padding-left: 3vmin;
-                        }
-                    }
-                }
-
-                //聯絡方式
-                .contact {
-                    width: 22vw;
-
-                    .contactinfo {
-                        width: 21vw;
-                        height: 24vh;
-                        border: 2.5px solid #978989;
-                        border-radius: 10px;
-                        margin-top: 1vmin;
-
-                        p {
-                            padding-left: 3vmin;
-                        }
-                    }
-                }
-
-                //家庭狀況
-                .family {
-                    .familyinfo {
-                        width: 21vw;
-                        height: 24vh;
-                        border: 2.5px solid #978989;
-                        border-radius: 10px;
-                        margin-top: 1vmin;
-
-                        p {
-                            padding-left: 3vmin;
-                        }
-                    }
-                }
-            }
-
-            //給送養人的一句話 
-            .memo {
-                margin-left: 8vmin;
-
-                .memoArea {
-                    width: 57vw;
-                    height: 24vh;
+                .userinfo {
+                    width: 100%;
+                    height: 390px;
                     border: 2.5px solid #978989;
                     border-radius: 10px;
                     margin-top: 1vmin;
-
-                    p {
-                        padding-left: 3vmin;
+                    padding: 15px 25px 15px 25px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    .blockData{
+                        width: 95%;
                     }
                 }
             }
+
+            .infoRight{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                //聯絡方式
+                .contact {
+                    width: 35vw;
+                    margin-bottom: 20px;
+
+                    .contactinfo {
+                        width: inherit;
+                        height: 230px;
+                        border: 2.5px solid #978989;
+                        border-radius: 10px;
+                        margin-top: 1vmin;
+                        padding: 10px 25px 10px 25px;
+                        .contactInfoInput{
+                            display: flex;
+                            flex-direction: column;
+                            margin-bottom: 10px;
+                        }
+                    }
+                }
+                //家庭狀況
+                .family {
+                    width: 35vw;
+                    .familyinfo {
+                        width: inherit;
+                        height: 100px;
+                        border: 2.5px solid #978989;
+                        border-radius: 10px;
+                        margin-top: 1vmin;
+                    }
+                }
+            }
+            
+
+            
+        }
+
+        //給送養人的一句話 
+        .memo {
+            margin-top: 20px;
+            .memoArea {
+                width: 60vw;
+                height: 120px;
+                border: 2.5px solid #978989;
+                border-radius: 10px;
+                margin-top: 1vmin;
+            }
         }
     }
+}
+
+// textarea
+.block{
+    padding: 10px 10px 10px 10px;
+    border: $inputBorder solid 2px;
+    border-radius: 10px;
+    margin: 10px 0px 10px 0px;
+}
+
+.blockSmall{
+    padding: 0px 5px 0px 5px;
+    border: $inputBorder solid 2px;
+    border-radius: 10px;
+    margin: 10px 0px 10px 0px;
 }
 </style>
