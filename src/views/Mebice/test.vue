@@ -12,40 +12,32 @@ export default {
     }
 }
 </script>
-
+<!-- 論壇首頁<br />科普版<br />閒聊版<br />MY ARTICLE -->
 <template>
     <div class="dashboardArea">
-        <div class="notification line">
-            <i class="fa-solid fa-bell"></i>
-            <p>Notification</p>
-        </div>
         <div class="setting line">
-            <i class="fa-solid fa-user-gear"></i>
-            <p @click="goTo('/ProfileSetting')">Settings</p>
+            <p>論壇首頁</p>
         </div>
         <div class="pet line">
-            <i class="fa-solid fa-dog"></i>
-            <p @click="goTo('/MyPet')">My Pet</p>
+            <p>科普版</p>
         </div>
         <div class="article line">
-            <i class="fa-solid fa-pencil"></i>
-            <p @click="goTo('/MyArticle')">My Articles</p>
+            <p>閒聊版</p>
         </div>
         <div class="adopt line">
-            <i class="fa-solid fa-user-tie"></i>
-            <p @click="goTo('/MyAdopt')">My Adopt</p>
+            <p>MY ARTICLE</p>
         </div>
-        <div class="chat line">
-            <i class="fa-brands fa-rocketchat"></i>
-            <p>Chat</p>
-        </div>
+        <button class="dashboard_btn">
+            <i class="fa-solid fa-plus plus_icon"></i>
+            <div class="dashboard_btn_text">我要發文</div>
+        </button>
 
     </div>
 </template>
 
 <style lang="scss" scoped>
 .dashboardArea {
-    width: 100%;
+    width: 17%;
     height: auto;
     background-color: white;
     border-radius: 15px;
@@ -53,6 +45,7 @@ export default {
     font-size: 16pt;
     box-shadow: 0 0 3px 2px lightgray;
     padding: 20px;
+    
 
     i {
         margin-bottom: 10px;
@@ -63,19 +56,13 @@ export default {
         margin-bottom: 10px;
     }
 
-    .notification {
-        height: 5vh;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        margin-top: 2vmin;
-    }
 
     .setting {
         height: 5vh;
         display: flex;
         justify-content: start;
         align-items: center;
+        margin-left: 30px;
     }
 
     .pet {
@@ -83,6 +70,7 @@ export default {
         display: flex;
         justify-content: start;
         align-items: center;
+        margin-left: 30px;
     }
 
     .article {
@@ -90,6 +78,7 @@ export default {
         display: flex;
         justify-content: start;
         align-items: center;
+        margin-left: 30px;
     }
 
     .adopt {
@@ -97,31 +86,26 @@ export default {
         display: flex;
         justify-content: start;
         align-items: center;
+        margin-left: 30px;
     }
 
-    .chat {
-        height: 5vh;
+    .dashboard_btn{
         display: flex;
-        justify-content: start;
         align-items: center;
-    }
+        justify-content: center;
+        width: 160px;
+        height: 50px;
+        color: white;
+        background-color: #6E75A8;
+        border-radius: 30px;
+        font-weight: 700;
+        
 
-    .BE{
-        height: 5vh;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-
-        .router-link-custom {
-            text-decoration: none;
-            color: blue;
-            transition: text-decoration-color 0.3s;
-            border-bottom: 1px solid transparent;
-
-            &:hover {
-                text-decoration-color: blue;
-                border-bottom: 1px solid blue;
-            }
+        .plus_icon{
+            margin-top: 10px;
         }
     }
-}</style>
+
+
+}
+</style>

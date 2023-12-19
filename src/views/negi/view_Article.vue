@@ -1,3 +1,16 @@
+<script>
+import ArticleDashBoard from '../../components/ArticleDashBoard.vue';
+export default{
+    data(){
+        return{
+
+        }
+    },
+    components:{
+        ArticleDashBoard
+    },
+}
+</script>
 <!-- 論談的人來看文章 -->
 <template>
     <div class="all">
@@ -5,7 +18,8 @@
         <div class="out_contain">
             <div class="in_contain">
                 <div class="dashboard">
-                    <div class="dashboard_area">
+                    <ArticleDashBoard />
+                    <!-- <div class="dashboard_area">
                         <div class="dashboard_text">
                             論壇首頁<br />科普版<br />閒聊版<br />MY ARTICLE
                         </div>
@@ -13,7 +27,7 @@
                                 <i class="fa-solid fa-plus plus_icon"></i>
                             <div class="dashboard_btn_text">我要發文</div>
                         </button>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="out_article_area">
                     <div class="in_article_area">
@@ -128,7 +142,7 @@
 .all {
     background-color: #dddfee;
     display: flex;
-    padding-top: 6px;
+    /* padding-top: 6px; */
     flex-direction: column;
 }
 
@@ -148,10 +162,11 @@
 }
 
 .out_contain {
-    align-self: center;
-    margin-top: 46px;
+    /* align-self: center; */
+    margin-top: 28px;
     width: 100%;
     max-width: 1290px;
+    margin-left: 50px;
 }
 
 @media (max-width: 991px) {
@@ -253,7 +268,7 @@
     flex-direction: column;
     line-height: normal;
     width: 80%;
-    margin-left: 20px;
+    margin-left: 40px;
 }
 
 @media (max-width: 991px) {
@@ -270,7 +285,7 @@
     flex-grow: 1;
     flex-direction: column;
     align-items: end;
-    width: 100%;
+    width: 78vw;
     padding: 45px 0;
 }
 

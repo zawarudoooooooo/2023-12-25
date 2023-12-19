@@ -1,9 +1,13 @@
 <script>
+import ArticleDashBoard from '../../components/ArticleDashBoard.vue';
 export default {
     data(){
         return{
             isCheckPage:false
         }
+    },
+    components:{
+        ArticleDashBoard
     },
     methods:{
         switch_check_page(){
@@ -22,11 +26,12 @@ export default {
         <div class="out_contain">
             <div class="in_contain">
                 <div class="dashboard">
-                    <div class="dashboard_area">
+                    <ArticleDashBoard />
+                    <!-- <div class="dashboard_area">
                         <div class="dashboard_text">
                             論壇首頁<br />科普版<br />閒聊版<br />MY ARTICLE
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="out_article_area">
                     <div class="in_article_area">
@@ -165,11 +170,14 @@ export default {
 .all {
     background-color: #dddfee;
     display: flex;
-    padding-top: 6px;
+    padding-top: 3vmin;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-bottom: 5vmin;
     flex-direction: column;
 }
 
-.div-2 {
+/* .div-2 {
     box-shadow: 0px 4px 49px 0px rgba(0, 0, 0, 0.28);
     background-color: #fff;
     display: flex;
@@ -182,14 +190,14 @@ export default {
     .div-2 {
         max-width: 100%;
     }
-}
+} */
 
-.out_contain {
+/* .out_contain {
     align-self: center;
     margin-top: 46px;
     width: 100%;
     max-width: 1290px;
-}
+} */
 
 @media (max-width: 991px) {
     .out_contain {
@@ -199,7 +207,7 @@ export default {
 }
 
 .in_contain {
-    gap: 20px;
+    /* gap: 20px; */
     display: flex;
 }
 
@@ -212,11 +220,14 @@ export default {
 }
 
 .dashboard {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     line-height: normal;
     width: 20%;
-    margin-left: 0px;
+    min-width: 185px;
+    max-width: 185px;
+    margin-left: 0px; */
+    height: 33%;
 }
 
 @media (max-width: 991px) {
@@ -225,7 +236,7 @@ export default {
     }
 }
 
-.dashboard_area {
+/* .dashboard_area {
     border-radius: 37px;
     box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25);
     background-color: #fff;
@@ -246,7 +257,7 @@ export default {
 .dashboard_text {
     color: #978989;
     font: 400 28px Lexend, sans-serif;
-}
+} */
 
 .dashboard_btn {
     border-radius: 35px;
@@ -258,23 +269,17 @@ export default {
     justify-content: center;
     align-items: center;
     gap: 11px;
-    padding: 17px 21px;
+    /* padding: 17px 21px; */
 }
 
 @media (max-width: 991px) {
     .dashboard_btn {
-        padding-left: 20px;
+        /* padding-left: 20px; */
         margin-top: 40px;
     }
 }
 
 .plus_icon {
-    /* aspect-ratio: 1.03;
-    object-fit: contain;
-    object-position: center;
-    width: 32px;
-    overflow: hidden;
-    max-width: 100%; */
     font-size: 18pt;
     color: white;
 }
@@ -289,8 +294,8 @@ export default {
     display: flex;
     flex-direction: column;
     line-height: normal;
-    width: 80%;
-    margin-left: 20px;
+    /* width: 80%; */
+    margin-left: 60px;
 }
 
 @media (max-width: 991px) {
@@ -307,7 +312,7 @@ export default {
     flex-grow: 1;
     flex-direction: column;
     align-items: end;
-    width: 100%;
+    width: 78vw;
     padding: 45px 0;
 }
 

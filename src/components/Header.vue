@@ -27,9 +27,10 @@ export default {
         <RouterLink class="routerLink" to="/pre_myArticle">pre_myArticle</RouterLink>
         <RouterLink class="routerLink" to="/PlatformEntrance">PlatformEntrance</RouterLink>
         <RouterLink class="routerLink" to="/ForumEntrance">ForumEntrance</RouterLink>
-        <RouterLink class="routerLink" to="/mapSearch">mapSearch</RouterLink>
+        <RouterLink class="routerLink" to="/mapSearch">MapSearch</RouterLink>
         <RouterLink class="routerLink" to="/view_Article">view_Article</RouterLink>
         <RouterLink class="routerLink" to="/create_Article">create_Article</RouterLink>
+        <RouterLink class="routerLink" to="/MyArticle">MyArticle</RouterLink>
     </div>
 </template>
 
