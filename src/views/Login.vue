@@ -42,7 +42,7 @@ export default {
                     console.log(data);
                     this.userInfoList = data.userInfoList;
                 })
-                .catch(error =>{
+                .catch(error => {
                     console.error(error)
                 })
         },
@@ -91,10 +91,7 @@ export default {
 
                                 const foundUser = this.userInfoList.find(user => user.email === enteredEmail);
                                 if (foundUser) {
-                                    sessionStorage.setItem('foundUserInfo', JSON.stringify({
-                                        userId: foundUser.userId,
-                                        permission: foundUser.permission,
-                                    }));
+                                    sessionStorage.setItem('foundUserInfo', JSON.stringify(foundUser));
                                 }
 
                                 // 定義你的密碼規則（英文大小寫、8位字符的規則）

@@ -72,7 +72,9 @@ export default {
             <!-- 使用者名稱和ID -->
             <div class="usernameAndid">
                 <p>{{ foundUser.userName }}</p>
-                <img :src="'../../public/' + foundFileName" alt="" style="border-radius: 50%;" height="120px" width="120px">
+                <img v-if="foundUserInfo.userPhoto" :src="'../../public/' + foundFileName" alt="" style="border-radius: 50%;" height="100px" width="100px">
+                <div v-if="!foundUserInfo.userPhoto" style="border: 2px solid; height: 100px; width: 100px; border-radius: 50%;">
+                </div>
                 <p>{{ foundUser.account }}</p>
             </div>
 

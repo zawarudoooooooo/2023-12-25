@@ -1,6 +1,7 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import ProfileDashBoard from '../components/ProfileDashBoard.vue'
+import Swal from 'sweetalert2'
 export default {
     data() {
         return {
@@ -36,6 +37,10 @@ export default {
 
     methods: {
 
+        chooseImage() {
+            document.getElementById('imageInput').click(); // 觸發選擇檔案的 input 欄位
+        },
+
         onFileChange(event) {
             const file = event.target.files[0];
             if (file) {
@@ -45,7 +50,6 @@ export default {
         readFile(file) {
             const reader = new FileReader();
             reader.onload = (event) => {
-                // this.foundUser.userPhoto = event.target.result; // 将文件内容赋值给用户的照片字段
                 this.imageUrl = event.target.result; // 也將其賦值給 imageUrl，用於預覽
             };
             reader.readAsDataURL(file);
@@ -115,8 +119,16 @@ export default {
                 })
                 .then(data => {
                     console.log('User information created/updated:', data);
-                    window.location.reload(); // 重新載入頁面
-                    alert("成功更新個人資料")
+
+                    Swal.fire({
+                        title: "成功更新個人資料",
+                        icon: "success"
+                    }).then((result) => {
+                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                            this.$router.push('/Profile')
+                        }
+                    });
+
                 })
                 .catch(error => {
                     console.error('Error creating/updating user information:', error);
@@ -134,11 +146,6 @@ export default {
 </script>
 
 <template>
-    <!--12.14 router for admin 需要登入後才能使用的屬性 暫時放這裡-->
-    <div class="BE line" v-if="foundUserInfo.permission >= 20">
-        <i class="fa-solid fa-gear"></i>
-        <RouterLink to="/BeManagement" class="router-link-custom">後台管理</RouterLink>
-    </div>
     <div class="content" v-if="foundUser">
         <!-- 側邊功能區 -->
 
@@ -154,23 +161,23 @@ export default {
             </div>
             <!-- 使用者名稱和ID -->
             <div class="usernameAndid">
-                <span>使用者名稱</span>
                 <input type="text" name="" id="" style="border:none; width: 150px;" :placeholder=foundUser.userName
-                    v-model="this.userName" >
-                <!-- 使用 v-if 條件來顯示不同的圖片 -->
-                <img v-if="!imageUrl" :src="'../../public/' + foundFileName" alt="" style="border-radius: 50%;"
-                    height="120px" width="120px">
-                <img v-if="imageUrl" :src="imageUrl" alt="Uploaded Image" style="border-radius: 50%;" height="120px"
-                    width="120px">
+                    v-model="this.userName">
+
+                <div class="image-upload">
+                    <img v-if="!imageUrl" :src="'../../public/' + foundFileName" alt="" style="border-radius: 50%;"
+                        height="100px" width="100px">
+                    <img v-else :src="imageUrl" alt="Uploaded Image" style="border-radius: 50%;" height="100px"
+                        width="100px">
+                    <div class="add-icon" @click="chooseImage">
+                        <i class="fa-solid fa-plus"></i>
+                        <input type="file" accept="image/*" id="imageInput" style="display: none;" @change="onFileChange">
+                    </div>
+                </div>
+
                 <p>{{ foundUser.account }}</p>
             </div>
             <div>
-                <div>
-                    <label for="imageInput" class="custom-file-upload">
-                        選擇圖片
-                    </label>
-                    <input type="file" accept="image/*" @change="onFileChange" id="imageInput" style="display: none;">
-                </div>
             </div>
             <!-- 使用者簡介 -->
             <div class="profileinfo">
@@ -260,6 +267,8 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+$inputBorder: #e2dbca;
+
 .content {
     width: 95vw;
     height: 200vh;
@@ -290,7 +299,7 @@ export default {
 
         //使用者名稱和ID
         .usernameAndid {
-            width: 55vw;
+            width: 65vw;
             height: 15vh;
             background-color: white;
             border-radius: 10px;
@@ -300,7 +309,32 @@ export default {
             align-items: center;
             font-size: 26pt;
             margin-top: 3vmin;
-            margin-left: 28vmin;
+            margin-left: 12vmin;
+
+            .image-upload {
+                position: relative;
+                display: inline-block;
+                margin-right: 20px;
+                /* 調整位置 */
+
+                .add-icon {
+                    position: absolute;
+                    bottom: -10px;
+                    /* 控制底部位置 */
+                    right: -10px;
+                    /* 控制右側位置 */
+                    background-color: #ffffff;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+                }
+            }
+
+
 
             p {
                 color: #978989;
@@ -308,11 +342,6 @@ export default {
                 margin: 0;
             }
 
-            i {
-                color: #E9D2A6;
-                font-size: 100pt;
-                margin-left: 7vmin;
-            }
         }
 
         //使用者簡介
@@ -441,15 +470,4 @@ export default {
         }
     }
 }
-
-/* 自訂樣式，讓 label 看起來像是一個按鈕 */
-.custom-file-upload {
-    display: inline-block;
-    padding: 10px 15px;
-    cursor: pointer;
-    background: #ccc;
-    border: 1px solid #999;
-    border-radius: 5px;
-}
-
 </style>
