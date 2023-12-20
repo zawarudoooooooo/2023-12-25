@@ -132,7 +132,6 @@ const router = createRouter({
       name: 'MapSearch',
       component: () => import('../views/Mebice/MapSearch.vue'),
     },
-<<<<<<< HEAD
     {
       path: '/AdoptionSearch',
       name: 'AdoptionSearch',
@@ -144,7 +143,6 @@ const router = createRouter({
       component: () => import('../views/Mebice/MyArticle.vue'),
     },
 
-=======
 
     //科普
     {
@@ -152,7 +150,6 @@ const router = createRouter({
       name: 'popScience',
       component: () => import('../views/popScience.vue'),
     },
->>>>>>> Xiufu
   ]
 })
 
