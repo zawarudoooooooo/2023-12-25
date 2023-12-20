@@ -1,8 +1,12 @@
 <script>
+import notification from '../views/negi/notification.vue'
+import axios from 'axios';
+
 export default {
     data() {
         return {
             foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
+            noti_state : false,
         }
     },
     methods: {
@@ -13,10 +17,32 @@ export default {
             sessionStorage.removeItem('foundUserInfo');
             sessionStorage.removeItem('petInfo');
             alert("成功登出")
+
             this.$router.push('/') //回到首頁
 
+
+            this.$router.push('/Login')
+        },
+        tap_noti(){
+            this.noti_state = !this.noti_state
+            if(this.noti_state == false){
+                this.set_readed()
+            }
+        },
+        set_readed(){
+            axios.post(`http://localhost:8080/api/notification/setNotiRead?userId=${this.foundUserInfo.userId}`)
+            .then( response => {
+                console.log(response.data)
+            })
+            .catch( error => {
+                console.error(error);
+            })
+
         }
-    }
+    },
+    components: {
+        notification
+    },
 }
 </script>
 
@@ -28,7 +54,8 @@ export default {
         </div>
         <div class="notification line">
             <i class="fa-solid fa-bell"></i>
-            <p>Notification</p>
+            <p @click="tap_noti()">Notification</p>
+            <notification  :noti_state = "noti_state"/>
         </div>
         <div class="setting line" @click="goTo('/Profile')">
             <i class="fa-solid fa-user"></i>
@@ -76,6 +103,7 @@ export default {
     font-size: 16pt;
     box-shadow: 0 0 3px 2px lightgray;
     padding: 20px;
+    position: relative;
     i {
         margin-bottom: 10px;
         margin-right: 1vmin

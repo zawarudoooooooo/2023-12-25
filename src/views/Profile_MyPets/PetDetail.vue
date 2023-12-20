@@ -136,6 +136,7 @@ export default {
             this.isShowModal = false;
         },
         isChecked(checkVaccine){
+
             if(this.petInfo.vaccine == null || this.petInfo.vaccine.trim() == ""){
                 return false;
             }

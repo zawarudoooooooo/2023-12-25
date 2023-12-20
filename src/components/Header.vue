@@ -40,6 +40,9 @@ export default {
         <RouterLink class="routerLink" to="/MyPet">MyPet</RouterLink>
         <RouterLink class="routerLink" to="MyAdopt">MyAdopt</RouterLink>
         <RouterLink class="routerLink" to="AdoptionSearch">AdoptionSearch</RouterLink>
+        <RouterLink class="routerLink" to="notification">notification</RouterLink>
+        <RouterLink class="routerLink" to="ProfileForOther">ProfileForOther</RouterLink>
+
     </div>
 </template>
 
@@ -47,6 +50,7 @@ export default {
 .header {
     width: 100vw;
     height: 15vh;
+
     background-color: rgb(255, 255, 255);
     display: flex;
     justify-content: space-between;
@@ -57,6 +61,12 @@ export default {
         margin-left: 20px;
         /* 調整連結之間的間距 */
     }
+
+    background-color: white;
+    display: flex;
+    flex-wrap: wrap;
+    // justify-content: space-between;
+
 
     .routerLink {
         margin-right: 10px;

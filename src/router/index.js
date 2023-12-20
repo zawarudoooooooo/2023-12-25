@@ -132,6 +132,7 @@ const router = createRouter({
       name: 'MapSearch',
       component: () => import('../views/Mebice/MapSearch.vue'),
     },
+
     {
       path: '/AdoptionSearch',
       name: 'AdoptionSearch',
@@ -141,6 +142,21 @@ const router = createRouter({
       path: '/MyArticle',
       name: 'MyArticle',
       component: () => import('../views/Mebice/MyArticle.vue'),
+    },
+
+
+
+
+    //
+    {
+      path: '/notification',
+      name: 'notification',
+      component: () => import('../views/negi/notification.vue'),
+    },
+    {
+      path: '/ProfileForOther/:sendId',
+      name: 'ProfileForOther',
+      component: () => import('../views/ProfileForOther.vue'),
     },
 
   ]

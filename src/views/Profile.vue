@@ -60,8 +60,8 @@ export default {
 
     },
     components: {
-        ProfileDashBoard
-    },
+        ProfileDashBoard,
+        },
 }
 </script>
 
