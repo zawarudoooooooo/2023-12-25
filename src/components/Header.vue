@@ -38,7 +38,8 @@ export default {
         <RouterLink class="routerLink" to="/view_Article">view_Article</RouterLink>
         <RouterLink class="routerLink" to="/create_Article">create_Article</RouterLink>
         <RouterLink class="routerLink" to="/MyPet">MyPet</RouterLink>
-        <RouterLink class="routerLink" to="MyAdopt">MyAdopt</RouterLink>
+        <RouterLink class="routerLink" to="/MyAdopt">MyAdopt</RouterLink>
+        <RouterLink class="routerLink" to="/AdoptionSearch">AdoptionSearch</RouterLink>
     </div>
 </template>
 

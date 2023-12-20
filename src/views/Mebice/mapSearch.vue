@@ -19,6 +19,34 @@ export default {
         this.search()
     },
 
+    computed: {
+        // 根據選擇的區域動態生成城市選項
+        filteredCities() {
+            if (this.area) {
+                switch (this.area) {
+                    case "北部":
+                        return ["台北市", "新北市", "基隆市", "新竹市", "桃園市", "新竹縣", "宜蘭縣"];
+                    case "中部":
+                        return ["台中市", "苗栗縣", "彰化縣", "南投縣", "雲林縣"];
+                    case "南部":
+                        return ["高雄市", "台南市", "嘉義市", "嘉義縣", "屏東縣", "澎湖縣"];
+                    case "東部":
+                        return ["花蓮縣", "台東縣"];
+                    default:
+                        return [];
+                }
+            } else {
+                // 如果未選擇區域，顯示所有城市選項
+                return [
+                    "台北市", "新北市", "基隆市", "新竹市", "桃園市", "新竹縣", "宜蘭縣",
+                    "台中市", "苗栗縣", "彰化縣", "南投縣", "雲林縣",
+                    "高雄市", "台南市", "嘉義市", "嘉義縣", "屏東縣", "澎湖縣",
+                    "花蓮縣", "台東縣"
+                ];
+            }
+        },
+    },
+
     methods: {
 
         search() {
@@ -87,8 +115,11 @@ export default {
                 <select v-model="this.city">
 
                     <option value=""></option>
+                    <option v-for="cityOption in filteredCities" :value="cityOption">
+                        {{ cityOption }}
+                    </option>
 
-                    <option value="台北市">台北市</option>
+                    <!-- <option value="台北市">台北市</option>
                     <option value="新北市">新北市</option>
                     <option value="基隆市">基隆市</option>
                     <option value="新竹市">新竹市</option>
@@ -110,7 +141,7 @@ export default {
                     <option value="澎湖縣">澎湖縣</option>
 
                     <option value="花蓮縣">花蓮縣</option>
-                    <option value="台東縣">台東縣</option>
+                    <option value="台東縣">台東縣</option> -->
                 </select>
 
             </div>
@@ -162,7 +193,8 @@ export default {
                 </div>
 
                 <div class="icon">
-                    <i class="fa-solid fa-arrow-up-right-from-square" @click="toWebsite(item.website)" style="cursor: pointer;"></i>
+                    <i class="fa-solid fa-arrow-up-right-from-square" @click="toWebsite(item.website)"
+                        style="cursor: pointer;"></i>
 
                     <div class="phoneArea">
                         <i class="fa-solid fa-mobile-screen-button">
@@ -295,7 +327,7 @@ export default {
                     margin-right: 2vw;
                     margin-top: 8vh;
 
-                    &:hover{
+                    &:hover {
                         color: rgb(68, 51, 48);
                     }
 
