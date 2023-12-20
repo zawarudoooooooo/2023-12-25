@@ -69,7 +69,7 @@ export default {
                 userName: this.userName,
                 email: this.email,
                 password: this.password,
-                birth: this.birth,
+                birthday: this.birth,
             };
 
             console.log(newuserInfo)
