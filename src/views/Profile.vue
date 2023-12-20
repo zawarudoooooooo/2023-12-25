@@ -46,7 +46,6 @@ export default {
                         // 在這裡加入 base64 前綴
                         const base64Prefix = 'data:image/jpeg;base64,';
                         const filePath = base64Prefix + foundUser.userPhoto; // 在這裡將路徑轉換為 base64 圖片前綴
-                        console.log(filePath);
                         foundUser.filePath = filePath; // 將處理後的圖片路徑存儲在 foundUser 中的 filePath 屬性
 
                         this.$emit("userInfo", foundUser);
