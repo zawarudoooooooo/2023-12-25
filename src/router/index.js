@@ -144,11 +144,17 @@ const router = createRouter({
     },
 
 
-    //科普
+    //科普版
     {
       path: '/popScience',
       name: 'popScience',
       component: () => import('../views/popScience.vue'),
+    },
+    //閒聊版
+    {
+      path: '/Chitchatting',
+      name: 'Chitchatting',
+      component: () => import('../views/Chitchatting.vue'),
     },
   ]
 })
