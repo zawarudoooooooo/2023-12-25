@@ -42,7 +42,7 @@ export default {
                     console.log(data);
                     this.userInfoList = data.userInfoList;
                 })
-                .catch(error =>{
+                .catch(error => {
                     console.error(error)
                 })
         },

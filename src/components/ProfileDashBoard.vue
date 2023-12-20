@@ -9,11 +9,12 @@ export default {
         goTo(x) {
             this.$router.push(x);
         },
-        logout(){
+        logout() {
             sessionStorage.removeItem('foundUserInfo');
             sessionStorage.removeItem('petInfo');
             alert("成功登出")
-            this.$router.push('/Login')
+            this.$router.push('/') //回到首頁
+
         }
     }
 }
@@ -21,37 +22,45 @@ export default {
 
 <template>
     <div class="dashboardArea">
+        <div class="notification line" @click="goTo('/')">
+            <i class="fa-solid fa-house"></i>
+            <p>首頁</p>
+        </div>
         <div class="notification line">
             <i class="fa-solid fa-bell"></i>
             <p>Notification</p>
         </div>
-        <div class="setting line">
+        <div class="setting line" @click="goTo('/Profile')">
             <i class="fa-solid fa-user"></i>
-            <p @click="goTo('/Profile')">Profile</p>
+            <p>Profile</p>
         </div>
-        <div class="setting line">
+        <div class="setting line" @click="goTo('/ProfileSetting')">
             <i class="fa-solid fa-user-gear"></i>
-            <p @click="goTo('/ProfileSetting')">Settings</p>
+            <p>Settings</p>
         </div>
-        <div class="pet line">
+        <div class="pet line" @click="goTo('/MyPet')">
             <i class="fa-solid fa-dog"></i>
-            <p @click="goTo('/MyPet')">My Pet</p>
+            <p>My Pet</p>
         </div>
         <div class="article line">
             <i class="fa-solid fa-pencil"></i>
-            <p>My Articles</p>
+            <p @click="goTo('/MyArticle')">My Articles</p>
         </div>
-        <div class="adopt line">
+        <div class="adopt line" @click="goTo('/MyAdopt')">
             <i class="fa-solid fa-user-tie"></i>
-            <p @click="goTo('/MyAdopt')">My Adopt</p>
+            <p>My Adopt</p>
         </div>
         <div class="chat line">
             <i class="fa-brands fa-rocketchat"></i>
             <p>Chat</p>
         </div>
-        <div class="chat line">
+        <div class="logout line" @click="logout()">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            <p @click="logout()">登出</p>
+            <p>登出</p>
+        </div>
+        <div class="BE line" v-if="foundUserInfo.permission >= 20" @click="goTo('/BeManagement')">
+            <i class="fa-solid fa-gear"></i>
+            <p>後台管理</p>
         </div>
 
     </div>
@@ -59,8 +68,7 @@ export default {
 
 <style lang="scss" scoped>
 .dashboardArea {
-    width: 100%;
-    min-width: 175px;
+    width: 170px;
     height: auto;
     background-color: white;
     border-radius: 20px;
@@ -75,6 +83,7 @@ export default {
 
     .line {
         margin-bottom: 10px;
+        cursor: pointer;
     }
 
     .notification {
@@ -120,7 +129,14 @@ export default {
         align-items: center;
     }
 
-    .BE{
+    .logout {
+        height: 5vh;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+    }
+
+    .BE {
         height: 5vh;
         display: flex;
         justify-content: start;

@@ -128,10 +128,23 @@ const router = createRouter({
     
     //這是Mebice的
     {
-      path: '/mapSearch',
-      name: 'mapSearch',
-      component: () => import('../views/Mebice/mapSearch.vue'),
+      path: '/MapSearch',
+      name: 'MapSearch',
+      component: () => import('../views/Mebice/MapSearch.vue'),
     },
+<<<<<<< HEAD
+    {
+      path: '/AdoptionSearch',
+      name: 'AdoptionSearch',
+      component: () => import('../views/Mebice/AdoptionSearch.vue'),
+    },
+    {
+      path: '/MyArticle',
+      name: 'MyArticle',
+      component: () => import('../views/Mebice/MyArticle.vue'),
+    },
+
+=======
 
     //科普
     {
@@ -139,6 +152,7 @@ const router = createRouter({
       name: 'popScience',
       component: () => import('../views/popScience.vue'),
     },
+>>>>>>> Xiufu
   ]
 })
 

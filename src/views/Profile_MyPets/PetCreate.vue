@@ -43,6 +43,7 @@ export default{
     },
     mounted(){
         this.userInfo = JSON.parse(sessionStorage.getItem('foundUserInfo'));
+        this.petInfo.user_id = this.userInfo.userId;
     },
     watch: {
         isAdopted(){

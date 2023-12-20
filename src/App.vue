@@ -44,10 +44,10 @@ export default{
 </template>
 
 <style lang="scss" scoped>
-.header{
-  width: 100vw;
-  height: 15vh;
-}
+// .header{
+//   width: 100vw;
+//   height: 15vh;
+// }
 .content{
   width: 100vw;
   min-height: 85vh;
