@@ -101,8 +101,8 @@ export default{
             <div class="topLeft">
                 <div class="topLeftPhoto"></div>
                 <div class="topLeftText">
-                    <p>{{ this.userInfo.user_name }}</p>
-                    <p>{{ this.userInfo.account }}</p>
+                    <p>{{ this.userInfo.userName }}</p>
+                    <p>@{{ this.userInfo.account }}</p>
                 </div>
             </div>
             <div class="topRight">

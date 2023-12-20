@@ -33,6 +33,7 @@ export default {
         <RouterLink class="routerLink" to="/MyPet">MyPet</RouterLink>
         <RouterLink class="routerLink" to="MyAdopt">MyAdopt</RouterLink>
         <RouterLink class="routerLink" to="notification">notification</RouterLink>
+        <RouterLink class="routerLink" to="ProfileForOther">ProfileForOther</RouterLink>
     </div>
 </template>
 
@@ -41,7 +42,9 @@ export default {
     width: 100vw;
     height: 15vh;
     background-color: white;
-    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    // justify-content: space-between;
 
     .routerLink {
         margin: 10px;

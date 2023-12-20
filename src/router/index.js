@@ -140,6 +140,11 @@ const router = createRouter({
       name: 'notification',
       component: () => import('../views/negi/notification.vue'),
     },
+    {
+      path: '/ProfileForOther/:sendId',
+      name: 'ProfileForOther',
+      component: () => import('../views/ProfileForOther.vue'),
+    },
   ]
 })
 

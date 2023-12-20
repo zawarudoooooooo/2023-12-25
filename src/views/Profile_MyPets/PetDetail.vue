@@ -115,7 +115,8 @@ export default{
             this.isShowModal = false;
         },
         isChecked(checkVaccine){
-            if(this.petInfo.vaccine.trim() == "" || this.petInfo.vaccine == null){
+            //this.petInfo.vaccine.trim() == "" || 
+            if(this.petInfo.vaccine == null){
                 return false;
             }
             let vaccineArr = this.petInfo.vaccine.split(',').map(vaccine => vaccine.trim());

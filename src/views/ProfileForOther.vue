@@ -4,7 +4,7 @@ import ProfileDashBoard from '../components/ProfileDashBoard.vue'
 export default {
     data() {
         return {
-            foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
+            foundUserInfoId: "",
 
             foundUser: null,
             userInfoList: null,
@@ -19,6 +19,9 @@ export default {
     },
     mounted() {
         this.searchAllUserInfo()
+        this.foundUserInfoId = parseInt(this.$route.params.sendId,10);
+        
+        console.log(this.foundUserInfoId);
     },
 
     methods: {
@@ -36,7 +39,7 @@ export default {
                     console.log(this.userInfoList)
 
                     // 根據 foundUserId 找到對應的 foundUser
-                    const foundUser = this.userInfoList.find(user => user.userId === this.foundUserInfo.userId);
+                    const foundUser = this.userInfoList.find(user => user.userId === this.foundUserInfoId);
 
                     // 如果找到了對應的 foundUser，你可以做一些操作
                     if (foundUser) {
@@ -96,7 +99,7 @@ export default {
                         <div class="finish">
                         </div>
                         <p>已送養</p>
-                        <i class="fa-solid fa-pen"></i>
+                        <!-- <i class="fa-solid fa-pen"></i> -->
                     </div>
                 </div>
                 <!-- 寵物圖示區域 -->
