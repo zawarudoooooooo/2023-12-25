@@ -4,12 +4,14 @@ export default {
     data() {
         return {
             foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
+            newInfoList: null,
         }
     },
     beforeCreate() {
     },
 
     mounted() {
+        this.searchAllNewInfo()
     },
 
     methods: {
@@ -18,6 +20,30 @@ export default {
         },
         goProfile() {
             this.$router.push('/Profile')
+        },
+        searchAllNewInfo() {
+            fetch('http://localhost:8080/api/adoption/searchAllNewUserInfo', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // 將每個含有圖片的資料轉換成可顯示的格式
+                    this.newInfoList = data.newInfoList.map(info => {
+                        if (info.image) {
+                            const base64Prefix = 'data:image/jpeg;base64,';
+                            return { ...info, base64Image: base64Prefix + info.image };
+                        } else {
+                            return info;
+                        }
+                    });
+                })
+                .catch(error => {
+                    // 處理錯誤
+                    console.error('Error fetching data:', error);
+                });
         },
     }
 }
@@ -40,6 +66,15 @@ export default {
             </div>
         </div>
     </div>
+    <div class="searchAllNewInfo">
+        <div v-for="newInfo in newInfoList" :key="newInfo.serialNo" class="info-card">
+            <h2>{{ newInfo.title }}</h2>
+            <p>Category: {{ newInfo.category }}</p>
+            <p>Date: {{ newInfo.date }}</p>
+            <p>Content: {{ newInfo.content }}</p>
+            <img v-if="newInfo.base64Image" :src="newInfo.base64Image" alt="New Info Image" />
+        </div>
+    </div>
 </template>
 
 
@@ -53,12 +88,7 @@ export default {
 }
 
 
-@media (max-width: 991px) {
-    .div-2 {
-        max-width: 100%;
-        padding: 0 20px;
-    }
-}
+
 
 .img {
     aspect-ratio: 0.94;
@@ -81,25 +111,14 @@ export default {
     padding: 46px 80px 46px 55px;
 }
 
-@media (max-width: 991px) {
-    .div-3 {
-        margin: 40px 0;
-        padding: 0 20px;
-    }
-}
+
 
 .div-4 {
     gap: 20px;
     display: flex;
 }
 
-@media (max-width: 991px) {
-    .div-4 {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0px;
-    }
-}
+
 
 .column {
     display: flex;
@@ -109,11 +128,6 @@ export default {
     margin-left: 0px;
 }
 
-@media (max-width: 991px) {
-    .column {
-        width: 100%;
-    }
-}
 
 .img-2 {
     aspect-ratio: 1.11;
@@ -124,11 +138,7 @@ export default {
     max-width: 100%;
 }
 
-@media (max-width: 991px) {
-    .img-2 {
-        margin-top: 40px;
-    }
-}
+
 
 .column-2 {
     display: flex;
@@ -138,11 +148,7 @@ export default {
     margin-left: 20px;
 }
 
-@media (max-width: 991px) {
-    .column-2 {
-        width: 100%;
-    }
-}
+
 
 .div-5 {
     color: #978989;
@@ -151,9 +157,31 @@ export default {
     font: 800 40px Lexend, sans-serif;
 }
 
-@media (max-width: 991px) {
-    .div-5 {
-        margin-top: 40px;
-        white-space: initial;
-    }
-}</style>
+.searchAllNewInfo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.info-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    width: calc(33.33% - 20px);
+    /* 調整每個消息卡片的寬度，這裡假設每行三個 */
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+}
+
+.info-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.info-card img {
+    max-width: 100%;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+</style>

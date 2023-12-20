@@ -24,6 +24,8 @@ export default {
             age: null,
             gender: null,
 
+            imageUrl: null, // 新增用於顯示預覽圖的變數
+
         }
     },
     //進入頁面時，變更背景顏色
@@ -49,10 +51,15 @@ export default {
         },
         readFile(file) {
             const reader = new FileReader();
-            reader.onload = (event) => {
-                this.imageUrl = event.target.result; // 也將其賦值給 imageUrl，用於預覽
+            reader.onloadend = (event) => {
+                const arrayBuffer = event.target.result;
+                const bytes = new Uint8Array(arrayBuffer);
+                this.userPhoto = Array.from(bytes);
+
+                // 顯示預覽圖
+                this.imageUrl = URL.createObjectURL(file); // 使用 URL.createObjectURL 顯示預覽圖
             };
-            reader.readAsDataURL(file);
+            reader.readAsArrayBuffer(file);
         },
 
         searchAllUserInfo() {
@@ -65,7 +72,7 @@ export default {
                 .then(data => {
                     console.log(data);
                     this.userInfoList = data.userInfoList;
-                    console.log(this.userInfoList)
+                    console.log(this.userInfoList);
 
                     // 根據 foundUserId 找到對應的 foundUser
                     const foundUser = this.userInfoList.find(user => user.userId === this.foundUserInfo.userId);
@@ -73,24 +80,31 @@ export default {
                     // 如果找到了對應的 foundUser，你可以做一些操作
                     if (foundUser) {
                         console.log('找到了對應的使用者:', foundUser);
-                        this.foundUser = foundUser
+
+                        // 在這裡加入 base64 前綴
+                        const base64Prefix = 'data:image/jpeg;base64,';
+                        const filePath = base64Prefix + foundUser.userPhoto; // 在這裡將路徑轉換為 base64 圖片前綴
+                        console.log(filePath);
+                        foundUser.filePath = filePath; // 將處理後的圖片路徑存儲在 foundUser 中的 filePath 屬性
+
+                        this.$emit("userInfo", foundUser);
+                        this.foundUser = foundUser; // 將整理後的 foundUser 存入 this.foundUser
                     } else {
                         console.log('找不到對應的使用者');
                     }
-                    const filePath = foundUser.userPhoto
-                    const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
-                    this.foundFileName = fileName
-                    console.log(this.foundFileName) // 輸出: image_1702435129913.jpg
-                })
+                });
         },
-        update() {
 
+
+
+        update() {
             const userInfo = {
                 userId: this.foundUser.userId, //Id不修改 保留
                 password: this.foundUser.password, // 保留原始密碼
                 ///這裡開始 會修改
                 userName: this.userName,
-                userPhoto: this.imageUrl,
+
+                userPhoto: this.userPhoto,
                 profile: this.profile,
                 jobOccupation: this.jobOccupation,
                 address: this.address,
@@ -135,7 +149,6 @@ export default {
                 });
 
         },
-
     },
 
 
@@ -164,9 +177,9 @@ export default {
                     v-model="this.userName">
 
                 <div class="image-upload">
-                    <img v-if="!imageUrl" :src="'../../public/' + foundFileName" alt="" style="border-radius: 50%;"
-                        height="100px" width="100px">
-                    <img v-else :src="imageUrl" alt="Uploaded Image" style="border-radius: 50%;" height="100px"
+                    <img v-if="!imageUrl" :src="this.foundUser.filePath" alt="" style="border-radius: 50%; border: 3px solid;"
+                        height="100px" width="100px"  >
+                    <img v-else :src="imageUrl" alt="Uploaded Image" style="border-radius: 50%; border: 3px solid;" height="100px"
                         width="100px">
                     <div class="add-icon" @click="chooseImage">
                         <i class="fa-solid fa-plus"></i>
@@ -181,9 +194,10 @@ export default {
             <!-- 使用者簡介 -->
             <div class="profileinfo">
                 <div class="profileInfoTop">
-                    <h4 style="text-align: center;" >個人簡介</h4>
+                    <h4 style="text-align: center;">個人簡介</h4>
                 </div>
-                <textarea class="block profileInfoContent" name="" id="" cols="95" rows="6" :placeholder=foundUser.profile v-model="this.profile"></textarea>
+                <textarea class="block profileInfoContent" name="" id="" cols="95" rows="6" :placeholder=foundUser.profile
+                    v-model="this.profile"></textarea>
             </div>
             <!-- 使用者領養資料 -->
             <div class="adoptInformation">
@@ -199,12 +213,13 @@ export default {
                         <div class="userinfo">
                             <div class="name">
                                 <span>真實姓名 : </span>
-                                <input class="blockSmall blockData" type="text" name="" id="" :placeholder=foundUser.userRealName
-                                    v-model="this.userRealName">
+                                <input class="blockSmall blockData" type="text" name="" id=""
+                                    :placeholder=foundUser.userRealName v-model="this.userRealName">
                             </div>
                             <div class="age">
                                 <span>年齡 : </span>
-                                <input class="blockSmall blockData" type="number" :placeholder=foundUser.age v-model="this.age">
+                                <input class="blockSmall blockData" type="number" :placeholder=foundUser.age
+                                    v-model="this.age">
                             </div>
                             <div class="gender">
                                 <span>性別 : </span>
@@ -217,8 +232,8 @@ export default {
                             </div>
                             <div class="work">
                                 <span>職業 : </span>
-                                <input class="blockSmall blockData" type="text" name="" id="" :placeholder=foundUser.jobOccupation
-                                    v-model="this.jobOccupation">
+                                <input class="blockSmall blockData" type="text" name="" id=""
+                                    :placeholder=foundUser.jobOccupation v-model="this.jobOccupation">
                             </div>
                         </div>
                     </div>
@@ -229,30 +244,32 @@ export default {
                             <div class="contactinfo">
                                 <div class="address contactInfoInput">
                                     <span>地址 : </span>
-                                    <input class="blockSmall blockContact" type="text" name="" id="" :placeholder=foundUser.address v-model="this.address">
+                                    <input class="blockSmall blockContact" type="text" name="" id=""
+                                        :placeholder=foundUser.address v-model="this.address">
                                 </div>
                                 <div class="email contactInfoInput">
                                     <p>信箱 : {{ foundUser.email }}</p>
                                 </div>
                                 <div class="phone contactInfoInput">
                                     <span>聯絡電話 : </span>
-                                    <input class="blockSmall blockContact" type="text" :placeholder=foundUser.phone v-model="this.phone">
+                                    <input class="blockSmall blockContact" type="text" :placeholder=foundUser.phone
+                                        v-model="this.phone">
                                 </div>
                             </div>
                         </div>
                         <!-- 家庭狀況 -->
                         <div class="family">
                             <label for="">家庭狀況</label>
-                            <textarea class="block familyinfo" name="" id="" cols="30" rows="6" :placeholder=foundUser.familyStatus
-                                v-model="this.familyStatus"></textarea>
+                            <textarea class="block familyinfo" name="" id="" cols="30" rows="6"
+                                :placeholder=foundUser.familyStatus v-model="this.familyStatus"></textarea>
                         </div>
                     </div>
                 </div>
                 <!-- 給送養人的一句話 -->
                 <div class="memo">
                     <label for="">給送養人的一句話</label>
-                    <textarea class="block memoArea" name="" id="" cols="80" rows="6" :placeholder=foundUser.sentenceToAdopter
-                        v-model="this.sentenceToAdopter"></textarea>
+                    <textarea class="block memoArea" name="" id="" cols="80" rows="6"
+                        :placeholder=foundUser.sentenceToAdopter v-model="this.sentenceToAdopter"></textarea>
                 </div>
             </div>
         </div>
@@ -277,7 +294,7 @@ $inputBorder: #e2dbca;
     border-radius: 20px;
     color: #978989;
     font-size: 14pt;
-    padding: 20px 30px 20px 30px ;
+    padding: 20px 30px 20px 30px;
     box-shadow: 3px 3px 3px gray;
 
     //右上icon區
@@ -348,7 +365,8 @@ $inputBorder: #e2dbca;
         display: flex;
         flex-direction: column;
         align-items: center;
-        .profileInfoTop{
+
+        .profileInfoTop {
             width: 90%;
             height: 50px;
             display: flex;
@@ -356,7 +374,8 @@ $inputBorder: #e2dbca;
             font-weight: bolder;
             margin-top: 20px;
         }
-        .profileInfoContent{
+
+        .profileInfoContent {
             width: 90%;
             height: 150px;
             margin-bottom: 15px;
@@ -422,16 +441,18 @@ $inputBorder: #e2dbca;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
-                    .blockData{
+
+                    .blockData {
                         width: 95%;
                     }
                 }
             }
 
-            .infoRight{
+            .infoRight {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+
                 //聯絡方式
                 .contact {
                     width: 35vw;
@@ -444,16 +465,19 @@ $inputBorder: #e2dbca;
                         border-radius: 10px;
                         margin-top: 1vmin;
                         padding: 10px 25px 10px 25px;
-                        .contactInfoInput{
+
+                        .contactInfoInput {
                             display: flex;
                             flex-direction: column;
                             margin-bottom: 10px;
                         }
                     }
                 }
+
                 //家庭狀況
                 .family {
                     width: 35vw;
+
                     .familyinfo {
                         width: inherit;
                         height: 100px;
@@ -463,14 +487,15 @@ $inputBorder: #e2dbca;
                     }
                 }
             }
-            
 
-            
+
+
         }
 
         //給送養人的一句話 
         .memo {
             margin-top: 20px;
+
             .memoArea {
                 width: 60vw;
                 height: 120px;
@@ -483,14 +508,14 @@ $inputBorder: #e2dbca;
 }
 
 // textarea
-.block{
+.block {
     padding: 10px 10px 10px 10px;
     border: $inputBorder solid 2px;
     border-radius: 10px;
     margin: 10px 0px 10px 0px;
 }
 
-.blockSmall{
+.blockSmall {
     padding: 0px 5px 0px 5px;
     border: $inputBorder solid 2px;
     border-radius: 10px;
