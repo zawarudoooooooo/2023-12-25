@@ -1,118 +1,132 @@
 <template>
-    <div class="div">
-        <div class="div-2"></div>
-        <div class="div-3">
+<div class="div">
+    <div class="div-2"></div>
+    <div class="div-3">
         <div class="div-4">
-        <div class="div-5">
-        <div class="column">
-        <div class="div-6">
-        論壇首頁<br />科普版<br />閒聊版<br />MY ARTICLE
-        </div>
-        </div>
-        <div class="column-2">
-        <div class="div-7">
-            <div class="div-8">
-                <div class="column-3">
-                    <img
-                    loading="lazy"
-                    srcSet="..."
-                    class="img"
-                    />
+            <div class="div-5">
+                <div class="column">
+                    <div class="div-6">
+                        論壇首頁<br />科普版<br />閒聊版<br />MY ARTICLE
+                    </div>
                 </div>
-                <div class="column-4">
-                    <div class="div-9">
-                        <div class="div-10">狂犬病也會傳染給人類!</div>
-                        <div class="div-11">
-                        <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
-                            <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">”依</span>
-                        </span>
-                        <a href="https://db.lawbank.com.tw/FLAW/FLAWQRY03.aspx?lno=20&lsid=FL014716" 
-                        style="text-decoration: underline; font-size: 24px; color: rgba(110, 117, 168, 1);"
-                        target="_blank">
-                            <a href="https://db.lawbank.com.tw/FLAW/FLAWQRY03.aspx?lno=20&lsid=FL014716"
-                            style="text-decoration: underline; font-size: 24px; color: rgba(110, 117, 168, 1);"
-                            target="_blank">動物傳染病防治條例第２０條第２款</a>
-                        </a>
-                        <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
-                            <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
-                                之規定，如防疫人員認為有必要，有可能對遭感染之動物進行撲殺，為保護家中動物並維護健康，防治狂犬病，
-                                防檢局呼籲飼主每年務必為犬貓施打狂犬病疫苗，並應繫掛證明牌，以維護人畜安全，避免受罰。”
-                            </span>
-                        <br />
-                            <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
-                            </span>
-                        </span>
-                        <span style="font-size: 25px">
-                            <span style="font-size: 25px"></span><br />
-                            <span style="font-size: 25px">
-                            根據世界衛生組織估計：每年約有59,000~
-                            61,000死亡病例，其中亞洲國家以印度、中國、印尼及菲律賓病例數最多。在被疑似罹患狂犬病動物抓咬傷的受害者中，
-                            約有40%是15歲以下的孩童。人類狂犬病死亡病例絕大多數由病犬咬傷所引起。
-                            </span>
-                        </span>
+                <div class="column-2">
+                    <div class="div-7">
+                        <div class="div-8">
+                            <div class="column-3">
+                                <img
+                                    loading="lazy"
+                                    srcSet="..."
+                                    class="img"
+                                />
+                            </div>                                    
+                            <div class="column-4">
+                                <div class="div-9">
+                                    <div class="div-10">狂犬病也會傳染給人類!</div>
+                                    <div class="div-11">
+                                        <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
+                                            <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">”依</span>
+                                        </span>
+                                        <a 
+                                            href="https://db.lawbank.com.tw/FLAW/FLAWQRY03.aspx?lno=20&lsid=FL014716" 
+                                            style="text-decoration: underline; font-size: 24px; color: rgba(110, 117, 168, 1);"
+                                            target="_blank"
+                                        >
+                                            <a 
+                                                href="https://db.lawbank.com.tw/FLAW/FLAWQRY03.aspx?lno=20&lsid=FL014716"
+                                                style="text-decoration: underline; font-size: 24px; color: rgba(110, 117, 168, 1);"
+                                                target="_blank"
+                                            >
+                                                動物傳染病防治條例第２０條第２款
+                                            </a>
+                                        </a>
+                                        <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
+                                            <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
+                                                之規定，如防疫人員認為有必要，有可能對遭感染之動物進行撲殺，為保護家中動物並維護健康，防治狂犬病，
+                                                防檢局呼籲飼主每年務必為犬貓施打狂犬病疫苗，並應繫掛證明牌，以維護人畜安全，避免受罰。”
+                                            </span>
+                                            <br />
+                                            <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
+                                            </span>
+                                        </span>
+                                        <span style="font-size: 25px">
+                                            <span style="font-size: 25px"></span>
+                                            <br />
+                                            <span style="font-size: 25px">
+                                            根據世界衛生組織估計：每年約有59,000~
+                                            61,000死亡病例，其中亞洲國家以印度、中國、印尼及菲律賓病例數最多。在被疑似罹患狂犬病動物抓咬傷的受害者中，
+                                            約有40%是15歲以下的孩童。人類狂犬病死亡病例絕大多數由病犬咬傷所引起。
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="div-12">點我看完整文章</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="div-12">點我看完整文章</div>
-                    </div>
                     </div>
                 </div>
-                </div>
-            </div>
             </div>
         </div>
         <div class="div-13">
             <div class="div-14">
-            <div class="column-5">
-                <img
-                loading="lazy"
-                srcSet="..."
-                class="img-2"
-                />
-            </div>
-            <div class="column-6">
-                <div class="div-15">
-                    <div class="div-16">狂犬病也會傳染給人類!</div>
-                    <div class="div-17">
-                        <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
-                            <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">”依</span>
-                        </span>
-                        <a href="https://db.lawbank.com.tw/FLAW/FLAWQRY03.aspx?lno=20&lsid=FL014716" 
-                        style="text-decoration: underline; 
-                        font-size: 24px; color: 
-                        rgba(110, 117, 168, 1);" 
-                        target="_blank">
-                        <a
-                        href="https://db.lawbank.com.tw/FLAW/FLAWQRY03.aspx?lno=20&lsid=FL014716"
-                        style="
-                        text-decoration: underline;
-                        font-size: 24px;
-                        color: rgba(110, 117, 168, 1);
-                        "
-                        target="_blank"
-                        >動物傳染病防治條例第２０條第２款</a>
-                        </a>
-                        <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
+                <div class="column-5">
+                    <img
+                        loading="lazy"
+                        srcSet="..."
+                        class="img-2"
+                    />
+                </div>
+                <div class="column-6">
+                    <div class="div-15">
+                        <div class="div-16">狂犬病也會傳染給人類!</div>
+                        <div class="div-17">
                             <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
-                                之規定，如防疫人員認為有必要，有可能對遭感染之動物進行撲殺，
-                                為保護家中動物並維護健康，防治狂犬病，防檢局呼籲飼主每年務必為犬貓施打狂犬病疫苗，
-                                並應繫掛證明牌，以維護人畜安全，避免受罰。”</span>
-                            <br />
-                            <span style="font-size: 24px; color: rgba(110, 117, 168, 1)"></span>
-                        </span>
-                        <span style="font-size: 25px">
-                            <span style="font-size: 25px"></span>
-                            <br />
-                        <span style="font-size: 25px">根據世界衛生組織估計：每年約有59,000~
-                        61,000死亡病例，其中亞洲國家以印度、中國、印尼及菲律賓病例數最多。
-                        在被疑似罹患狂犬病動物抓咬傷的受害者中，約有40%是15歲以下的孩童。
-                        人類狂犬病死亡病例絕大多數由病犬咬傷所引起。</span>
-                        </span>
-                </div>
+                                <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">”依</span>
+                            </span>
+                            <a 
+                                href="https://db.lawbank.com.tw/FLAW/FLAWQRY03.aspx?lno=20&lsid=FL014716" 
+                                style="text-decoration: underline; 
+                                font-size: 24px; color: 
+                                rgba(110, 117, 168, 1);" 
+                                target="_blank"
+                            >
+                                <a
+                                    href="https://db.lawbank.com.tw/FLAW/FLAWQRY03.aspx?lno=20&lsid=FL014716"
+                                    style=
+                                    "
+                                    text-decoration: underline;
+                                    font-size: 24px;
+                                    color: rgba(110, 117, 168, 1);
+                                    "
+                                    target="_blank"
+                                >動物傳染病防治條例第２０條第２款
+                                </a>
+                            </a>
+                            <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
+                                <span style="font-size: 24px; color: rgba(110, 117, 168, 1)">
+                                    之規定，如防疫人員認為有必要，有可能對遭感染之動物進行撲殺，
+                                    為保護家中動物並維護健康，防治狂犬病，防檢局呼籲飼主每年務必為犬貓施打狂犬病疫苗，
+                                    並應繫掛證明牌，以維護人畜安全，避免受罰。”
+                                </span>
+                                <br />
+                                <span style="font-size: 24px; color: rgba(110, 117, 168, 1)"></span>
+                            </span>
+                            <span style="font-size: 25px">
+                                <span style="font-size: 25px"></span>
+                                <br />
+                                <span style="font-size: 25px">
+                                    根據世界衛生組織估計：每年約有59,000~
+                                    61,000死亡病例，其中亞洲國家以印度、中國、印尼及菲律賓病例數最多。
+                                    在被疑似罹患狂犬病動物抓咬傷的受害者中，約有40%是15歲以下的孩童。
+                                    人類狂犬病死亡病例絕大多數由病犬咬傷所引起。
+                                </span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            </div>
-        </div>
         </div>
     </div>
+</div>
 </template>
 
 <style scoped>
