@@ -487,10 +487,6 @@ export default {
     margin-left: 65px;
 }
 
-.article_text {
-    
-}
-
 .article_img {
     aspect-ratio: 0.91;
     object-fit: contain;

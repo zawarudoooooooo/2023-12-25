@@ -46,14 +46,19 @@ export default{
         this.petInfo.user_id = this.userInfo.userId;
     },
     watch: {
-        isAdopted(){
-            if(this.isAdopted){
+        isAdopted(newValue, oldValue){
+            if(newValue){
                 this.petInfo.adoption_status = "送養中";
             } else {
                 this.petInfo.adoption_status = "正常";
             }
-            console.log(this.petInfo.adoption_status)
         },
+        'petInfo.type': function(newValue, oldValue){
+            if(newValue != oldValue){
+                this.vaccineArr = [];
+                this.petInfo.ligation = false;
+            }
+        }
     },
     methods: {
         getPath(type){
@@ -89,7 +94,6 @@ export default{
             }
         },
         changeVaccine(vaccine){
-            console.log(this.vaccineArr)
             const index = this.vaccineArr.indexOf(vaccine);
 
             if (index !== -1) {
@@ -97,11 +101,9 @@ export default{
             } else {
                 this.vaccineArr.push(vaccine);
             }
-            console.log("new vaccine arr", this.vaccineArr)
         },
         changeLigation(){
             this.petInfo.ligation = !this.petInfo.ligation;
-            console.log("new ligation status", this.petInfo.ligation)
         },
         previewImg(){
             const fileInput = this.$refs.fileInput;
@@ -137,6 +139,9 @@ export default{
                 console.error(error);
             })
         },
+        goTo(x){
+            this.$router.push(x)
+        }
     },
 }
 </script>
@@ -206,6 +211,13 @@ export default{
                         </svg>
                     </div>
                     <input class="inputTextName" type="text" placeholder="寵物名字" v-model="this.petInfo.pet_name">
+                    <div class="selectTypeArea">
+                        <label for="type">種類</label>
+                        <select class="selectType" name="" id="type" v-model="petInfo.type">
+                            <option value="狗">狗</option>
+                            <option value="貓">貓</option>
+                        </select>
+                    </div>
                     <div class="isAdopt">
                         <input type="checkbox" id="isAdoptAnimal" v-model="isAdopted">
                         <label for="isAdoptAnimal">是否送養？</label>
@@ -233,17 +245,44 @@ export default{
                         <div class="blockVaccine">
                             <p>醫療狀態</p>
                             <div class="block blockVaccineContent">
-                                <!-- 待轉成動態識別 -->
-                                <div class="vaccine">
+                                <!-- 貓疫苗 -->
+                                <div v-if="petInfo.type == '貓'" class="vaccine">
                                     <i v-if="isChecked('三合一疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('三合一疫苗')"></i>
                                     <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('三合一疫苗')"></i>
                                     <p @click="changeVaccine('三合一疫苗')">三合一疫苗</p>
                                 </div>
-                                <div class="vaccine">
+                                <div v-if="petInfo.type == '貓'" class="vaccine">
                                     <i v-if="isChecked('五合一疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('五合一疫苗')"></i>
                                     <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('五合一疫苗')"></i>
                                     <p @click="changeVaccine('五合一疫苗')">五合一疫苗</p>
                                 </div>
+                                <!-- 狗疫苗 -->
+                                <div v-if="petInfo.type == '狗'" class="vaccine">
+                                    <i v-if="isChecked('五合一疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('三合一疫苗')"></i>
+                                    <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('五合一疫苗')"></i>
+                                    <p @click="changeVaccine('五合一疫苗')">五合一疫苗</p>
+                                </div>
+                                <div v-if="petInfo.type == '狗'" class="vaccine">
+                                    <i v-if="isChecked('七合一疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('五合一疫苗')"></i>
+                                    <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('七合一疫苗')"></i>
+                                    <p @click="changeVaccine('七合一疫苗')">七合一疫苗</p>
+                                </div>
+                                <div v-if="petInfo.type == '狗'" class="vaccine">
+                                    <i v-if="isChecked('八合一疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('三合一疫苗')"></i>
+                                    <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('八合一疫苗')"></i>
+                                    <p @click="changeVaccine('八合一疫苗')">八合一疫苗</p>
+                                </div>
+                                <div v-if="petInfo.type == '狗'" class="vaccine">
+                                    <i v-if="isChecked('十合一疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('五合一疫苗')"></i>
+                                    <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('十合一疫苗')"></i>
+                                    <p @click="changeVaccine('十合一疫苗')">十合一疫苗</p>
+                                </div>
+                                <div v-if="petInfo.type == '狗'" class="vaccine">
+                                    <i v-if="isChecked('萊姆病疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('五合一疫苗')"></i>
+                                    <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('萊姆病疫苗')"></i>
+                                    <p @click="changeVaccine('萊姆病疫苗')">萊姆病疫苗</p>
+                                </div>
+                                <!-- 通用 -->
                                 <div class="vaccine">
                                     <i v-if="isChecked('狂犬病疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('狂犬病疫苗')"></i>
                                     <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('狂犬病疫苗')"></i>
@@ -295,7 +334,13 @@ export default{
             </div>
         </div>
 
-        <!-- <div class="clear_fix"></div> -->
+        <!-- btn -->
+        <div class="btnArea">
+            <button class="btn btn-big btn-specialBlue" @click="goTo('/MyPet')">
+                <i class="fa-solid fa-right-to-bracket" style="color: white"></i>
+                <p style="color: white;">回到列表</p>
+            </button>
+        </div>
     </div>
 </div>
 </template>
@@ -303,8 +348,6 @@ export default{
 
 <style lang="scss" scoped>
 @import '../../assets/RStyle.scss';
-
-$inputBorder: #e2dbca;
 
 .content{
     justify-content: center;
@@ -409,6 +452,16 @@ $inputBorder: #e2dbca;
                         width: 200px;
                         border: $inputBorder solid 2px;
                         font-size: 18pt;
+                        margin-right: 20px;
+                    }
+
+                    .selectTypeArea{
+                        display: flex;
+                        align-items: center;
+                        .selectType{
+                            width: 80px;
+                            height: 35px;
+                        }
                     }
                     .isAdopt{
                         margin-left: 20px;
@@ -545,6 +598,18 @@ $inputBorder: #e2dbca;
                         object-fit: contain;
                         margin-bottom: 20px;
                     }
+                }
+            }
+        }
+        .btnArea{
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .btn{
+                i{
+                    margin-right: 10px;
                 }
             }
         }
