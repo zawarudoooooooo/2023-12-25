@@ -101,6 +101,15 @@ export default{
         closeMoal(){
             this.isShowModal = false;
         },
+        isChecked(checkVaccine){
+            console.log("vaccine", this.petInfo.vaccine)
+            if(this.petInfo.vaccine.trim() == "" || this.petInfo.vaccine == null){
+                return false;
+            }
+            let vaccineArr = this.petInfo.vaccine.split(',').map(vaccine => vaccine.trim());
+            console.log(vaccineArr)
+            return vaccineArr.includes(checkVaccine);
+        },
         goTo(x){
             sessionStorage.removeItem('adopt pet detail');
             this.$router.push(x)
@@ -221,10 +230,26 @@ export default{
                             <p>醫療狀態</p>
                             <div class="block blockVaccineContent">
                                 <!-- 待轉成動態識別 -->
-                                <p>{{  }} 五合一疫苗</p>
-                                <p>{{  }} 三合一疫苗</p>
-                                <p>{{  }} 狂犬病疫苗</p>
-                                <p>{{ this.petInfo.ligation }} 結紮</p>
+                                <div class="vaccine">
+                                    <i v-if="isChecked('三合一疫苗')" class="fa-regular fa-circle"></i>
+                                    <i v-else class="fa-solid fa-xmark"></i>
+                                    <p>三合一疫苗</p>
+                                </div>
+                                <div class="vaccine">
+                                    <i v-if="isChecked('五合一疫苗')" class="fa-regular fa-circle"></i>
+                                    <i v-else class="fa-solid fa-xmark"></i>
+                                    <p>五合一疫苗</p>
+                                </div>
+                                <div class="vaccine">
+                                    <i v-if="isChecked('狂犬病疫苗')" class="fa-regular fa-circle"></i>
+                                    <i v-else class="fa-solid fa-xmark"></i>
+                                    <p>狂犬病疫苗</p>
+                                </div>
+                                <div class="vaccine">
+                                    <i v-if="this.petInfo.ligation" class="fa-regular fa-circle"></i>
+                                    <i v-else class="fa-solid fa-xmark"></i>
+                                    <p>結紮</p>
+                                </div>
                             </div>
                         </div>
                         <div class="blockStatus">
@@ -379,6 +404,19 @@ export default{
                             font-size: 12pt;
                             .blockVaccineContent{
                                 width: 100%;
+                                .vaccine{
+                                    display: flex;
+                                    align-items: center;
+                                    font-size: 12pt;
+                                    padding-left: 5px;
+                                    i{
+                                        width: 15px;
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                        margin-right: 10px;
+                                    }
+                                }
                             }
                         }
                         .blockStatus{

@@ -606,6 +606,7 @@ $inputBorder: #e2dbca;
     }
 }
 
+// textarea & input
 .block{
     padding: 10px 10px 10px 10px;
     border: 2px solid lightgray;

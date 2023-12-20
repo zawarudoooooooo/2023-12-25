@@ -32,7 +32,7 @@ export default {
         <RouterLink class="routerLink" to="/Profile">Profile</RouterLink>
         <RouterLink class="routerLink" to="/edit_myArticle">edit_myArticle</RouterLink>
         <RouterLink class="routerLink" to="/pre_myArticle">pre_myArticle</RouterLink>
-        <RouterLink class="routerLink" to="/PlatformEntrance">PlatformEntrance</RouterLink>
+        <RouterLink class="routerLink" to="/">平台首頁</RouterLink>
         <RouterLink class="routerLink" to="/ForumEntrance">ForumEntrance</RouterLink>
         <RouterLink class="routerLink" to="/mapSearch">mapSearch</RouterLink>
         <RouterLink class="routerLink" to="/view_Article">view_Article</RouterLink>

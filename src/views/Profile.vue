@@ -9,7 +9,8 @@ export default {
             foundUser: null,
             userInfoList: null,
             imageUrl: null,
-            foundFileName:null
+            foundFileName: null,
+            // filePath: null
 
         };
     },
@@ -33,7 +34,7 @@ export default {
                 .then(data => {
                     console.log(data);
                     this.userInfoList = data.userInfoList;
-                    console.log(this.userInfoList)
+                    console.log(this.userInfoList);
 
                     // 根據 foundUserId 找到對應的 foundUser
                     const foundUser = this.userInfoList.find(user => user.userId === this.foundUserInfo.userId);
@@ -41,17 +42,22 @@ export default {
                     // 如果找到了對應的 foundUser，你可以做一些操作
                     if (foundUser) {
                         console.log('找到了對應的使用者:', foundUser);
+
+                        // 在這裡加入 base64 前綴
+                        const base64Prefix = 'data:image/jpeg;base64,';
+                        const filePath = base64Prefix + foundUser.userPhoto; // 在這裡將路徑轉換為 base64 圖片前綴
+                        console.log(filePath);
+                        foundUser.filePath = filePath; // 將處理後的圖片路徑存儲在 foundUser 中的 filePath 屬性
+
                         this.$emit("userInfo", foundUser);
-                        this.foundUser = foundUser
+                        this.foundUser = foundUser; // 將整理後的 foundUser 存入 this.foundUser
                     } else {
                         console.log('找不到對應的使用者');
                     }
-                    const filePath = foundUser.userPhoto
-                    const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
-                    this.foundFileName=fileName
-                    console.log(this.foundFileName) // 輸出: image_1702435129913.jpg
-                })
+                });
         },
+
+
 
     },
     components: {
@@ -61,7 +67,6 @@ export default {
 </script>
 
 <template>
-
     <div class="content">
         <!-- 側邊功能區 -->
         <div class="dashBoardArea">
@@ -72,55 +77,84 @@ export default {
             <!-- 使用者名稱和ID -->
             <div class="usernameAndid">
                 <p>{{ foundUser.userName }}</p>
-                <img v-if="foundUserInfo.userPhoto" :src="'../../public/' + foundFileName" alt="" style="border-radius: 50%;" height="100px" width="100px">
-                <div v-if="!foundUserInfo.userPhoto" style="border: 2px solid; height: 100px; width: 100px; border-radius: 50%;">
+                <img v-if="this.foundUser.filePath" :src="this.foundUser.filePath" alt="" style="border-radius: 50%; border: 3px solid;"
+                    height="100px" width="100px">
+                <div v-if="!this.foundUser.filePath"
+                    style="border: 3px solid; height: 100px; width: 100px; border-radius: 50%;">
                 </div>
-                <p>{{ foundUser.account }}</p>
+                <p>@{{ foundUser.account }}</p>
             </div>
 
             <!-- 使用者簡介 -->
             <div class="userinfo">
-                <p style="text-align: center;" >個人簡介</p>
-                <p v-html="foundUser.profile ? foundUser.profile.replace(/\n/g, '<br>') : '未填寫'"></p>
+                <div class="userInfoTop">
+                    <h4 style="text-align: center;">個人簡介</h4>
+                </div>
+                <div class="userInfoContent">
+                    <p v-html="foundUser.profile ? foundUser.profile.replace(/\n/g, '<br>') : '未填寫'"></p>
+                </div>
             </div>
-            <!-- 使用者寵物專區 -->
-            <div class="mypetArea">
+            <!-- 使用者領養資料 -->
+            <div class="adoptInformation">
                 <div class="title">
-                    <p>My Pet</p>
-                    <!-- 寵物狀態區域 -->
-                    <div class="state">
-                        <div class="regular">
+                    <p>我的領養資料</p>
+                    <h4>(以下資料僅提拱給送養人)</h4>
+                </div>
+                <!-- 詳細領養資料 -->
+                <div class="infoArea">
+                    <!-- 基本資料 -->
+                    <div class="user">
+                        <label for="">基本資料</label>
+                        <div class="userinfo">
+                            <div class="name">
+                                <span>真實姓名 : </span>
+                                <span>{{ foundUser.userRealName ? foundUser.userRealName : "未填寫" }}</span>
+                            </div>
+                            <div class="age">
+                                <span>年齡 : </span>
+                                <span>{{ foundUser.age ? foundUser.age : "未填寫" }}</span>
+                            </div>
+                            <div class="gender">
+                                <span>性別 : </span>
+                                <span>{{ foundUser.gender ? foundUser.gender : "未填寫" }}</span>
+                            </div>
+                            <div class="work">
+                                <span>職業 : </span>
+                                <span>{{ foundUser.jobOccupation ? foundUser.jobOccupation : "未填寫" }}</span>
+                            </div>
                         </div>
-                        <p>正常</p>
-                        <div class="ing">
+                    </div>
+                    <div class="infoRight">
+                        <!-- 聯絡方式 -->
+                        <div class="contact">
+                            <label for="">聯絡方式</label>
+                            <div class="contactinfo">
+                                <div class="address contactInfoInput">
+                                    <span>地址 : </span>
+                                    <span>{{ foundUser.address ? foundUser.address : "未填寫" }}</span>
+                                </div>
+                                <div class="email contactInfoInput">
+                                    <p>信箱 : {{ foundUser.email ? foundUser.email : "未填寫" }}</p>
+                                </div>
+                                <div class="phone contactInfoInput">
+                                    <span>聯絡電話 : </span>
+                                    <span>{{ foundUser.phone ? foundUser.phone : "未填寫" }}</span>
+                                </div>
+                            </div>
                         </div>
-                        <p>送養中</p>
-                        <div class="finish">
+                        <!-- 家庭狀況 -->
+                        <div class="family">
+                            <label for="">家庭狀況</label>
+                            <p v-html="foundUser.familyStatus ? foundUser.familyStatus.replace(/\n/g, '<br>') : '未填寫'"></p>
                         </div>
-                        <p>已送養</p>
-                        <i class="fa-solid fa-pen"></i>
                     </div>
                 </div>
-                <!-- 寵物圖示區域 -->
-                <div class="petimg">
-                    <div class="ruby">
-                        <p>Ruby</p>
-                        <i class="fa-solid fa-dog"></i>
-                    </div>
-                    <div class="kiwi">
-                        <p>Kiwi</p>
-                        <i class="fa-solid fa-cat"></i>
-                    </div>
-                    <div class="lucky">
-                        <p>Lucky</p>
-                        <i class="fa-solid fa-dog"></i>
-                    </div>
-
+                <!-- 給送養人的一句話 -->
+                <div class="memo">
+                    <label for="">給送養人的一句話</label>
+                    <p v-html="foundUser.sentenceToAdopter ? foundUser.sentenceToAdopter.replace(/\n/g, '<br>') : '未填寫'">
+                    </p>
                 </div>
-            </div>
-            <!-- 其他區域 -->
-            <div class="otherArea">
-
             </div>
         </div>
     </div>
@@ -128,21 +162,34 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+$inputBorder: #e2dbca;
+
 .content {
-    width: 95vw;
-    height: 200vh;
-    margin: auto;
-    margin-top: 3vmin;
+    width: 100vw;
+    height: auto;
+    padding-top: 3vmin;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-bottom: 5vmin;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+
+    .dashBoardArea {
+        width: 13vw;
+    }
 
     //使用者資料區
     .profileArea {
-        width: 80vw;
-        height: 195vh;
+        width: 78vw;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         background-color: white;
-        border-radius: 10px;
-        text-align: center;
+        border-radius: 20px;
+        color: #978989;
+        font-size: 14pt;
+        padding: 20px 30px 20px 30px;
         box-shadow: 3px 3px 3px gray;
 
         //使用者名稱和ID
@@ -157,7 +204,6 @@ export default {
             align-items: center;
             font-size: 26pt;
             margin-top: 10vmin;
-            margin-left: 12vmin;
 
             p {
                 color: #978989;
@@ -165,7 +211,7 @@ export default {
                 margin: 0;
             }
 
-            img{
+            img {
                 margin-left: 115px;
             }
 
@@ -180,170 +226,147 @@ export default {
         .userinfo {
             text-align: left;
             width: 65vw;
-            height: 30vh;
+            height: 250px;
             background-color: white;
             border-radius: 10px;
             box-shadow: 3px 3px 3px 3px gray;
             margin-top: 10vmin;
-            margin-left: 12vmin;
-            padding: 5vmin;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .userInfoTop {
+                width: 90%;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                font-weight: bolder;
+                margin-top: 20px;
+            }
+
+            .userInfoContent {
+                width: 90%;
+                height: 150px;
+                margin-bottom: 15px;
+            }
         }
 
-        //使用者寵物專區
-        .mypetArea {
+        //使用者領養資料
+        .adoptInformation {
             width: 65vw;
-            height: 40vh;
+            height: auto;
             background-color: white;
             border-radius: 10px;
             box-shadow: 3px 3px 3px 3px gray;
             margin-top: 10vmin;
-            margin-left: 12vmin;
-            padding: 4vmin;
+            padding: 5vmin;
+            font-weight: bold;
+
+            p {
+                color: #978989;
+            }
+
+            label {
+                color: #978989;
+                font-weight: bold;
+                font-size: 16pt;
+                margin-left: 2vmin;
+            }
 
             .title {
-                height: 10vh;
-                display: flex;
-                justify-content: space-between;
+                height: 15vh;
+                text-align: center;
 
                 p {
-                    color: #978989;
-                    font-weight: bold;
-                    font-size: 22pt;
+                    font-size: 28pt;
                     margin: 0;
                 }
 
-                //寵物狀態區域
-                .state {
-                    height: 5vh;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-around;
-
-                    p {
-                        font-size: 16pt;
-                        margin-right: 1vmin;
-                    }
-
-                    //狀態 : 正常
-                    .regular {
-                        width: 3vmin;
-                        height: 3vmin;
-                        border-radius: 50%;
-                        background-color: #E9D2A6;
-                        margin-right: 1vmin;
-                    }
-
-                    //狀態 : 送養中
-                    .ing {
-                        width: 3vmin;
-                        height: 3vmin;
-                        border-radius: 50%;
-                        background-color: #C79CA4;
-                        margin-right: 1vmin;
-                    }
-
-                    //狀態 : 已送養                    
-                    .finish {
-                        width: 3vmin;
-                        height: 3vmin;
-                        border-radius: 50%;
-                        background-color: #B2D2CB;
-                        margin-right: 1vmin;
-                    }
-
-                    i {
-                        color: #978989;
-                        font-size: 28pt;
-                    }
+                h4 {
+                    color: #A63A50;
+                    margin: 0;
                 }
             }
 
-            //寵物圖示區域
-            .petimg {
+            //詳細領養資料
+            .infoArea {
+                width: 60vw;
+                height: auto;
                 display: flex;
-                justify-content: space-around;
+                justify-content: space-between;
 
-                //ruby
-                .ruby {
-                    width: 40vmin;
-                    height: 20vmin;
-                    border-radius: 20px;
-                    background-color: #E9D2A6;
-                    display: flex;
-                    color: white;
-                    padding-left: 3vmin;
-                    margin-top: 1vmin;
+                //基本資料
+                .user {
+                    width: 20vw;
 
-                    p {
-                        font-weight: bold;
-                        font-size: 26pt;
-                        margin-top: 0;
-                    }
-
-                    i {
-                        font-size: 135pt;
+                    .userinfo {
+                        width: 100%;
+                        height: 390px;
+                        border: 2.5px solid #978989;
+                        border-radius: 10px;
                         margin-top: 1vmin;
+                        padding: 15px 25px 15px 25px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+
+                        .blockData {
+                            width: 95%;
+                        }
                     }
                 }
 
-                //kiwi
-                .kiwi {
-                    width: 40vmin;
-                    height: 20vmin;
-                    border-radius: 20px;
-                    background-color: #C79CA4;
+                .infoRight {
                     display: flex;
-                    color: white;
-                    padding-left: 3vmin;
-                    margin-top: 1vmin;
+                    flex-direction: column;
+                    align-items: center;
 
-                    p {
-                        font-weight: bold;
-                        font-size: 26pt;
-                        margin-top: 0;
+                    //聯絡方式
+                    .contact {
+                        width: 35vw;
+                        margin-bottom: 20px;
+
+                        .contactinfo {
+                            width: inherit;
+                            height: 230px;
+                            border: 2.5px solid #978989;
+                            border-radius: 10px;
+                            margin-top: 1vmin;
+                            padding: 10px 25px 10px 25px;
+
+                            .contactInfoInput {
+                                display: flex;
+                                flex-direction: column;
+                                margin-bottom: 10px;
+                            }
+                        }
                     }
 
-                    i {
-                        font-size: 135pt;
+                    //家庭狀況
+                    .family {
+                        width: 35vw;
+                        height: 130px;
+                        border: 2.5px solid #978989;
+                        border-radius: 10px;
                         margin-top: 1vmin;
+                        padding: 10px 25px 10px 25px;
+
+
                     }
                 }
 
-                //lucky
-                .lucky {
-                    width: 40vmin;
-                    height: 20vmin;
-                    border-radius: 20px;
-                    background-color: #B2D2CB;
-                    display: flex;
-                    color: white;
-                    padding-left: 3vmin;
-                    margin-top: 1vmin;
 
-                    p {
-                        font-weight: bold;
-                        font-size: 26pt;
-                        margin-top: 0;
-                    }
 
-                    i {
-                        font-size: 135pt;
-                        margin-top: 1vmin;
-                    }
-                }
             }
-        }
 
-        //其他區域
-        .otherArea {
-            width: 65vw;
-            height: 30vh;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 3px 3px 3px 3px gray;
-            margin-left: 12vmin;
-            margin-top: 10vmin;
-            padding: 5vmin;
+            //給送養人的一句話 
+            .memo {
+                margin-top: 5vmin;
+                width: 60vw;
+                height: 120px;
+                border: 2.5px solid #978989;
+                border-radius: 10px;
+            }
         }
     }
 }

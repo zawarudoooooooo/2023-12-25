@@ -25,7 +25,7 @@ export default {
             <p>閒聊版</p>
         </div>
         <div class="adopt line">
-            <p>MY ARTICLE</p>
+            <p>我的文章</p>
         </div>
         <button class="dashboard_btn">
             <i class="fa-solid fa-plus plus_icon"></i>
@@ -37,21 +37,19 @@ export default {
 
 <style lang="scss" scoped>
 .dashboardArea {
-    width: 100%;
-    height: 22%;
+    width: 170px;
+    height: auto;
     background-color: white;
-    border-radius: 35px;
+    border-radius: 20px;
     color: #978989;
     font-size: 16pt;
     font-weight: 700;
     box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
-    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-
-    i {
-        margin-bottom: 10px;
-        margin-right: 1vmin
-    }
 
     .line {
         margin-bottom: 10px;
@@ -63,7 +61,6 @@ export default {
         display: flex;
         justify-content: start;
         align-items: center;
-        margin-left: 45px;
         margin-top: 35px;
     }
 
@@ -72,7 +69,6 @@ export default {
         display: flex;
         justify-content: start;
         align-items: center;
-        margin-left: 45px;
     }
 
     .article {
@@ -80,7 +76,6 @@ export default {
         display: flex;
         justify-content: start;
         align-items: center;
-        margin-left: 45px;
     }
 
     .adopt {
@@ -88,7 +83,6 @@ export default {
         display: flex;
         justify-content: start;
         align-items: center;
-        margin-left: 45px;
     }
 
     .dashboard_btn {
@@ -101,9 +95,13 @@ export default {
         background-color: #6E75A8;
         border-radius: 30px;
         font-weight: 700;
-        margin: 30px 50px;
         padding: 0px 10px 0px 10px;
         font-size: 12pt;
+        margin-bottom: 20px;
+        i {
+            margin-bottom: 10px;
+            margin-right: 1vmin
+        }
 
 
         .plus_icon {

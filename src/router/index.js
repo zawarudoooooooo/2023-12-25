@@ -133,6 +133,11 @@ const router = createRouter({
       component: () => import('../views/Mebice/MapSearch.vue'),
     },
     {
+      path: '/AdoptionSearch',
+      name: 'AdoptionSearch',
+      component: () => import('../views/Mebice/AdoptionSearch.vue'),
+    },
+    {
       path: '/MyArticle',
       name: 'MyArticle',
       component: () => import('../views/Mebice/MyArticle.vue'),
