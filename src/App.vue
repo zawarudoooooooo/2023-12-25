@@ -8,6 +8,7 @@ export default{
       userInfo: {},
       petInfo: {},
       userPetInfo: {},
+      petId: "",
     }
   },
   components: {
@@ -20,6 +21,9 @@ export default{
     },
     getPetInfo(obj){
       this.petInfo = obj;
+    },
+    getPetId(x){
+      this.petId = x;
     },
     getUserPetInfo(obj){
       this.userPetInfo = obj;
@@ -38,6 +42,7 @@ export default{
     <RouterView 
     @userInfo="getUserInfo" :userInfo="userInfo"
     @petInfo="getPetInfo" :petInfo="petInfo"
+    @petId="getPetId" :petId="petId"
     @userPetInfo="getUserPetInfo" :userPetInfo="userPetInfo"/>
   </div>
 </div>

@@ -1,4 +1,6 @@
 <script>
+import axios from 'axios';
+
 export default{
     data(){
         return{
@@ -57,10 +59,11 @@ export default{
         }
     },
     props: [
-        "petInfo"
+        "petId"
     ],
     mounted(){
-        this.petInfo = JSON.parse(sessionStorage.getItem('adopt pet detail'));
+        console.log("pet id", this.petId);
+        this.getPetUser();
     },
     computed: {
         checkAdopted(){
@@ -71,6 +74,21 @@ export default{
         },
     },
     methods: {
+        getPetUser(){
+            axios.get('http://localhost:8080/api/adoption/petInfo/getAdoptPetInfoAndUserInfo', {
+                params: {
+                    petId: this.petId
+                }
+            })
+            .then(response => {
+                console.log("response pet & user", response.data)
+                this.petInfo = response.data.vo.petInfo;
+                this.userInfo = response.data.vo.userInfo;
+            })
+            .catch(error => {
+                console.error(error)
+            })
+        },
         getPath(type){
             if(type == "狗"){
                 return this.dog;
@@ -102,12 +120,10 @@ export default{
             this.isShowModal = false;
         },
         isChecked(checkVaccine){
-            console.log("vaccine", this.petInfo.vaccine)
-            if(this.petInfo.vaccine.trim() == "" || this.petInfo.vaccine == null){
+            if(this.petInfo.vaccine == null || this.petInfo.vaccine.trim() == ""){
                 return false;
             }
             let vaccineArr = this.petInfo.vaccine.split(',').map(vaccine => vaccine.trim());
-            console.log(vaccineArr)
             return vaccineArr.includes(checkVaccine);
         },
         goTo(x){
@@ -129,8 +145,8 @@ export default{
             <div class="topLeft">
                 <div class="topLeftPhoto"></div>
                 <div class="topLeftText">
-                    <p>{{ this.userInfo.user_name }}</p>
-                    <p>{{ this.userInfo.account }}</p>
+                    <p>{{ this.userInfo.userName }}</p>
+                    <p>@{{ this.userInfo.account }}</p>
                 </div>
             </div>
             <div class="topRight">
