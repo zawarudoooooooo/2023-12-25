@@ -61,7 +61,7 @@ export default {
     },
     components: {
         ProfileDashBoard,
-        },
+    },
 }
 </script>
 
@@ -76,9 +76,9 @@ export default {
             <!-- 使用者名稱和ID -->
             <div class="usernameAndid">
                 <p>{{ foundUser.userName }}</p>
-                <img v-if="this.foundUser.filePath" :src="this.foundUser.filePath" alt="" style="border-radius: 50%; border: 3px solid;"
-                    height="100px" width="100px">
-                <div v-if="!this.foundUser.filePath"
+                <img v-if="this.foundUser.userPhoto" :src="this.foundUser.filePath" alt=""
+                    style="border-radius: 50%; border: 3px solid;" height="100px" width="100px">
+                <div v-if="!this.foundUser.userPhoto"
                     style="border: 3px solid; height: 100px; width: 100px; border-radius: 50%;">
                 </div>
                 <p>@{{ foundUser.account }}</p>
@@ -97,7 +97,7 @@ export default {
             <div class="adoptInformation">
                 <div class="title">
                     <p>我的領養資料</p>
-                    <h4>(以下資料僅提拱給送養人)</h4>
+                    <h4>(以下資料僅提供給送養人)</h4>
                 </div>
                 <!-- 詳細領養資料 -->
                 <div class="infoArea">
@@ -133,7 +133,7 @@ export default {
                                     <span>{{ foundUser.address ? foundUser.address : "未填寫" }}</span>
                                 </div>
                                 <div class="email contactInfoInput">
-                                    <p>信箱 : {{ foundUser.email ? foundUser.email : "未填寫" }}</p>
+                                    <span>信箱 : {{ foundUser.email ? foundUser.email : "未填寫" }}</span>
                                 </div>
                                 <div class="phone contactInfoInput">
                                     <span>聯絡電話 : </span>
@@ -144,15 +144,22 @@ export default {
                         <!-- 家庭狀況 -->
                         <div class="family">
                             <label for="">家庭狀況</label>
-                            <p v-html="foundUser.familyStatus ? foundUser.familyStatus.replace(/\n/g, '<br>') : '未填寫'"></p>
+                            <div class="family2">
+                                <p v-html="foundUser.familyStatus ? foundUser.familyStatus.replace(/\n/g, '<br>') : '未填寫'">
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!-- 給送養人的一句話 -->
+
                 <div class="memo">
                     <label for="">給送養人的一句話</label>
-                    <p v-html="foundUser.sentenceToAdopter ? foundUser.sentenceToAdopter.replace(/\n/g, '<br>') : '未填寫'">
-                    </p>
+                    <div class="memo2">
+                        <p
+                            v-html="foundUser.sentenceToAdopter ? foundUser.sentenceToAdopter.replace(/\n/g, '<br>') : '未填寫'">
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -307,7 +314,10 @@ $inputBorder: #e2dbca;
                         padding: 15px 25px 15px 25px;
                         display: flex;
                         flex-direction: column;
-                        justify-content: center;
+                        align-content: space-between;
+                        justify-content: space-evenly;
+                        align-items: start;
+
 
                         .blockData {
                             width: 95%;
@@ -332,10 +342,14 @@ $inputBorder: #e2dbca;
                             border-radius: 10px;
                             margin-top: 1vmin;
                             padding: 10px 25px 10px 25px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-evenly;
+                            align-content: space-evenly;
+                            align-items: start;
 
                             .contactInfoInput {
                                 display: flex;
-                                flex-direction: column;
                                 margin-bottom: 10px;
                             }
                         }
@@ -343,12 +357,20 @@ $inputBorder: #e2dbca;
 
                     //家庭狀況
                     .family {
-                        width: 35vw;
-                        height: 130px;
-                        border: 2.5px solid #978989;
-                        border-radius: 10px;
+
                         margin-top: 1vmin;
-                        padding: 10px 25px 10px 25px;
+
+                        .family2 {
+                            width: 35vw;
+                            height: 100px;
+                            border: 2.5px solid #978989;
+                            border-radius: 10px;
+                            margin-top: 1vmin;
+                            padding: 10px 25px 10px 25px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-evenly;
+                        }
 
 
                     }
@@ -361,10 +383,19 @@ $inputBorder: #e2dbca;
             //給送養人的一句話 
             .memo {
                 margin-top: 5vmin;
-                width: 60vw;
-                height: 120px;
-                border: 2.5px solid #978989;
-                border-radius: 10px;
+
+                .memo2 {
+
+                    width: 60vw;
+                    height: 120px;
+                    border: 2.5px solid #978989;
+                    border-radius: 10px;
+
+                    p{
+                        margin-left: 15px;
+                        margin-top: 15px;
+                    }
+                }
             }
         }
     }

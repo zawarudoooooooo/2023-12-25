@@ -203,7 +203,7 @@ export default {
             <div class="adoptInformation">
                 <div class="title">
                     <p>我的領養資料</p>
-                    <h4>(以下資料僅提拱給送養人)</h4>
+                    <h4>(以下資料僅提供給送養人)</h4>
                 </div>
                 <!-- 詳細領養資料 -->
                 <div class="infoArea">
@@ -218,7 +218,7 @@ export default {
                             </div>
                             <div class="age">
                                 <span>年齡 : </span>
-                                <input class="blockSmall blockData" type="number" :placeholder=foundUser.age
+                                <input disabled="disabled" class="blockSmall blockData" type="number" :placeholder=foundUser.age
                                     v-model="this.age">
                             </div>
                             <div class="gender">
@@ -300,13 +300,13 @@ $inputBorder: #e2dbca;
     //右上icon區
     .logoutAndsave {
         width: 95%;
-        height: 70px;
+        // height: 70px;
         display: flex;
         justify-content: end;
         align-items: center;
         font-size: 30pt;
         color: #978989;
-        margin-top: 20px;
+        margin-top: 8px;
     }
 
     //使用者名稱和ID

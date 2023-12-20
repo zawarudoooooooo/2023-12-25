@@ -458,9 +458,11 @@ export default {
                     overflow: hidden;
 
                     .previewImg {
+                        //嘗試修改至中心
                         height: 100%;
-                        object-fit: cover;
-                        object-position: center;
+                        // object-fit: cover;
+                        // object-position: center;
+                        width: 100%;
                     }
                 }
 
