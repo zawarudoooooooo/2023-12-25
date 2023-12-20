@@ -60,7 +60,7 @@ export default {
         </div>
         <div class="BE line" v-if="foundUserInfo.permission >= 20" @click="goTo('/BeManagement')">
             <i class="fa-solid fa-gear"></i>
-            <p>後台管理</p>
+            <p>管理</p>
         </div>
 
     </div>
