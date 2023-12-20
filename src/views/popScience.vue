@@ -6,7 +6,7 @@
             <div class="div-5">
                 <div class="column">
                     <div class="div-6">
-                        論壇首頁<br />科普版<br />閒聊版<br />MY ARTICLE
+                        <a href="/" style="text-decoration:none;color: #978989">論壇首頁</a><br /><a href="/popScience" style="text-decoration:none;color: #978989">科普版</a><br /><a href="/Chitchatting" style="text-decoration:none;color: #978989">閒聊版</a><br /><a href="" style="text-decoration:none;color: #978989">MY ARTICLE</a>
                     </div>
                 </div>
                 <div class="column-2">
@@ -58,7 +58,7 @@
                                             </span>
                                         </span>
                                     </div>
-                                    <div class="div-12">點我看完整文章</div>
+                                    <div class="div-12"><a href="" style="text-decoration:none;color: #ffffff">點我看完整文章</a></div>
                                 </div>
                             </div>
                         </div>
@@ -121,6 +121,7 @@
                                 </span>
                             </span>
                         </div>
+                        <div class="div-18"><a href="" style="text-decoration:none;color: #ffffff">點我看完整文章</a></div>
                     </div>
                 </div>
             </div>
@@ -430,6 +431,24 @@
 @media (max-width: 991px) {
     .div-17 {
     max-width: 100%;
+    }
+}
+.div-18 {
+    color: #fff;
+    white-space: nowrap;
+    width: 212pt;
+    border-radius: 35px;
+    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
+    background-color: #6e75a8;
+    margin-top: 9px;
+    justify-content: center;
+    padding: 16px 37px 16px 29px;
+    font: 800 31px Lexend, sans-serif;
+}
+@media (max-width: 991px) {
+    .div-18 {
+    white-space: initial;
+    padding: 0 20px;
     }
 }
 </style>

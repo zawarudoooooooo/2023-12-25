@@ -1,15 +1,15 @@
 <template>
     <div class="div">
-        <div class="div-2"></div>
+        <!-- <div class="div-2"></div> -->
         <div class="div-3">
             <div class="div-4">
                 <div class="div-5">
                     <div class="column">
                         <div class="div-6">
                             <div class="div-7">
-                                論壇首頁<br />科普版<br />閒聊版<br />MY ARTICLE
+                                <a href="/" style="text-decoration:none;color: #978989">論壇首頁</a><br /><a href="/popScience" style="text-decoration:none;color: #978989">科普版</a><br /><a href="/Chitchatting" style="text-decoration:none;color: #978989">閒聊版</a><br /><a href="" style="text-decoration:none;color: #978989">MY ARTICLE</a>
                             </div>
-                            <div class="div-8">我要發文</div>
+                            <div class="div-8"><a href="" style="text-decoration:none;color: #ffffff">我要發文</a></div>
                         </div>
                     </div>
                     <div class="column-2">
@@ -20,7 +20,7 @@
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/340a586740ea01152dcbdaf4fa44274a7912ab69a50a81577694ccada8f3f049?apiKey=d0af60e025864fe186ab505eee384b88&"
                                     class="img"
                                 />
-                                <div class="div-11">短腿貓的爸<br />@wei0113__</div>
+                                <div class="div-11">短腿貓的爸<br /><a href="" style="text-decoration:none;color: #978989">@wei0113__</a></div>
                             </div>
                             <div class="div-12">好像養了一隻迷因貓</div>
                             <img
@@ -39,7 +39,7 @@
                                 </span>
                                 <span style="font-size: 19px; color: rgba(110, 117, 168, 1)">
                                     <span style="font-size: 19px; color: rgba(110, 117, 168, 1)">
-                                    ...點我看更多
+                                    <a href="" style="text-decoration:none;color: #6e75a8">...點我看更多</a>
                                     </span>
                                 </span>
                             </div>
@@ -53,7 +53,7 @@
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/96dad8d282c64e617f3f6adec8ffb46540464fc1b8686513b71ebce3661d07b9?apiKey=d0af60e025864fe186ab505eee384b88&"
                                     class="img"
                                 />
-                                <div class="div-16">短腿貓的爸<br />@wei0113__</div>
+                                <div class="div-16">短腿貓的爸<br /><a href="" style="text-decoration:none;color: #978989">@wei0113__</a></div>
                             </div>
                             <div class="div-17">好像養了一隻迷因貓</div>
                             <img
@@ -71,7 +71,7 @@
                                 </span>
                                 <span style="font-size: 19px; color: rgba(110, 117, 168, 1)">
                                     <span style="font-size: 19px; color: rgba(110, 117, 168, 1)">
-                                        ...點我看更多
+                                        <a href="" style="text-decoration:none;color: #6e75a8">...點我看更多</a>
                                     </span>
                                 </span>
                             </div>
@@ -85,7 +85,7 @@
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/cc07534ec7185f71ac51bf933c5d20021109a2d20bc87b265acef5d5e6428c07?apiKey=d0af60e025864fe186ab505eee384b88&"
                                     class="img"
                                 />
-                                <div class="div-21">短腿貓的爸<br />@wei0113__</div>
+                                <div class="div-21">短腿貓的爸<br /><a href="" style="text-decoration:none;color: #978989">@wei0113__</a></div>
                             </div>
                             <div class="div-22">好像養了一隻迷因貓</div>
                             <img
@@ -103,7 +103,7 @@
                                 </span>
                                 <span style="font-size: 19px; color: rgba(110, 117, 168, 1)">
                                     <span style="font-size: 19px; color: rgba(110, 117, 168, 1)">
-                                        ...點我看更多
+                                        <a href="" style="text-decoration:none;color: #6e75a8">...點我看更多</a>
                                     </span>
                                 </span>
                             </div>
@@ -121,7 +121,7 @@
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/60f649a8736b41a7311d1498d04ba584eb17efdc484a6c8736b0fa3a882827da?apiKey=d0af60e025864fe186ab505eee384b88&"
                                     class="img-5"
                                 />
-                                <div class="div-28">短腿貓的爸<br />@wei0113__</div>
+                                <div class="div-28">短腿貓的爸<br /><a href="" style="text-decoration:none;color: #978989">@wei0113__</a></div>
                             </div>
                             <div class="div-29">好像養了一隻迷因貓</div>
                             <img
@@ -139,7 +139,7 @@
                                 </span>
                                 <span style="font-size: 19px; color: rgba(110, 117, 168, 1)">
                                     <span style="font-size: 19px; color: rgba(110, 117, 168, 1)">
-                                        ...點我看更多
+                                        <a href="" style="text-decoration:none;color: #6e75a8">...點我看更多</a>
                                     </span>
                                 </span>
                             </div>
@@ -153,7 +153,7 @@
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/cc0ddd70ed3edce0187e779ebc56b8ac7898fe8a3ca8c1291a1569487f436984?apiKey=d0af60e025864fe186ab505eee384b88&"
                                     class="img"
                                 />
-                                <div class="div-33">短腿貓的爸<br />@wei0113__</div>
+                                <div class="div-33">短腿貓的爸<br /><a href="" style="text-decoration:none;color: #978989">@wei0113__</a></div>
                             </div>
                             <div class="div-34">好像養了一隻迷因貓</div>
                             <img
@@ -171,7 +171,7 @@
                                 </span>
                                 <span style="font-size: 19px; color: rgba(110, 117, 168, 1)">
                                     <span style="font-size: 19px; color: rgba(110, 117, 168, 1)">
-                                        ...點我看更多
+                                        <a href="" style="text-decoration:none;color: #6e75a8">...點我看更多</a>
                                     </span>
                                 </span>
                             </div>
@@ -185,7 +185,7 @@
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/003cb8c1b28fee5a7bb1a46925f6a7def318053ab96dfcb68ca4ce942c4a0da6?apiKey=d0af60e025864fe186ab505eee384b88&"
                                     class="img"
                                 />
-                                <div class="div-38">短腿貓的爸<br />@wei0113__</div>
+                                <div class="div-38">短腿貓的爸<br /><a href="" style="text-decoration:none;color: #978989">@wei0113__</a></div>
                             </div>
                             <div class="div-39">好像養了一隻迷因貓</div>
                             <img
@@ -203,7 +203,7 @@
                                 </span>
                                 <span style="font-size: 19px; color: rgba(110, 117, 168, 1)">  
                                     <span style="font-size: 19px; color: rgba(110, 117, 168, 1)">
-                                        ...點我看更多
+                                        <a href="" style="text-decoration:none;color: #6e75a8">...點我看更多</a>
                                     </span>
                                 </span>
                             </div>
