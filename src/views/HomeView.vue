@@ -119,12 +119,14 @@ export default {
 <style lang="scss" scoped>
 body {
     position: relative;
+    z-index: -100;
 
 }
 
 .carousel {
     width: 100%;
     position: fixed;
+    z-index: -100;
     top: 0;
 }
 

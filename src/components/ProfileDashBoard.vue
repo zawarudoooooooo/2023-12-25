@@ -68,18 +68,10 @@ export default {
 
 <template>
     <div class="dashboardArea">
-        <div class="notification line" @click="goTo('/')">
-            <i class="fa-solid fa-house"></i>
-            <p>首頁</p>
-        </div>
         <div class="notification line">
             <i class="fa-solid fa-bell" :class="{ 'isread_false': !isread }"></i>
             <p @click="tap_noti()">Notification</p>
             <notification  :noti_state = "noti_state"/>
-        </div>
-        <div class="setting line" @click="goTo('/Profile')">
-            <i class="fa-solid fa-user"></i>
-            <p>Profile</p>
         </div>
         <div class="setting line" @click="goTo('/ProfileSetting')">
             <i class="fa-solid fa-user-gear"></i>
