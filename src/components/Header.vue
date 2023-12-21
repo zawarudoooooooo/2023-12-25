@@ -27,21 +27,12 @@ export default {
 
 <template>
     <div class="header">
-        <RouterLink class="routerLink" to="/Login">Log In</RouterLink>
-        <RouterLink class="routerLink" to="/SignUp">Sign Up</RouterLink>
-        <RouterLink class="routerLink" to="/Profile">Profile</RouterLink>
-        <RouterLink class="routerLink" to="/edit_myArticle">edit_myArticle</RouterLink>
-        <RouterLink class="routerLink" to="/pre_myArticle">pre_myArticle</RouterLink>
         <RouterLink class="routerLink" to="/">平台首頁</RouterLink>
-        <RouterLink class="routerLink" to="/ForumEntrance">ForumEntrance</RouterLink>
+        <RouterLink class="routerLink" to="/ForumEntrance">論壇首頁</RouterLink>
         <RouterLink class="routerLink" to="/mapSearch">mapSearch</RouterLink>
-        <RouterLink class="routerLink" to="/view_Article">view_Article</RouterLink>
-        <RouterLink class="routerLink" to="/create_Article">create_Article</RouterLink>
-        <RouterLink class="routerLink" to="/MyPet">MyPet</RouterLink>
-        <RouterLink class="routerLink" to="MyAdopt">MyAdopt</RouterLink>
         <RouterLink class="routerLink" to="AdoptionSearch">AdoptionSearch</RouterLink>
-        <RouterLink class="routerLink" to="notification">notification</RouterLink>
         <RouterLink class="routerLink" to="ProfileForOther">ProfileForOther</RouterLink>
+        <RouterLink class="routerLink" to="/Login">登入/註冊</RouterLink>
 
     </div>
 </template>
@@ -55,6 +46,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 50px;
 
     .links {
         display: flex;
@@ -69,8 +61,17 @@ export default {
 
 
     .routerLink {
+        color: white;
+        font-weight: 700;
         margin-right: 10px;
         /* 調整連結之間的間距 */
+        text-decoration: none;
+        z-index: 1;
+
+                &:hover{
+                    text-decoration:underline;
+                    text-decoration-thickness: 3px;
+                }
     }
 
     .loginOrProfile {
