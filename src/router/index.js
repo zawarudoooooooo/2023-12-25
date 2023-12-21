@@ -161,15 +161,15 @@ const router = createRouter({
 
     //科普版
     {
-      path: '/popScience',
-      name: 'popScience',
-      component: () => import('../views/popScience.vue'),
+      path: '/PopScience',
+      name: 'PopScience',
+      component: () => import('../views/PopScience.vue'),
     },
     //閒聊版
     {
-      path: '/Chitchatting',
-      name: 'Chitchatting',
-      component: () => import('../views/Chitchatting.vue'),
+      path: '/ChitChatting',
+      name: 'ChitChatting',
+      component: () => import('../views/ChitChatting.vue'),
     },
   ]
 })
