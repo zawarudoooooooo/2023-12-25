@@ -289,6 +289,25 @@ export default {
 
 
     </div>
+
+
+    <div class="testArea">
+        <div class="testCardArea">
+            <div class="testCard">
+                <div class="cardTop">
+                    <h2>Ruby</h2>
+                </div>
+                <div class="cardMiddle">
+                    <img src="../../../public/cat2.jpg" alt="Placeholder Image">
+                    <div class="additionalInfo">
+                        <p>很健康; 親人親貓; 貪吃</p>
+                        <button>申請領養</button>
+                        <button>聊聊了解</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <style lang="scss" scoped>
 @import '../../assets/RStyle.scss';
@@ -552,4 +571,94 @@ export default {
         }
     }
 
-}</style>
+}
+
+.testArea {
+    width: 100vw;
+    height: 150vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .testCardArea {
+        width: 300px;
+        height: 400px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+
+        .testCard {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: transform 0.5s ease;
+
+            .cardTop {
+                z-index: 1;
+            }
+
+            .cardMiddle {
+                position: relative;
+                z-index: 0;
+
+                img {
+                    width: 100%;
+                    height: auto;
+                    transition: transform 0.5s ease;
+                }
+
+                .additionalInfo {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    width: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    color: white;
+                    padding: 20px;
+                    box-sizing: border-box;
+                    transform: translateY(100%);
+                    transition: transform 0.5s ease;
+                    opacity: 0;
+
+                    p {
+                        margin-bottom: 10px;
+                    }
+
+                    button {
+                        padding: 8px 16px;
+                        background-color: #3498db;
+                        color: white;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            &:hover {
+                transform: translateY(-20%);
+
+                .cardMiddle img {
+                    transform: translateY(-20%);
+                }
+
+                .cardMiddle .additionalInfo {
+                    transform: translateY(0%);
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+
+}
+</style>
