@@ -48,35 +48,32 @@ export default {
 </script>
 
 <template>
-    <div class="header">
+    <div class="header " >
 
         <div class="notification line" @click="goTo('/')">
-            <i class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-house"  style="color: white;"></i>
         </div>
-
-        <RouterLink class="routerLink" to="/">平台首頁</RouterLink>
-        <RouterLink class="routerLink" to="/ForumEntrance">論壇首頁</RouterLink>
+        <RouterLink class="routerLink" to="/ForumEntrance">論壇</RouterLink>
         <RouterLink class="routerLink" to="/mapSearch">mapSearch</RouterLink>
         <RouterLink class="routerLink" to="AdoptionSearch">AdoptionSearch</RouterLink>
         <RouterLink class="routerLink" to="ProfileForOther">ProfileForOther</RouterLink>
 
         <RouterLink class="routerLink" to="/Login" v-if="!foundUserInfo">登入/註冊</RouterLink>
         <div class="setting line" @click="goTo('/Profile')" v-if="foundUserInfo">
-            <i class="fa-solid fa-user"></i>
+            <i class="fa-solid fa-user"  style="color: white;"></i>
         </div>
-
-        <RouterLink class="routerLink" to="/Login">登入/註冊</RouterLink>
 
 
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .header {
     width: 100vw;
     height: 15vh;
+    background-color: blueviolet;
 
-    background-color: rgb(255, 255, 255);
+
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -88,7 +85,7 @@ export default {
         /* 調整連結之間的間距 */
     }
 
-    background-color: white;
+
     display: flex;
     flex-wrap: wrap;
     // justify-content: space-between;
