@@ -1,42 +1,59 @@
 <script>
+import Swal from 'sweetalert2'
 import notification from '../views/negi/notification.vue'
 import axios from 'axios';
+import { mapState, mapActions } from "pinia";
+import indexState from "../stores/indexState";
 
 export default {
     data() {
         return {
             foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
-            noti_state : false,
+            noti_state: false,
         }
     },
+    computed: {
+        ...mapState(indexState, ["foundUserInfo"]),
+    },
+
+
     methods: {
+        ...mapActions(indexState, ["updateUserInfo", "clearUserInfo"]),
+
+        // 举例：在某个地方需要更新用户信息时调用此方法
+        updateUser(newUserInfo) {
+            this.updateUserInfo(newUserInfo);
+        },
+
         goTo(x) {
             this.$router.push(x);
         },
         logout() {
-            sessionStorage.removeItem('foundUserInfo');
-            sessionStorage.removeItem('petInfo');
-            alert("成功登出")
-
-            this.$router.push('/') //回到首頁
-
-
-            this.$router.push('/Login')
+            Swal.fire({
+                title: "成功登出",
+                icon: "success"
+            }).then((result) => {
+                if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                    sessionStorage.clear();
+                    this.updateUserInfo(null);
+                    this.$router.push('/'); // 回到首頁
+                }
+            });
         },
-        tap_noti(){
+        tap_noti() {
             this.noti_state = !this.noti_state
-            if(this.noti_state == false){
+            if (this.noti_state == false) {
                 this.set_readed()
             }
         },
-        set_readed(){
+        set_readed() {
             axios.post(`http://localhost:8080/api/notification/setNotiRead?userId=${this.foundUserInfo.userId}`)
-            .then( response => {
-                console.log(response.data)
-            })
-            .catch( error => {
-                console.error(error);
-            })
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.error(error);
+                })
 
         }
     },
@@ -55,7 +72,7 @@ export default {
         <div class="notification line">
             <i class="fa-solid fa-bell"></i>
             <p @click="tap_noti()">Notification</p>
-            <notification  :noti_state = "noti_state"/>
+            <notification :noti_state="noti_state" />
         </div>
         <div class="setting line" @click="goTo('/Profile')">
             <i class="fa-solid fa-user"></i>
@@ -104,6 +121,7 @@ export default {
     box-shadow: 0 0 3px 2px lightgray;
     padding: 20px;
     position: relative;
+
     i {
         margin-bottom: 10px;
         margin-right: 1vmin
@@ -182,4 +200,5 @@ export default {
             }
         }
     }
-}</style>
+}
+</style>
