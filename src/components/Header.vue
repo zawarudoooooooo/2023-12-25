@@ -1,47 +1,65 @@
 <script>
 import { RouterLink } from 'vue-router';
+import { mapState, mapActions } from "pinia";
+import indexState from "../stores/indexState";
 export default {
     data() {
         return {
-            foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
+
         }
     },
-    mounted() {
-        
+
+    computed: {
+        ...mapState(indexState, ["foundUserInfo"]),
     },
 
     methods: {
+
+        ...mapActions(indexState, ["updateUserInfo", "clearUserInfo"]),
+
+        goTo(x) {
+            this.$router.push(x);
+        },
+
         goLoginIn() {
             this.$router.push('/Login')
         },
         goProfile() {
             this.$router.push('/Profile')
         },
+
     },
 
+    watch: {
+        foundUserInfo(newValue, oldValue) {
+            // 在状态更新时触发
+            if (newValue !== oldValue) {
+                // 更新 sessionStorage
+                sessionStorage.setItem('foundUserInfo', JSON.stringify(newValue));
+            }
+        },
+    },
     components: {
-        RouterLink
-    }
+        RouterLink,
+    },
+
+
 }
 </script>
 
 <template>
     <div class="header">
-        <RouterLink class="routerLink" to="/Login">Log In</RouterLink>
-        <RouterLink class="routerLink" to="/SignUp">Sign Up</RouterLink>
-        <RouterLink class="routerLink" to="/Profile">Profile</RouterLink>
-        <RouterLink class="routerLink" to="/edit_myArticle">edit_myArticle</RouterLink>
-        <RouterLink class="routerLink" to="/pre_myArticle">pre_myArticle</RouterLink>
-        <RouterLink class="routerLink" to="/">平台首頁</RouterLink>
-        <RouterLink class="routerLink" to="/ForumEntrance">ForumEntrance</RouterLink>
+        <div class="notification line" @click="goTo('/')">
+            <i class="fa-solid fa-house"></i>
+        </div>
+        <RouterLink class="routerLink" to="/ForumEntrance">論壇首頁</RouterLink>
         <RouterLink class="routerLink" to="/mapSearch">mapSearch</RouterLink>
-        <RouterLink class="routerLink" to="/view_Article">view_Article</RouterLink>
-        <RouterLink class="routerLink" to="/create_Article">create_Article</RouterLink>
-        <RouterLink class="routerLink" to="/MyPet">MyPet</RouterLink>
-        <RouterLink class="routerLink" to="MyAdopt">MyAdopt</RouterLink>
         <RouterLink class="routerLink" to="AdoptionSearch">AdoptionSearch</RouterLink>
-        <RouterLink class="routerLink" to="notification">notification</RouterLink>
         <RouterLink class="routerLink" to="ProfileForOther">ProfileForOther</RouterLink>
+        <RouterLink class="routerLink" to="/Login" v-if="!foundUserInfo">登入/註冊</RouterLink>
+        <div class="setting line" @click="goTo('/Profile')" v-if="foundUserInfo">
+            <i class="fa-solid fa-user"></i>
+        </div>
 
     </div>
 </template>
@@ -53,7 +71,7 @@ export default {
 
     background-color: rgb(255, 255, 255);
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
 
     .links {
@@ -79,4 +97,5 @@ export default {
         margin-right: 20px;
         /* 調整連結之間的間距 */
     }
-}</style>
+}
+</style>

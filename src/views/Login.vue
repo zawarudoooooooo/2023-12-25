@@ -1,5 +1,7 @@
 <script>
 import Swal from 'sweetalert2'
+import { mapState, mapActions } from "pinia";
+import indexState from "../stores/indexState";
 export default {
     data() {
         return {
@@ -15,11 +17,18 @@ export default {
         document.querySelector('body').setAttribute('style', 'background:#F8F5EE')
     },
 
+    computed: {
+        ...mapState(indexState, ["foundUserInfo"]),
+    },
+
     mounted() {
         this.searchAllUserInfo()
     },
 
     methods: {
+
+        ...mapActions(indexState, ["updateUserInfo", "clearUserInfo"]),
+
         goSignUp() {
             this.$router.push('/SignUp')
         },
@@ -92,6 +101,7 @@ export default {
                                 const foundUser = this.userInfoList.find(user => user.email === enteredEmail);
                                 if (foundUser) {
                                     sessionStorage.setItem('foundUserInfo', JSON.stringify(foundUser));
+                                    this.updateUser(foundUser); // 调用 updateUser 方法更新用户信息
                                 }
 
                                 // 定義你的密碼規則（英文大小寫、8位字符的規則）
@@ -114,6 +124,12 @@ export default {
                     console.error('登入過程中出現錯誤:', error);
                     Swal.fire('登入過程中出現錯誤');
                 });
+        },
+
+
+         // 举例：在某个地方需要更新用户信息时调用此方法
+         updateUser(newUserInfo) {
+            this.updateUserInfo(newUserInfo);
         }
 
 
@@ -121,6 +137,7 @@ export default {
 
 
     }
+
 }
 </script>
 

@@ -1,28 +1,44 @@
 <script>
+import Swal from 'sweetalert2'
 import notification from '../views/negi/notification.vue'
 import axios from 'axios';
+import { mapState, mapActions } from "pinia";
+import indexState from "../stores/indexState";
 
 export default {
     data() {
         return {
             foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
-            noti_state: false,
-            isread: true,
+            noti_state : false,
         }
     },
+    computed: {
+        ...mapState(indexState, ["foundUserInfo"]),
+    },
+
+
     methods: {
+        ...mapActions(indexState, ["updateUserInfo", "clearUserInfo"]),
+
+        // 举例：在某个地方需要更新用户信息时调用此方法
+        updateUser(newUserInfo) {
+            this.updateUserInfo(newUserInfo);
+        },
+
         goTo(x) {
             this.$router.push(x);
         },
         logout() {
-            sessionStorage.removeItem('foundUserInfo');
-            sessionStorage.removeItem('petInfo');
-            alert("成功登出")
-
-            this.$router.push('/') //回到首頁
-
-
-            this.$router.push('/Login')
+            Swal.fire({
+                title: "成功登出",
+                icon: "success"
+            }).then((result) => {
+                if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                    sessionStorage.clear();
+                    this.updateUserInfo(null);
+                    this.$router.push('/'); // 回到首頁
+                }
+            });
         },
         tap_noti() {
             this.noti_state = !this.noti_state
@@ -59,7 +75,7 @@ export default {
         <div class="notification line">
             <i class="fa-solid fa-bell" :class="{ 'isread_false': !isread }"></i>
             <p @click="tap_noti()">Notification</p>
-            <notification @isread="show_isread" :noti_state="noti_state" />
+            <notification  :noti_state = "noti_state"/>
         </div>
         <div class="setting line" @click="goTo('/Profile')">
             <i class="fa-solid fa-user"></i>
@@ -191,28 +207,5 @@ export default {
                 border-bottom: 1px solid blue;
             }
         }
-    }
-}
-
-@keyframes shake {
-
-    0%{
-        transform: rotate(15deg);
-    }
-
-    10% {
-        transform: rotate(-15deg);
-    }
-
-    20% {
-        transform: rotate(15deg);
-    }
-
-    30%{
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(0deg);
     }
 }</style>
