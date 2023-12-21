@@ -49,17 +49,24 @@ export default {
 
 <template>
     <div class="header">
+
         <div class="notification line" @click="goTo('/')">
             <i class="fa-solid fa-house"></i>
         </div>
+
+        <RouterLink class="routerLink" to="/">平台首頁</RouterLink>
         <RouterLink class="routerLink" to="/ForumEntrance">論壇首頁</RouterLink>
         <RouterLink class="routerLink" to="/mapSearch">mapSearch</RouterLink>
         <RouterLink class="routerLink" to="AdoptionSearch">AdoptionSearch</RouterLink>
         <RouterLink class="routerLink" to="ProfileForOther">ProfileForOther</RouterLink>
+
         <RouterLink class="routerLink" to="/Login" v-if="!foundUserInfo">登入/註冊</RouterLink>
         <div class="setting line" @click="goTo('/Profile')" v-if="foundUserInfo">
             <i class="fa-solid fa-user"></i>
         </div>
+
+        <RouterLink class="routerLink" to="/Login">登入/註冊</RouterLink>
+
 
     </div>
 </template>
@@ -73,6 +80,7 @@ export default {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    padding: 0 50px;
 
     .links {
         display: flex;
@@ -87,8 +95,17 @@ export default {
 
 
     .routerLink {
+        color: white;
+        font-weight: 700;
         margin-right: 10px;
         /* 調整連結之間的間距 */
+        text-decoration: none;
+        z-index: 1;
+
+                &:hover{
+                    text-decoration:underline;
+                    text-decoration-thickness: 3px;
+                }
     }
 
     .loginOrProfile {
