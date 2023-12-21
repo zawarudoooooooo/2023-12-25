@@ -20,12 +20,24 @@ export default {
         6.領養人拒絕送養人的同意，user是送養人，send領養人，不用跳
         */
         get_notification_data(id) {
-            console.log(id);
+            // console.log(id);
             axios.get(`http://localhost:8080/api/notification/getNoti?userId=${id}`,
             )
                 .then(response => {
                     this.notifi_arr = response.data.notifiReq
-                    console.log(this.notifi_arr.reverse())//反轉了就整個反轉了
+                    this.notifi_arr.reverse()
+                    // console.log(this.notifi_arr.reverse())//反轉了就整個反轉了
+                    let stat = false;
+                    this.notifi_arr.forEach((noti)=>{
+                        if(!noti.read){
+                            stat = true;
+                            this.$emit("isread",noti.read);
+                        }
+                    })
+                    if(stat&&this.noti_state){
+                        // console.log(this.noti_state);
+                        this.$emit("isread",stat);
+                    }
                 })
                 .catch(error => {
                     console.error(error);
@@ -186,7 +198,9 @@ export default {
                 })
         },
 */
-
+        test(){
+            console.log("test")
+        }
     },
     props: [
         'noti_state'
@@ -196,8 +210,9 @@ export default {
         console.log(this.userInfo)
         this.petInfo = JSON.parse(sessionStorage.getItem("petInfo"))
         console.log(this.petInfo);
-        this.get_notification_data(this.userInfo.userId)
+        this.get_notification_data(this.userInfo.userId);
         console.log(this.noti_state);
+        setInterval(() => this.get_notification_data(this.userInfo.userId), 1500);
     },
 }
 
@@ -232,13 +247,13 @@ export default {
 
 <style lang="scss" scoped>
 .notifi_area {
-    width: 170%;
+    width: 200%;
     height: 100%;
     border: 5px solid #d8d2c3;
     font-size: 16pt;
     overflow: auto;
     position: absolute;
-    left: 250px;
+    left: 110%;
     top: 0px;
     z-index: 1;
     background-color: white;

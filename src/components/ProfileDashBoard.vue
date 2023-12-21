@@ -6,7 +6,8 @@ export default {
     data() {
         return {
             foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
-            noti_state : false,
+            noti_state: false,
+            isread: true,
         }
     },
     methods: {
@@ -23,21 +24,24 @@ export default {
 
             this.$router.push('/Login')
         },
-        tap_noti(){
+        tap_noti() {
             this.noti_state = !this.noti_state
-            if(this.noti_state == false){
+            if (this.noti_state == false) {
                 this.set_readed()
             }
         },
-        set_readed(){
+        set_readed() {
             axios.post(`http://localhost:8080/api/notification/setNotiRead?userId=${this.foundUserInfo.userId}`)
-            .then( response => {
-                console.log(response.data)
-            })
-            .catch( error => {
-                console.error(error);
-            })
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.error(error);
+                })
 
+        },
+        show_isread(read) {
+            this.isread = read
         }
     },
     components: {
@@ -53,9 +57,9 @@ export default {
             <p>首頁</p>
         </div>
         <div class="notification line">
-            <i class="fa-solid fa-bell"></i>
+            <i class="fa-solid fa-bell" :class="{ 'isread_false': !isread }"></i>
             <p @click="tap_noti()">Notification</p>
-            <notification  :noti_state = "noti_state"/>
+            <notification @isread="show_isread" :noti_state="noti_state" />
         </div>
         <div class="setting line" @click="goTo('/Profile')">
             <i class="fa-solid fa-user"></i>
@@ -104,6 +108,7 @@ export default {
     box-shadow: 0 0 3px 2px lightgray;
     padding: 20px;
     position: relative;
+
     i {
         margin-bottom: 10px;
         margin-right: 1vmin
@@ -120,6 +125,11 @@ export default {
         justify-content: start;
         align-items: center;
         margin-top: 2vmin;
+
+        .isread_false {
+            color: red;
+            animation: shake 1s ease-in-out infinite;
+        }
     }
 
     .setting {
@@ -181,5 +191,28 @@ export default {
                 border-bottom: 1px solid blue;
             }
         }
+    }
+}
+
+@keyframes shake {
+
+    0%{
+        transform: rotate(15deg);
+    }
+
+    10% {
+        transform: rotate(-15deg);
+    }
+
+    20% {
+        transform: rotate(15deg);
+    }
+
+    30%{
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
     }
 }</style>
