@@ -10,6 +10,7 @@ export default {
         return {
             foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
             noti_state : false,
+            isread: true,
         }
     },
     computed: {
@@ -71,7 +72,7 @@ export default {
         <div class="notification line">
             <i class="fa-solid fa-bell" :class="{ 'isread_false': !isread }"></i>
             <p @click="tap_noti()">Notification</p>
-            <notification  :noti_state = "noti_state"/>
+            <notification  @isread="show_isread" :noti_state = "noti_state"/>
         </div>
         <div class="setting line" @click="goTo('/ProfileSetting')">
             <i class="fa-solid fa-user-gear"></i>
@@ -200,4 +201,26 @@ export default {
             }
         }
     }
+}
+@keyframes shake {
+
+0%{
+    transform: rotate(15deg);
+}
+
+10% {
+    transform: rotate(-15deg);
+}
+
+20% {
+    transform: rotate(15deg);
+}
+
+30%{
+    transform: rotate(0deg);
+}
+
+100% {
+    transform: rotate(0deg);
+}
 }</style>
