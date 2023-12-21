@@ -12,9 +12,44 @@ export default {
     methods:{
         switch_check_page(){
             this.isCheckPage = !this.isCheckPage
-        }
+        },
+        handleFiles() {
+            const uploadButton = document.getElementById('upload');
+            const imgDOM = document.getElementById('upload-image');
+            const fileList = uploadButton.files;
+            const [file] = fileList;
+            const p1 = this.createImageFromFile(imgDOM, file);
+            const p2 = this.getFileBase64Encode(file);
+            Promise.all([p1, p2])
+            .then(([img, b64]) => {
+                img.width = 360;
+                img.height = 400;
+            })
+            .catch(error => {
+            console.error(error);
+            }
+            );
+        },
+        createImageFromFile(img, file) {
+            return new Promise((resolve, reject) => {
+            img.src = URL.createObjectURL(file);
+            img.onload = () => {
+            URL.revokeObjectURL(img.src);
+            resolve(img);
+            };
+            img.onerror = () => reject('Failure to load image.');
+            });
+        },
+
+        getFileBase64Encode(blob) {
+            return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+            });
+        },
     },
-    
 }
 </script>
 
@@ -61,8 +96,17 @@ export default {
                             <div class="div-20"></div>
                             <input class="article_title" type="text" placeholder="輸入標題" />
                             <!-- <div class="article_title">好像養了一隻迷因貓</div> -->
-                            <img loading="lazy" srcSet="..." class="article_img" />
-                            <input class="article_file" type="file" />
+                            <img loading="lazy" 
+                            class="article_img" 
+                            id="upload-image"/>
+                            <!-- <input class="article_file" type="file" accept="image/*"/> -->
+                            <input
+                                id="upload"
+                                class="article_file"
+                                type="file"
+                                accept="image/*"
+                                @change="handleFiles"
+                            />
                             <div class="article_contain">
                                 <input class="article_text" type="text" placeholder="輸入內文" />
                                 <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus fugiat odio nostrum tempore, quisquam incidunt, reiciendis quas eveniet mollitia deleniti eos dolore aliquam quibusdam consequuntur totam possimus asperiores, unde maiores.</p> -->

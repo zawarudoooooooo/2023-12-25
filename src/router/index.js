@@ -159,6 +159,18 @@ const router = createRouter({
       component: () => import('../views/ProfileForOther.vue'),
     },
 
+    //科普版
+    {
+      path: '/PopScience',
+      name: 'PopScience',
+      component: () => import('../views/PopScience.vue'),
+    },
+    //閒聊版
+    {
+      path: '/ChitChatting',
+      name: 'ChitChatting',
+      component: () => import('../views/ChitChatting.vue'),
+    },
   ]
 })
 
