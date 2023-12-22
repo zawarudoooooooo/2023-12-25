@@ -128,7 +128,7 @@ export default{
         },
         goTo(x){
             sessionStorage.removeItem('adopt pet detail');
-            this.$router.push(x)
+            this.$router.back();
         }
     }
 }
