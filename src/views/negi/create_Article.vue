@@ -3,6 +3,11 @@ import ArticleDashBoard from '../../components/ArticleDashBoard.vue';
 export default {
     data(){
         return{
+            userId: 0,
+            userName: '',
+            account: '',
+            title: '',
+            description: '',
             isCheckPage:false
         }
     },
@@ -10,6 +15,33 @@ export default {
         ArticleDashBoard
     },
     methods:{
+        fetchCreateData() {
+            const postTime = new Date();
+            console.log(postTime);
+            const requestData = {
+                article: {
+                    userId: 55,
+                    userName: '修輔',
+                    account: 'k299443977',
+                    title: this.title,
+                    description: this.description,
+                },
+            };
+            fetch('http://localhost:8080/api/adoption/postArticle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Create success:',requestData.article);
+            })
+            .catch(error => {
+                console.error('Error creating:', error);
+            });
+        },
         switch_check_page(){
             this.isCheckPage = !this.isCheckPage
         },
@@ -74,9 +106,9 @@ export default {
                                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/1a90f93bf046cb34155d14545eaf092cbb5340f95d7851405d718068990aeece?"
                                                 class="poster_icon" />
                                             <div class="poster_data">
-                                                <p class="poster_name">短腿貓的爸</p>
+                                                <p class="poster_name" id="poster_name">短腿貓的爸</p>
                                                 <!-- 短腿貓的爸<br /> -->
-                                                <p class="poster_userId">@wei0113__</p>
+                                                <p class="poster_userId" id="poster_userId">@wei0113__</p>
                                             </div>
                                         </div>
                                     </div>
@@ -94,7 +126,7 @@ export default {
                                 </div>
                             </div>
                             <div class="div-20"></div>
-                            <input class="article_title" type="text" placeholder="輸入標題" />
+                            <input class="article_title" type="text" placeholder="輸入標題" v-model="title"/>
                             <!-- <div class="article_title">好像養了一隻迷因貓</div> -->
                             <img loading="lazy" 
                             class="article_img" 
@@ -108,7 +140,7 @@ export default {
                                 @change="handleFiles"
                             />
                             <div class="article_contain">
-                                <input class="article_text" type="text" placeholder="輸入內文" />
+                                <textarea class="article_text" v-model="description" type="text" placeholder="輸入內文"></textarea>
                                 <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus fugiat odio nostrum tempore, quisquam incidunt, reiciendis quas eveniet mollitia deleniti eos dolore aliquam quibusdam consequuntur totam possimus asperiores, unde maiores.</p> -->
                                 <!-- 先上最愛的一張照片，<br />快樂迷因仔，<br />不知道是不是腿短又肥肥的，<br />每次覺得睡覺阿腿都很可愛<br />就是一隻小笨貓<br />哈哈 -->
                             </div>
@@ -131,7 +163,7 @@ export default {
                 </div>
                 <div class="check_btn">
                     <button class="cancal" @click="switch_check_page()">再考慮一下</button>
-                    <button class="ok">好!現在就發</button>
+                    <button class="ok" @click="fetchCreateData()">好!現在就發</button>
                 </div>
             </div>
         </div>
@@ -562,6 +594,11 @@ export default {
     .article_contain {
         margin-left: 10px;
     }
+}
+
+.article_text{
+    width: 600px;
+    height: 400px;
 }
 
 .div-23 {
