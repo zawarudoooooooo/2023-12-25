@@ -48,19 +48,18 @@ export default {
 </script>
 
 <template>
-    <div class="header " >
+    <div class="header " id="transColor">
 
         <div class="notification line" @click="goTo('/')">
-            <i class="fa-solid fa-house"  style="color: white;"></i>
+            <i class="fa-solid fa-house" style="color: white;"></i>
         </div>
         <RouterLink class="routerLink" to="/ForumEntrance">論壇</RouterLink>
-        <RouterLink class="routerLink" to="/mapSearch">mapSearch</RouterLink>
-        <RouterLink class="routerLink" to="AdoptionSearch">AdoptionSearch</RouterLink>
-        <RouterLink class="routerLink" to="ProfileForOther">ProfileForOther</RouterLink>
+        <RouterLink class="routerLink" to="/mapSearch">其他地點</RouterLink>
+        <RouterLink class="routerLink" to="AdoptionSearch">領養區</RouterLink>
 
         <RouterLink class="routerLink" to="/Login" v-if="!foundUserInfo">登入/註冊</RouterLink>
         <div class="setting line" @click="goTo('/Profile')" v-if="foundUserInfo">
-            <i class="fa-solid fa-user"  style="color: white;"></i>
+            <i class="fa-solid fa-user" style="color: white;"></i>
         </div>
 
 
@@ -69,40 +68,54 @@ export default {
 
 <style lang="scss">
 .header {
-    width: 100vw;
+    width: 120vw;
     height: 15vh;
-    background-color: blueviolet;
-
 
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    padding: 0 50px;
 
     .links {
         display: flex;
         margin-left: 20px;
         /* 調整連結之間的間距 */
+
     }
 
 
-    display: flex;
-    flex-wrap: wrap;
-    // justify-content: space-between;
-
-
     .routerLink {
+        font-size: 1vw;
         color: white;
         font-weight: 700;
         margin-right: 10px;
         /* 調整連結之間的間距 */
         text-decoration: none;
-        z-index: 1;
+        background-image: linear-gradient(#ffffff, #ffffff);
+        background-position: left bottom;
+        background-size: 0 2.5px;
+        background-repeat: no-repeat;
+        transition: background-size 0.15s linear;
+        z-index: 100;
 
-                &:hover{
-                    text-decoration:underline;
-                    text-decoration-thickness: 3px;
-                }
+        &:hover {
+            background-size: 100% 2.5px;
+
+        }
+    }
+
+    .line {
+        font-size: 1.3vw;
+        color: white;
+        font-weight: 700;
+        margin-right: 10px;
+        /* 調整連結之間的間距 */
+        text-decoration: none;
+        z-index: 100;
+
+        &:hover {
+            cursor: pointer;
+        }
+
     }
 
     .loginOrProfile {
@@ -111,5 +124,22 @@ export default {
         margin-right: 20px;
         /* 調整連結之間的間距 */
     }
-}
-</style>
+
+    //轉變header顏色
+    #transColor {
+        background: #C79CA4;
+        animation: mymove 5s infinite;
+        -webkit-animation: mymove 5s infinite;
+    }
+
+    @keyframes mymove {
+        from {
+            background-color: #C79CA4;
+        }
+
+        to {
+            background-color: #E9D2A6;
+        }
+
+    }
+}</style>
