@@ -63,6 +63,7 @@ export default{
         emitGo(item){
             console.log(item)
             this.$emit("petId", item.pet_id);
+            sessionStorage.setItem("adopt pet detail", JSON.stringify(item))
             this.$router.push('/AdoptPetDetail');
         }
     }

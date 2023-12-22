@@ -1,4 +1,6 @@
 <script>
+import axios from 'axios';
+
 
 export default {
     data() {
@@ -135,7 +137,9 @@ export default {
                 job_occupation: "",
                 family_status: "",
                 user_photo: "",
-            }
+            },
+            inputType: "",
+            inputLocation: "",
         }
     },
     //進入頁面時，變更背景顏色
@@ -143,7 +147,7 @@ export default {
     },
 
     mounted() {
-        // this.search()
+        this.search()
     },
 
 
@@ -156,44 +160,24 @@ export default {
                 return this.cat;
             }
         },
-
-        // search() {
-        //     const enteredAnimalSpecies = this.animalSpecies;
-
-
-
-        //     const url = `http://localhost:8080/api/adoption/search?area=${encodeURIComponent(enteredArea || "")}&city=${encodeURIComponent(enteredCity || "")}&nature=${encodeURIComponent(enteredNature || "")}&animalSpecies=${encodeURIComponent(enteredAnimalSpecies || "")}&institutionName=${encodeURIComponent(enteredInstitutionName || "")}`;
-
-
-        //     console.log('URL:', url);
-        //     fetch(url, {
-        //         method: 'GET',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     })
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             // console.log(data);
-        //             this.mapSearchList = data.mapSearchList;
-        //             console.log(this.mapSearchList);
-
-        //         })
-        //         .catch(error => {
-        //             console.error('搜尋過程出現錯誤:', error);
-        //             alert('搜尋過程出現錯誤');
-        //         });
-        // },
-
-
+        search(){
+            axios.get('http://localhost:8080/api/adoption/petInfo/getAdoptablePetList', {
+                params: {
+                    "type": this.inputType,
+                    "location": this.inputLocation,
+                }
+            })
+            .then(response => {
+                console.log("res", response.data);
+                this.pets = response.data.petInfoList;
+            })
+        },
         emitGo(item) {
             console.log(item)
-            this.$emit("petInfo", item);
+            this.$emit("petId", item.pet_id);
             sessionStorage.setItem("adopt pet detail", JSON.stringify(item))
             this.$router.push('/AdoptPetDetail');
         }
-
-
     }
 }
 </script>
@@ -207,14 +191,13 @@ export default {
 
 
                 <span>種類</span>
-                <select>
-                    <option value=""></option>
+                <select v-model="inputType">
                     <option value="貓">貓</option>
                     <option value="狗">狗</option>
                 </select>
 
                 <span>地點</span>
-                <input type="text">
+                <input type="text" v-model="inputLocation">
                 <button @click="search()">Search</button>
 
             </div>
@@ -224,16 +207,14 @@ export default {
 
         <div class="cardArea">
 
-            <div class="showCard" v-for="(item, index) in pets">
+            <!-- <div class="showCard" v-for="(item, index) in pets">
                 <div class="cardTop">
-                    <div :class="{ 'yellowCard': item.adoption_status == '正常' }, { 'redCard': item.adoption_status == '送養中' }, { 'greenCard': item.adoption_status == '已送養' }"
-                        class="circle">
+                    <div :class="{'yellowCard' : item.adoption_status == '正常'}, {'redCard' : item.adoption_status == '送養中'}, {'greenCard' : item.adoption_status == '已送養'}" class="circle">
                         <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path :d="getPath(item.type)" fill="white" />
+                            <path :d="getPath(item.type)" fill="white"/>
                         </svg>
                     </div>
                     <h4 class="petNameClick" style="color: #978989;" @click="emitGo(item)">{{ item.pet_name }}</h4>
-
                 </div>
 
                 <div class="cardMiddle">
@@ -254,58 +235,69 @@ export default {
                     </button>
                 </div>
 
-                <!-- confirm  Modal -->
-                <div class="modal fade" id="confirmModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1"
-                    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                    @click="closeModal()"></button>
+                
+
+            </div> -->
+
+
+            <!-- new card -->
+            <div class="testCardArea" v-for="(item, index) in pets">
+                <div class="testCard">
+                        <div class="cardTop">
+                            <div :class="{'yellowCard' : item.adoption_status == '正常'}, {'redCard' : item.adoption_status == '送養中'}, {'greenCard' : item.adoption_status == '已送養'}" class="circle">
+                                <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path :d="getPath(item.type)" fill="white"/>
+                                </svg>
                             </div>
-                            <div class="modal-body">
-                                <h4>確定要申請領養 {{ item.pet_name }} 嗎？</h4>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close">
-                                    <i class="fa-solid fa-chevron-right" style="color: white;"></i>
-                                    <p style="color: white;">再想一下</p>
+                            <h4 class="petNameClick" style="color: #978989;" @click="emitGo(item)">{{ item.pet_name }}</h4>
+                        </div>
+                    <div class="cardMiddle">
+                        <img src="../../../public/cat2.jpg" alt="Placeholder Image">
+                        <div class="additionalInfo">
+                            <p>{{ item.pet_status }}</p>
+
+                            <div class="btnArea">
+                                <button class="btn btn-specialRed modal-btn" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                                    <i class="fa-solid fa-hand-holding-heart" style="color: white"></i>
+                                    <p style="color: white;">申請領養</p>
                                 </button>
-                                <button class="btn btn-specialRed modal-btn">
-                                    <i class="fa-solid fa-hand-holding-heart" style="color: white;"></i>
-                                    <p style="color: white;">確定申請</p>
+
+                                <button class="btn btn-specialBlue modal-btn">
+                                    <i class="fa-solid fa-comments" style="color: white;"></i>
+                                    <p style="color: white;">聊聊了解</p>
                                 </button>
                             </div>
+
                         </div>
                     </div>
                 </div>
-
-            </div>
-
+                <!-- confirm  Modal -->
+                <div class="modal fade" id="confirmModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1"
+                        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                        @click="closeModal()"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h4>確定要申請領養 {{ item.pet_name }} 嗎？</h4>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close">
+                                        <i class="fa-solid fa-chevron-right" style="color: white;"></i>
+                                        <p style="color: white;">再想一下</p>
+                                    </button>
+                                    <button class="btn btn-specialRed modal-btn">
+                                        <i class="fa-solid fa-hand-holding-heart" style="color: white;"></i>
+                                        <p style="color: white;">確定申請</p>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                </div>
         </div>
 
-
-
-
-
-    </div>
-
-
-    <div class="testArea">
-        <div class="testCardArea">
-            <div class="testCard">
-                <div class="cardTop">
-                    <h2>Ruby</h2>
-                </div>
-                <div class="cardMiddle">
-                    <img src="../../../public/cat2.jpg" alt="Placeholder Image">
-                    <div class="additionalInfo">
-                        <p>很健康; 親人親貓; 貪吃</p>
-                        <button>申請領養</button>
-                        <button>聊聊了解</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </template>
@@ -573,21 +565,16 @@ export default {
 
 }
 
-.testArea {
-    width: 100vw;
-    height: 150vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 
     .testCardArea {
-        width: 300px;
-        height: 400px;
+        width: 280px;
+        height: 380px;
         position: relative;
         overflow: hidden;
         border: 1px solid #ccc;
-        border-radius: 10px;
+        background-color: #fff;
+        border-radius: 15px;
+        margin: 10px;
 
         .testCard {
             width: 100%;
@@ -604,6 +591,9 @@ export default {
 
             .cardTop {
                 z-index: 1;
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
             }
 
             .cardMiddle {
@@ -618,34 +608,54 @@ export default {
 
                 .additionalInfo {
                     position: absolute;
-                    top: 100%;
+                    top: 90%;
                     left: 0;
                     width: 100%;
                     background: rgba(0, 0, 0, 0.8);
                     color: white;
-                    padding: 20px;
+                    padding: 10px;
                     box-sizing: border-box;
                     transform: translateY(100%);
                     transition: transform 0.5s ease;
                     opacity: 0;
 
-                    p {
-                        margin-bottom: 10px;
-                    }
+                    // p {
+                    //     margin-bottom: 10px;
+                    // }
 
-                    button {
-                        padding: 8px 16px;
-                        background-color: #3498db;
-                        color: white;
-                        border: none;
-                        border-radius: 4px;
-                        cursor: pointer;
+                    .btnArea{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin: 10px 0px 10px 0px;
+                        button {
+                            width: 120px;
+                            height: 30px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            font-size: 10pt;
+                            // padding: 8px 16px;
+                            // background-color: #3498db;
+                            // color: white;
+                            // border: none;
+                            // border-radius: 4spx;
+                            // cursor: pointer;
+
+                            i {
+                                margin-right: 5px;
+                            }
+                            
+                        }
                     }
+                    
                 }
             }
 
             &:hover {
-                transform: translateY(-20%);
+                transform: translateY(-15%);
 
                 .cardMiddle img {
                     transform: translateY(-20%);
@@ -660,5 +670,15 @@ export default {
     }
 
 
+
+// pet card
+.yellowCard{
+    background-color: $primary;
+}
+.redCard{
+    background-color: $give;
+}
+.greenCard{
+    background-color: $adoption;
 }
 </style>
