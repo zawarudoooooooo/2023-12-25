@@ -314,64 +314,70 @@ export default {
     align-items: center;
 
     .mapSearch {
-        width: 85%;
-        height: 20%;
+        width: 90%;
+        height: 80px;
         background-color: #fff;
         border-radius: 3vw;
         box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
         margin-top: 5vh;
         margin-bottom: 3vh;
+        display: flex;
+        align-items: center;
         position: relative;
 
-
-
         .searchArea {
+            width: 90%;
             margin: 4vh 5vw;
+            display: flex;
+            align-items: center;
 
             span {
-                font-size: 1.5vw;
+                width: 50px;
+                font-size: 12pt;
                 font-weight: bold;
                 color: #978989;
             }
 
             select {
-                width: 15%;
-                height: 4.5vh;
-                margin-left: 4vw;
-                margin-right: 5vw;
+                width: 10%;
+                height: 30px;
                 border-radius: 2.5vw;
                 background-color: #DDDFEE;
                 border: none;
                 text-align: center;
+                margin-right: 30px;
 
             }
 
 
 
             input {
-                width: 36%;
-                height: 4.5vh;
+                width: 50%;
+                height: 30px;
                 border-radius: 2.5vw;
-                margin-left: 4vw;
                 background-color: #DDDFEE;
                 border: none;
                 padding-left: 2vw;
+                margin-right: 30px;
             }
 
             button {
-                width: 12%;
-                height: 5vh;
+                width: 120px;
+                height: 30px;
                 border-radius: 3.5vw;
                 border: none;
                 background-color: #E9D2A6;
                 color: white;
                 font-weight: 900;
-                font-size: 2vw;
+                font-size: 12pt;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
                 // margin-left: 6vw;
                 position: absolute;
                 right: 6vw;
                 bottom: 3.6vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
         }
     }
