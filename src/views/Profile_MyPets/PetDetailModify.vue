@@ -527,11 +527,12 @@ $inputBorder: #e2dbca;
                     box-shadow: 0 0 2px 2px lightgray;
                     margin-bottom: 30px;
                     overflow: hidden;
+                    text-align: center;
 
                     .previewImg {
                         height: 100%;
                         object-fit: cover;
-                        object-position: center;
+                        object-position: center center;
                     }
                 }
 
