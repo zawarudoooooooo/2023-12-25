@@ -97,7 +97,10 @@ export default{
                     <h4 class="petNameClick" style="color: #978989;" @click="emitGo(item)">{{ item.pet_name }}</h4>
                 </div>
                 <div class="cardMiddle">
-                    <div class="cardMiddlePhoto"></div>
+                    <div class="cardMiddlePhoto">
+                        <!--加入這裡-->
+                        <img style="height: 240px ; width: 238px; border-radius: 15px;"  :src="'data:image/jpeg;base64,' + item.pet_photo" alt="">
+                    </div>
                     <div class="cardMiddleDescription">
                         <p>{{ item.pet_status }}</p>
                     </div>

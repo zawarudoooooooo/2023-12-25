@@ -144,8 +144,6 @@ export default {
                     }).then((result) => {
                         if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
                             this.$router.push('/Profile')
-                            sessionStorage.setItem('foundUserInfo', JSON.stringify(foundUser));
-                            this.updateUser(foundUser); // 调用 updateUser 方法更新用户信息
                         }
                     });
 
