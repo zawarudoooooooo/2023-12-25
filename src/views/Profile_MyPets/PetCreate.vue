@@ -46,22 +46,30 @@ export default {
         this.userInfo = JSON.parse(sessionStorage.getItem('foundUserInfo'));
         this.petInfo.user_id = this.userInfo.userId;
     },
+    computed: {
+    },
+
     watch: {
-        isAdopted(newValue, oldValue){
-            if(newValue){
+        isAdopted(newValue, oldValue) {
+            if (newValue) {
                 this.petInfo.adoption_status = "送養中";
             } else {
                 this.petInfo.adoption_status = "正常";
             }
         },
-        'petInfo.type': function(newValue, oldValue){
-            if(newValue != oldValue){
+        'petInfo.type': function (newValue, oldValue) {
+            if (newValue != oldValue) {
                 this.vaccineArr = [];
                 this.petInfo.ligation = false;
             }
-        }
+        },
+
+
+
     },
     methods: {
+
+
         getPath(type) {
             if (type == "狗") {
                 return this.dog;
@@ -94,7 +102,7 @@ export default {
                 this.petInfo.type = "狗";
             }
         },
-        changeVaccine(vaccine){
+        changeVaccine(vaccine) {
             const index = this.vaccineArr.indexOf(vaccine);
 
             if (index !== -1) {
@@ -141,13 +149,13 @@ export default {
                     petInfo: this.petInfo
                 }
             )
-            .then(response => {
-                console.log(response.data)
-                this.$router.push('/MyPet')
-            })
-            .catch(error => {
-                console.error(error);
-            })
+                .then(response => {
+                    console.log(response.data)
+                    this.$router.push('/MyPet')
+                })
+                .catch(error => {
+                    console.error(error);
+                })
 
             Swal.fire({
                 title: "成功新增寵物資料",
@@ -158,7 +166,7 @@ export default {
                 }
             });
         },
-        goTo(x){
+        goTo(x) {
             this.$router.push(x)
         }
     },
@@ -275,49 +283,58 @@ export default {
                                 <div class="block blockVaccineContent">
                                     <!-- 貓疫苗 -->
                                     <div v-if="petInfo.type == '貓'" class="vaccine">
-                                        <i v-if="isChecked('三合一疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('三合一疫苗')"></i>
+                                        <i v-if="isChecked('三合一疫苗')" class="fa-regular fa-circle fa"
+                                            @click="changeVaccine('三合一疫苗')"></i>
                                         <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('三合一疫苗')"></i>
                                         <p @click="changeVaccine('三合一疫苗')">三合一疫苗</p>
                                     </div>
                                     <div v-if="petInfo.type == '貓'" class="vaccine">
-                                        <i v-if="isChecked('五合一疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('五合一疫苗')"></i>
+                                        <i v-if="isChecked('五合一疫苗')" class="fa-regular fa-circle fa"
+                                            @click="changeVaccine('五合一疫苗')"></i>
                                         <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('五合一疫苗')"></i>
                                         <p @click="changeVaccine('五合一疫苗')">五合一疫苗</p>
                                     </div>
                                     <!-- 狗疫苗 -->
                                     <div v-if="petInfo.type == '狗'" class="vaccine">
-                                        <i v-if="isChecked('五合一疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('三合一疫苗')"></i>
+                                        <i v-if="isChecked('五合一疫苗')" class="fa-regular fa-circle fa"
+                                            @click="changeVaccine('三合一疫苗')"></i>
                                         <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('五合一疫苗')"></i>
                                         <p @click="changeVaccine('五合一疫苗')">五合一疫苗</p>
                                     </div>
                                     <div v-if="petInfo.type == '狗'" class="vaccine">
-                                        <i v-if="isChecked('七合一疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('五合一疫苗')"></i>
+                                        <i v-if="isChecked('七合一疫苗')" class="fa-regular fa-circle fa"
+                                            @click="changeVaccine('五合一疫苗')"></i>
                                         <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('七合一疫苗')"></i>
                                         <p @click="changeVaccine('七合一疫苗')">七合一疫苗</p>
                                     </div>
                                     <div v-if="petInfo.type == '狗'" class="vaccine">
-                                        <i v-if="isChecked('八合一疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('三合一疫苗')"></i>
+                                        <i v-if="isChecked('八合一疫苗')" class="fa-regular fa-circle fa"
+                                            @click="changeVaccine('三合一疫苗')"></i>
                                         <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('八合一疫苗')"></i>
                                         <p @click="changeVaccine('八合一疫苗')">八合一疫苗</p>
                                     </div>
                                     <div v-if="petInfo.type == '狗'" class="vaccine">
-                                        <i v-if="isChecked('十合一疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('五合一疫苗')"></i>
+                                        <i v-if="isChecked('十合一疫苗')" class="fa-regular fa-circle fa"
+                                            @click="changeVaccine('五合一疫苗')"></i>
                                         <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('十合一疫苗')"></i>
                                         <p @click="changeVaccine('十合一疫苗')">十合一疫苗</p>
                                     </div>
                                     <div v-if="petInfo.type == '狗'" class="vaccine">
-                                        <i v-if="isChecked('萊姆病疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('五合一疫苗')"></i>
+                                        <i v-if="isChecked('萊姆病疫苗')" class="fa-regular fa-circle fa"
+                                            @click="changeVaccine('五合一疫苗')"></i>
                                         <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('萊姆病疫苗')"></i>
                                         <p @click="changeVaccine('萊姆病疫苗')">萊姆病疫苗</p>
                                     </div>
                                     <!-- 通用 -->
                                     <div class="vaccine">
-                                        <i v-if="isChecked('狂犬病疫苗')" class="fa-regular fa-circle fa" @click="changeVaccine('狂犬病疫苗')"></i>
+                                        <i v-if="isChecked('狂犬病疫苗')" class="fa-regular fa-circle fa"
+                                            @click="changeVaccine('狂犬病疫苗')"></i>
                                         <i v-else class="fa-solid fa-xmark fa" @click="changeVaccine('狂犬病疫苗')"></i>
                                         <p @click="changeVaccine('狂犬病疫苗')">狂犬病疫苗</p>
                                     </div>
                                     <div class="vaccine">
-                                        <i v-if="this.petInfo.ligation" class="fa-regular fa-circle fa" @click="changeLigation()"></i>
+                                        <i v-if="this.petInfo.ligation" class="fa-regular fa-circle fa"
+                                            @click="changeLigation()"></i>
                                         <i v-else class="fa-solid fa-xmark fa" @click="changeLigation()"></i>
                                         <p @click="changeLigation()">結紮</p>
                                     </div>
@@ -381,7 +398,7 @@ export default {
 <style lang="scss" scoped>
 @import '../../assets/RStyle.scss';
 
-.content{
+.content {
     justify-content: center;
     background-color: #fff;
 
@@ -512,10 +529,11 @@ export default {
                         margin-right: 20px;
                     }
 
-                    .selectTypeArea{
+                    .selectTypeArea {
                         display: flex;
                         align-items: center;
-                        .selectType{
+
+                        .selectType {
                             width: 80px;
                             height: 35px;
                         }
@@ -680,14 +698,16 @@ export default {
                 }
             }
         }
-        .btnArea{
+
+        .btnArea {
             width: 100%;
             height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
-            .btn{
-                i{
+
+            .btn {
+                i {
                     margin-right: 10px;
                 }
             }

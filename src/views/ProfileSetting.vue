@@ -1,7 +1,11 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
+import { mapState, mapActions } from "pinia"
+import indexState from "../stores/indexState"
 import ProfileDashBoard from '../components/ProfileDashBoard.vue'
 import Swal from 'sweetalert2'
+
+
 export default {
     data() {
         return {
@@ -140,6 +144,8 @@ export default {
                     }).then((result) => {
                         if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
                             this.$router.push('/Profile')
+                            sessionStorage.setItem('foundUserInfo', JSON.stringify(foundUser));
+                            this.updateUser(foundUser); // 调用 updateUser 方法更新用户信息
                         }
                     });
 
@@ -149,6 +155,10 @@ export default {
                 });
 
         },
+
+        updateUser(newUserInfo) {
+            this.updateUserInfo(newUserInfo);
+        }
     },
 
 
@@ -173,14 +183,14 @@ export default {
             </div>
             <!-- 使用者名稱和ID -->
             <div class="usernameAndid">
-                <input class="block" type="text" name="" id="" style="width: 150px;" :placeholder=foundUser.userName
+                <input class="block" type="text" name="" id="" style="width: 200px;" :placeholder=foundUser.userName
                     v-model="this.userName">
 
                 <div class="image-upload">
-                    <img v-if="!imageUrl" :src="this.foundUser.filePath" alt="" style="border-radius: 50%; border: 3px solid;"
-                        height="100px" width="100px"  >
-                    <img v-else :src="imageUrl" alt="Uploaded Image" style="border-radius: 50%; border: 3px solid;" height="100px"
-                        width="100px">
+                    <img v-if="!imageUrl" :src="this.foundUser.filePath" alt=""
+                        style="border-radius: 50%; border: 3px solid;" height="100px" width="100px">
+                    <img v-else :src="imageUrl" alt="Uploaded Image" style="border-radius: 50%; border: 3px solid;"
+                        height="100px" width="100px">
                     <div class="add-icon" @click="chooseImage">
                         <i class="fa-solid fa-plus"></i>
                         <input type="file" accept="image/*" id="imageInput" style="display: none;" @change="onFileChange">
@@ -218,8 +228,8 @@ export default {
                             </div>
                             <div class="age">
                                 <span>年齡 : </span>
-                                <input disabled="disabled" class="blockSmall blockData" type="number" :placeholder=foundUser.age
-                                    v-model="this.age">
+                                <input disabled="disabled" class="blockSmall blockData" type="number"
+                                    :placeholder=foundUser.age v-model="this.age">
                             </div>
                             <div class="gender">
                                 <span>性別 : </span>

@@ -89,10 +89,16 @@ export default {
         this.petInfo = JSON.parse(sessionStorage.getItem('the pet'));
         console.log("pet info", this.petInfo);
 
-        // 重新生成帶有前綴的圖片路徑
+        // 重新生成帶有前綴的寵物圖片路徑
         if (this.petInfo.pet_photo) {
             const prefix = "data:image/jpeg;base64,"; // 圖片的前綴
             this.petInfo.pet_photo = prefix + this.petInfo.pet_photo;
+        }
+
+        // 重新生成帶有前綴的user圖片路徑
+        if (this.userInfo.userPhoto) {
+            const prefix = "data:image/jpeg;base64,"; // 圖片的前綴
+            this.userInfo.userPhoto = prefix + this.userInfo.userPhoto;
         }
     },
     computed: {
@@ -183,7 +189,7 @@ export default {
             <div class="top">
                 <div class="topLeft">
                     <div class="topLeftPhoto">
-                        <img :src="'data:image/jpeg;base64,' + this.userInfo.userPhoto" alt="">
+                        <img :src="this.userInfo.userPhoto" alt="">
                     </div>
                     <div class="topLeftText">
                         <p>{{ this.userInfo.userName }}</p>

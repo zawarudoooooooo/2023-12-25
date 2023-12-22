@@ -244,7 +244,8 @@ export default {
             <div class="top">
                 <div class="topLeft">
                     <div class="topLeftPhoto">
-                        <img :src="'data:image/jpeg;base64,' + this.userPet.userInfo.userPhoto" alt="">
+                        <img :src="this.userPet.userInfo.userPhoto" alt="">
+                        
                     </div>
                     <div class="topLeftText">
                         <p>{{ this.userPet.userInfo.userName }}</p>

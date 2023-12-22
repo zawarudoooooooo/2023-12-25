@@ -192,6 +192,7 @@ export default {
 
                 <span>種類</span>
                 <select v-model="inputType">
+                    <option value=""></option>
                     <option value="貓">貓</option>
                     <option value="狗">狗</option>
                 </select>
@@ -252,7 +253,7 @@ export default {
                             <h4 class="petNameClick" style="color: #978989;" @click="emitGo(item)">{{ item.pet_name }}</h4>
                         </div>
                     <div class="cardMiddle">
-                        <img src="../../../public/cat2.jpg" alt="Placeholder Image">
+                        <img style="height: 240px; border-radius: 15px;"  :src="'data:image/jpeg;base64,' + item.pet_photo" alt="">
                         <div class="additionalInfo">
                             <p>{{ item.pet_status }}</p>
 
