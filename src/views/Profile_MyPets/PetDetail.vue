@@ -195,11 +195,15 @@ export default {
             .then(response => {
                 console.log(response.data)
                 if (response.data.rtnCode == 'SUCCESSFUL') {
-                    sessionStorage.setItem("adopt pet detail", JSON.stringify(response.data.petInfo))
+                    sessionStorage.setItem("the pet", JSON.stringify(response.data.petInfo))
                     Swal.fire({
                         title: "拒絕成功！!",
                         icon: "success"
-                    })
+                    }).then((result) => {
+                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                            location.reload()
+                        }
+                    });
                 } else {
                     Swal.fire('出了些錯誤，請再次檢查');
                 }
@@ -225,7 +229,11 @@ export default {
                     Swal.fire({
                         title: "已送出確認！!",
                         icon: "success"
-                    })
+                    }).then((result) => {
+                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                            location.reload()
+                        }
+                    });
                 } else {
                     Swal.fire('出了些錯誤，請再次檢查');
                 }
