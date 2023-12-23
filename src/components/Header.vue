@@ -84,7 +84,7 @@ export default {
 
 
     .routerLink {
-        font-size: 1vw;
+        font-size: 14pt;
         color: white;
         font-weight: 700;
         margin-right: 10px;
@@ -99,7 +99,6 @@ export default {
 
         &:hover {
             background-size: 100% 2.5px;
-
         }
     }
 

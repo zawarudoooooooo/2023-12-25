@@ -66,11 +66,11 @@ const router = createRouter({
       name: "PetDetailModify",
       component: () => import('../views/Profile_MyPets/PetDetailModify.vue'),
     },
-    // only for check sth
+    // the detail page in adopt search
     {
-      path: '/check',
-      name: 'check',
-      component: () => import('../views/Profile_MyPets/OnlyforCheck.vue'),
+      path: '/AdoptSearchDetail',
+      name: 'AdoptSearchDetail',
+      component: () => import('../views/Profile_MyAdopt/AdoptSearchDetail.vue'),
     },
     // profile_myadopt
     {

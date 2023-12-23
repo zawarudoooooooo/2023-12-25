@@ -1,5 +1,6 @@
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -80,16 +81,16 @@ export default {
                     petId: this.petId
                 }
             })
-            .then(response => {
-                console.log("response pet & user", response.data)
-                this.petInfo = response.data.vo.petInfo;
-                // console.log(this.petInfo)
-                this.userInfo = response.data.vo.userInfo;
-                // console.log(this.userInfo)
-            })
-            .catch(error => {
-                console.error(error)
-            })
+                .then(response => {
+                    console.log("response pet & user", response.data)
+                    this.petInfo = response.data.vo.petInfo;
+                    // console.log(this.petInfo)
+                    this.userInfo = response.data.vo.userInfo;
+                    // console.log(this.userInfo)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
         },
         getPath(type) {
             if (type == "狗") {
@@ -130,7 +131,31 @@ export default {
         },
         goTo(x) {
             sessionStorage.removeItem('adopt pet detail');
-            this.$router.push('/MyAdopt');
+            this.$router.back();
+        },
+        sendApply(){
+            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
+
+            axios.post('http://localhost:8080/api/adoption/petInfo/adoptPet', {
+                petId: this.petInfo.pet_id,
+                userId: user.userId
+            })
+            .then(response => {
+                console.log(response.data);
+                if (response.data.rtnCode == 'SUCCESSFUL') {
+                    Swal.fire({
+                        title: "申請領養成功！!",
+                        icon: "success"
+                    })
+                } else if (response.data.rtnCode == 'THE_USER_HAS_ALREADY_ADOPTED_THE_PET'){
+                    Swal.fire('您已認養過此寵物！');
+                } else {
+                    Swal.fire('出了些錯誤，請再次檢查');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
         }
     }
 }
@@ -154,45 +179,14 @@ export default {
                     </div>
                 </div>
                 <div class="topRight">
-                    <button class="btn btn-specialRed modal-btn" data-bs-toggle="modal" data-bs-target="#quitModal">
-                        <i class="fa-solid fa-xmark" style="color: white;"></i>
-                        <p style="color: white;">取消申請</p>
+                    <button class="btn btn-specialRed modal-btn" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                        <i class="fa-solid fa-hand-holding-heart" style="color: white"></i>
+                        <p style="color: white;">申請領養</p>
                     </button>
-                    <button v-if="checkAdopted" class="btn btn-green modal-btn" data-bs-toggle="modal"
-                        data-bs-target="#confirmModal">
-                        <i class="fa-solid fa-check" style="color: white"></i>
-                        <p style="color: white;">確定領養</p>
-                    </button>
-                    <button v-if="!checkAdopted" class="btn btn-specialBlue modal-btn">
+                    <button class="btn btn-specialBlue modal-btn">
                         <i class="fa-solid fa-comments" style="color: white;"></i>
                         <p style="color: white;">聊聊了解</p>
                     </button>
-                </div>
-
-                <!-- Modal -->
-                <div class="modal fade" id="quitModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1"
-                    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                    @click="closeModal()"></button>
-                            </div>
-                            <div class="modal-body">
-                                <h4>確定要取消認養 {{ this.petInfo.pet_name }} 的申請嗎？</h4>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-specialBlue modal-btn">
-                                    <i class="fa-solid fa-chevron-right" style="color: white;"></i>
-                                    <p style="color: white;">再想一下</p>
-                                </button>
-                                <button class="btn btn-specialRed modal-btn">
-                                    <i class="fa-solid fa-xmark" style="color: white;"></i>
-                                    <p style="color: white;">取消申請</p>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <!-- Modal -->
                 <div class="modal fade" id="confirmModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1"
@@ -204,16 +198,16 @@ export default {
                                     @click="closeModal()"></button>
                             </div>
                             <div class="modal-body">
-                                <h4>確定要接受認養 {{ this.petInfo.pet_name }} 的申請嗎？</h4>
+                                <h4>確定要申請認養 {{ this.petInfo.pet_name }} 嗎？</h4>
                             </div>
                             <div class="modal-footer">
-                                <button class="btn btn-specialBlue modal-btn">
+                                <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close">
                                     <i class="fa-solid fa-chevron-right" style="color: white;"></i>
                                     <p style="color: white;">再想一下</p>
                                 </button>
-                                <button v-if="!this.isGived" class="btn btn-green modal-btn">
-                                    <i class="fa-solid fa-check" style="color: white"></i>
-                                    <p style="color: white;">接受送養</p>
+                                <button class="btn btn-specialRed modal-btn" @click="sendApply()">
+                                    <i class="fa-solid fa-hand-holding-heart" style="color: white"></i>
+                                    <p style="color: white;">確認申請</p>
                                 </button>
                             </div>
                         </div>
@@ -255,25 +249,53 @@ export default {
                             <div class="blockVaccine">
                                 <p>醫療狀態</p>
                                 <div class="block blockVaccineContent">
-                                    <!-- 待轉成動態識別 -->
-                                    <div class="vaccine">
-                                        <i v-if="isChecked('三合一疫苗')" class="fa-regular fa-circle"></i>
-                                        <i v-else class="fa-solid fa-xmark"></i>
+                                    <!-- 貓疫苗 -->
+                                    <div v-if="this.petInfo.type == '貓'" class="vaccine">
+                                        <i v-if="isChecked('三合一疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
                                         <p>三合一疫苗</p>
                                     </div>
-                                    <div class="vaccine">
-                                        <i v-if="isChecked('五合一疫苗')" class="fa-regular fa-circle"></i>
-                                        <i v-else class="fa-solid fa-xmark"></i>
+                                    <div v-if="this.petInfo.type == '貓'" class="vaccine">
+                                        <i v-if="isChecked('五合一疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
                                         <p>五合一疫苗</p>
                                     </div>
+                                    <!-- 狗疫苗 -->
+                                    <div v-if="this.petInfo.type == '狗'" class="vaccine">
+                                        <i v-if="isChecked('三合一疫苗')" class="fa-regular fa-circle fa"
+                                            @click="changeVaccine('三合一疫苗')"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
+                                        <p>三合一疫苗</p>
+                                    </div>
+                                    <div v-if="this.petInfo.type == '狗'" class="vaccine">
+                                        <i v-if="isChecked('六合一疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
+                                        <p>六合一疫苗</p>
+                                    </div>
+                                    <div v-if="this.petInfo.type == '狗'" class="vaccine">
+                                        <i v-if="isChecked('八合一疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
+                                        <p>八合一疫苗</p>
+                                    </div>
+                                    <div v-if="this.petInfo.type == '狗'" class="vaccine">
+                                        <i v-if="isChecked('十合一疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
+                                        <p>十合一疫苗</p>
+                                    </div>
+                                    <div v-if="this.petInfo.type == '狗'" class="vaccine">
+                                        <i v-if="isChecked('萊姆病疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
+                                        <p>萊姆病疫苗</p>
+                                    </div>
+                                    <!-- 通用 -->
                                     <div class="vaccine">
-                                        <i v-if="isChecked('狂犬病疫苗')" class="fa-regular fa-circle"></i>
-                                        <i v-else class="fa-solid fa-xmark"></i>
+                                        <i v-if="isChecked('狂犬病疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
                                         <p>狂犬病疫苗</p>
                                     </div>
                                     <div class="vaccine">
-                                        <i v-if="this.petInfo.ligation" class="fa-regular fa-circle"></i>
-                                        <i v-else class="fa-solid fa-xmark"></i>
+                                        <i v-if="this.petInfo.ligation" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
                                         <p>結紮</p>
                                     </div>
                                 </div>
@@ -417,7 +439,7 @@ export default {
 
             .middleRight {
                 width: 70%;
-                height: 430px;
+                height: auto;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -437,7 +459,7 @@ export default {
 
                 .middleRightContent {
                     width: 85%;
-                    height: 85%;
+                    height: auto;
                     display: flex;
                     flex-direction: column;
                     margin-bottom: 10px;
@@ -462,6 +484,7 @@ export default {
 
                             .blockVaccineContent {
                                 width: 100%;
+                                height: auto;
 
                                 .vaccine {
                                     display: flex;

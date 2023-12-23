@@ -1,5 +1,6 @@
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2'
 import ProfileDashBoard from '../../components/profiledashboard.vue';
 export default{
     data(){
@@ -65,6 +66,28 @@ export default{
             this.$emit("petId", item.pet_id);
             sessionStorage.setItem("adopt pet detail", JSON.stringify(item))
             this.$router.push('/AdoptPetDetail');
+        },
+        quitApply(item){
+            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
+
+            axios.post('http://localhost:8080/api/adoption/petInfo/quitAdoptPet', {
+                petId: item.pet_id,
+                userId: user.userId
+            })
+            .then(response => {
+                console.log(response.data);
+                if (response.data.rtnCode == 'SUCCESSFUL') {
+                    Swal.fire({
+                        title: "取消申請成功！!",
+                        icon: "success"
+                    })
+                } else {
+                    Swal.fire('出了些錯誤，請再次檢查');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
         }
     }
 }
@@ -146,7 +169,7 @@ export default{
                                     <i class="fa-solid fa-chevron-right" style="color: white;"></i>
                                     <p style="color: white;">再想一下</p>
                                 </button>
-                                <button class="btn btn-specialRed modal-btn">
+                                <button class="btn btn-specialRed modal-btn" data-bs-dismiss="modal" aria-label="Close" @click="quitApply(item)">
                                     <i class="fa-solid fa-xmark" style="color: white;"></i>
                                     <p style="color: white;">取消申請</p>
                                 </button>
