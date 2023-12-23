@@ -1,5 +1,6 @@
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
     data() {
@@ -39,13 +40,7 @@ export default {
             isAdopted: false,
             isGived: false,
             // 待接到資料之後，由字串轉為陣列
-            adopterList: [
-                "a",
-                "b",
-                "c",
-                "d",
-                "e"
-            ],
+            adopterList: [],
             // 待接到資料後，由字串轉成陣列
             petWaterfall: [
                 "1",
@@ -89,6 +84,8 @@ export default {
         this.petInfo = JSON.parse(sessionStorage.getItem('the pet'));
         console.log("pet info", this.petInfo);
 
+        this.getAdopterInfo()
+
         // 重新生成帶有前綴的寵物圖片路徑
         if (this.petInfo.pet_photo) {
             const prefix = "data:image/jpeg;base64,"; // 圖片的前綴
@@ -110,6 +107,22 @@ export default {
         }
     },
     methods: {
+        getAdopterInfo(){
+
+            axios.get('http://localhost:8080/api/adoption/userInfo/findAdopters', {
+                params: {
+                    idList: this.petInfo.adopter_id_list
+                }
+            })
+            .then(response => {
+                console.log(response.data)
+                this.adopterList = response.data.userInfoList;
+            })
+            .catch(error => {
+                console.error(error)
+            })
+        
+        },
         getPath(type) {
             if (type == "狗") {
                 return this.dog;
@@ -156,14 +169,70 @@ export default {
                     "petId": this.petInfo.pet_id
                 }
             )
-                .then(response => {
-                    console.log(response.data)
-                })
-                .catch(error => {
-                    console.error(error);
-                })
+            .then(response => {
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.error(error);
+            })
 
             this.$router.push('/MyPet')
+        },
+        rejectApply(item){
+            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
+
+            console.log("pet id", this.petInfo.pet_id)
+            console.log("owner id", user.userId)
+            console.log("adopter id", item.userId)
+
+            axios.post('http://localhost:8080/api/adoption/petInfo/rejectAdoptPet',
+                {
+                    petId: this.petInfo.pet_id,
+                    ownerId: user.userId,
+                    adopterId: item.userId
+                }
+            )
+            .then(response => {
+                console.log(response.data)
+                if (response.data.rtnCode == 'SUCCESSFUL') {
+                    sessionStorage.setItem("adopt pet detail", JSON.stringify(response.data.petInfo))
+                    Swal.fire({
+                        title: "拒絕成功！!",
+                        icon: "success"
+                    })
+                } else {
+                    Swal.fire('出了些錯誤，請再次檢查');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
+        },
+        confirmApply(item){
+            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
+
+            axios.post('http://localhost:8080/api/adoption/petInfo/ownerConfirm',
+                {
+                    petId: this.petInfo.pet_id,
+                    ownerId: user.userId,
+                    adopterId: item.userId
+                }
+            )
+            .then(response => {
+                console.log(response.data)
+                if (response.data.rtnCode == 'SUCCESSFUL') {
+                    sessionStorage.setItem("adopt pet detail", JSON.stringify(response.data.petInfo))
+                    Swal.fire({
+                        title: "已送出確認！!",
+                        icon: "success"
+                    })
+                } else {
+                    Swal.fire('出了些錯誤，請再次檢查');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
         },
         emitGo() {
             let objInfo = Object.assign({}, { userInfo: this.userInfo }, { petInfo: this.petInfo })
@@ -262,25 +331,53 @@ export default {
                             <div class="blockVaccine">
                                 <p>醫療狀態</p>
                                 <div class="block blockVaccineContent">
-                                    <!-- 待轉成動態識別 -->
-                                    <div class="vaccine">
-                                        <i v-if="isChecked('三合一疫苗')" class="fa-regular fa-circle"></i>
-                                        <i v-else class="fa-solid fa-xmark"></i>
+                                    <!-- 貓疫苗 -->
+                                    <div v-if="this.petInfo.type == '貓'" class="vaccine">
+                                        <i v-if="isChecked('三合一疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
                                         <p>三合一疫苗</p>
                                     </div>
-                                    <div class="vaccine">
-                                        <i v-if="isChecked('五合一疫苗')" class="fa-regular fa-circle"></i>
-                                        <i v-else class="fa-solid fa-xmark"></i>
+                                    <div v-if="this.petInfo.type == '貓'" class="vaccine">
+                                        <i v-if="isChecked('五合一疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
                                         <p>五合一疫苗</p>
                                     </div>
+                                    <!-- 狗疫苗 -->
+                                    <div v-if="this.petInfo.type == '狗'" class="vaccine">
+                                        <i v-if="isChecked('三合一疫苗')" class="fa-regular fa-circle fa"
+                                            @click="changeVaccine('三合一疫苗')"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
+                                        <p>三合一疫苗</p>
+                                    </div>
+                                    <div v-if="this.petInfo.type == '狗'" class="vaccine">
+                                        <i v-if="isChecked('六合一疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
+                                        <p>六合一疫苗</p>
+                                    </div>
+                                    <div v-if="this.petInfo.type == '狗'" class="vaccine">
+                                        <i v-if="isChecked('八合一疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
+                                        <p>八合一疫苗</p>
+                                    </div>
+                                    <div v-if="this.petInfo.type == '狗'" class="vaccine">
+                                        <i v-if="isChecked('十合一疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
+                                        <p>十合一疫苗</p>
+                                    </div>
+                                    <div v-if="this.petInfo.type == '狗'" class="vaccine">
+                                        <i v-if="isChecked('萊姆病疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
+                                        <p>萊姆病疫苗</p>
+                                    </div>
+                                    <!-- 通用 -->
                                     <div class="vaccine">
-                                        <i v-if="isChecked('狂犬病疫苗')" class="fa-regular fa-circle"></i>
-                                        <i v-else class="fa-solid fa-xmark"></i>
+                                        <i v-if="isChecked('狂犬病疫苗')" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
                                         <p>狂犬病疫苗</p>
                                     </div>
                                     <div class="vaccine">
-                                        <i v-if="this.petInfo.ligation" class="fa-regular fa-circle"></i>
-                                        <i v-else class="fa-solid fa-xmark"></i>
+                                        <i v-if="this.petInfo.ligation" class="fa-regular fa-circle fa"></i>
+                                        <i v-else class="fa-solid fa-xmark fa"></i>
                                         <p>結紮</p>
                                     </div>
                                 </div>
@@ -335,13 +432,13 @@ export default {
                                     <div class="circle"></div>
                                 </div>
                                 <div class="adopterText">
-                                    <p>someone</p>
-                                    <p>@someone01</p>
+                                    <p>{{ item.userName }}</p>
+                                    <p>@{{ item.account }}</p>
                                 </div>
                             </div>
 
                             <div class="adopterFileMiddle">
-                                <p>someone's description is here.</p>
+                                <p>{{ item.profile }}</p>
                             </div>
 
                             <div class="adopterFileBtn">
@@ -355,69 +452,69 @@ export default {
                                     <p style="color: white;">聊聊了解</p>
                                 </button>
                             </div>
-                        </div>
-                    </div>
-                    <!-- Modal -->
-                    <div class="modal fade" id="detailModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1"
-                        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                        @click="closeModal()"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="modalBodyTop">
-                                        <div class="usernameAndid">
-                                            <p>User Name</p>
-                                            <i class="fa-solid fa-circle-user"></i>
-                                            <p>@Example1117</p>
+                            <!-- Modal -->
+                            <div class="modal fade" id="detailModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1"
+                                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                                @click="closeModal()"></button>
                                         </div>
-                                    </div>
-                                    <div class="modalBodyMiddle">
-                                        <div class="modalBodyMiddleText">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum perferendis
-                                                exercitationem quis neque natus.</p>
-                                        </div>
-                                    </div>
-                                    <div class="modalBodyLast">
-                                        <div class="modalBodyLastShow">
-                                            <div class="modalBodyLastTitle">
-                                                <h6>My Pet</h6>
-                                            </div>
-                                            <!-- v-for -->
-                                            <div class="modalBodyLastPet">
-                                                <div class="showCard" v-for="(item, index) in pets">
-                                                    <div :class="{ 'yellowCard': item.adoption_status == '正常' }, { 'redCard': item.adoption_status == '送養中' }, { 'greenCard': item.adoption_status == '已送養' }"
-                                                        class="middleCard">
-                                                        <svg viewBox="0 0 180 180" fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg">
-                                                            <path :d="getPath(item.type)" fill="white" />
-                                                        </svg>
-                                                    </div>
+                                        <div class="modal-body">
+                                            <div class="modalBodyTop">
+                                                <div class="usernameAndid">
+                                                    <p>{{ item.userName }}</p>
+                                                    <i class="fa-solid fa-circle-user"></i>
+                                                    <p>@{{ item.account }}</p>
                                                 </div>
                                             </div>
-                                        </div>
+                                            <div class="modalBodyMiddle">
+                                                <div class="modalBodyMiddleText">
+                                                    <p>{{ item.profile }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="modalBodyLast">
+                                                <div class="modalBodyLastShow">
+                                                    <div class="modalBodyLastTitle">
+                                                        <h6>My Pet</h6>
+                                                    </div>
+                                                    <!-- v-for -->
+                                                    <div class="modalBodyLastPet">
+                                                        <div class="showCard" v-for="(pet, index) in pets">
+                                                            <div :class="{ 'yellowCard': pet.adoption_status == '正常' }, { 'redCard': pet.adoption_status == '送養中' }, { 'greenCard': pet.adoption_status == '已送養' }"
+                                                                class="middleCard">
+                                                                <svg viewBox="0 0 180 180" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                    <path :d="getPath(pet.type)" fill="white" />
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button v-if="!this.isGived" class="btn btn-specialRed modal-btn" @click="rejectApply(item)">
+                                                <i class="fa-solid fa-xmark" style="color: white;"></i>
+                                                <p style="color: white;">拒絕送養</p>
+                                            </button>
+                                            <button v-if="!this.isGived" class="btn btn-green modal-btn" @click="confirmApply(item)">
+                                                <i class="fa-solid fa-check" style="color: white"></i>
+                                                <p style="color: white;">接受送養</p>
+                                            </button>
+                                            <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close">
+                                                <i class="fa-solid fa-comments" style="color: white;"></i>
+                                                <p style="color: white;">聊聊了解</p>
+                                            </button>
+                                        </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button v-if="!this.isGived" class="btn btn-specialRed modal-btn">
-                                        <i class="fa-solid fa-xmark" style="color: white;"></i>
-                                        <p style="color: white;">拒絕送養</p>
-                                    </button>
-                                    <button v-if="!this.isGived" class="btn btn-green modal-btn">
-                                        <i class="fa-solid fa-check" style="color: white"></i>
-                                        <p style="color: white;">接受送養</p>
-                                    </button>
-                                    <button class="btn btn-specialBlue modal-btn">
-                                        <i class="fa-solid fa-comments" style="color: white;"></i>
-                                        <p style="color: white;">聊聊了解</p>
-                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
 
@@ -501,7 +598,7 @@ export default {
 
         .middle {
             width: 90%;
-            height: 430px;
+            height: auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -531,7 +628,7 @@ export default {
 
             .middleRight {
                 width: 70%;
-                height: 430px;
+                height: auto;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -551,7 +648,7 @@ export default {
 
                 .middleRightContent {
                     width: 85%;
-                    height: 85%;
+                    height: auto;
                     display: flex;
                     flex-direction: column;
                     margin-bottom: 10px;
@@ -567,15 +664,18 @@ export default {
 
                             .blockDataContent {
                                 width: 100%;
+                                height: 100%;
                             }
                         }
 
                         .blockVaccine {
                             width: 25%;
+                            height: auto;
                             font-size: 12pt;
 
                             .blockVaccineContent {
                                 width: 100%;
+                                height: auto;
 
                                 .vaccine {
                                     display: flex;
@@ -597,6 +697,7 @@ export default {
                         .blockStatus {
                             width: 40%;
                             font-size: 12pt;
+
                         }
                     }
 
