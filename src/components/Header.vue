@@ -59,7 +59,8 @@ export default {
 
         <RouterLink class="routerLink" to="/Login" v-if="!foundUserInfo">登入/註冊</RouterLink>
         <div class="setting line" @click="goTo('/Profile')" v-if="foundUserInfo">
-            <i class="fa-solid fa-user" style="color: white;"></i>
+            <!-- <i class="fa-solid fa-user" style="color: white;"></i> -->
+            <img style="width: 90px; height: 90x; border-radius: 50%;" :src="'data:image/jpeg;base64,' + foundUserInfo.userPhoto" alt="">
         </div>
 
 

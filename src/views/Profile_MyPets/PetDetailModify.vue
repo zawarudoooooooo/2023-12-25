@@ -62,6 +62,7 @@ export default {
                 },
             },
             vaccineArr: null,
+            ppimg: null,
         }
     },
     props: [
@@ -159,17 +160,19 @@ export default {
         },
         previewImg() {
             const fileInput = this.$refs.fileInput;
-            const reader = new FileReader();
 
             if (fileInput.files && fileInput.files[0]) {
-                reader.onload = (e) => {
-                    // 去掉前缀部分，只保留 Base64 编码的图片数据
-                    const base64Data = e.target.result.split(',')[1]; // 获取逗号后面的部分，即 Base64 编码数据
-                    // console.log(base64Data)
+                const reader = new FileReader();
 
-                    // 将去掉前缀的 Base64 编码数据赋值给 pet_photo 属性
-                    this.userPet.petInfo.pet_photo = base64Data;
-                }
+                reader.onload = (e) => {
+                    // 獲取 Base64 編碼的圖片資料，不包含前綴部分
+                    const base64Data = e.target.result.split(',')[1];
+                    console.log(base64Data);
+
+                    this.ppimg = base64Data;
+                };
+
+                // 讀取並處理選擇的圖片文件
                 reader.readAsDataURL(fileInput.files[0]);
             }
         },
@@ -183,7 +186,7 @@ export default {
             }
 
             this.userPet.petInfo.vaccine = this.vaccineArr.join(',');
-            this.userPet.petInfo.pet_photo = this.userPet.petInfo.pet_photo.split(',')[1];
+            this.userPet.petInfo.pet_photo=this.ppimg
 
             console.log(this.userPet.petInfo);
 
@@ -241,7 +244,6 @@ export default {
                 <div class="topLeft">
                     <div class="topLeftPhoto">
                         <img :src="this.userPet.userInfo.userPhoto" alt="">
-
                     </div>
                     <div class="topLeftText">
                         <p>{{ this.userPet.userInfo.userName }}</p>
@@ -285,9 +287,8 @@ export default {
                 <!-- 寵物照片 -->
                 <div class="middleLeft">
                     <div class="middleLeftPic">
-                        <img :src="userPet.petInfo.pet_photo" alt="">
-                        <!-- 显示 File Reader 转换后的图片 -->
-                        <img class="previewImg" ref="preview" :src="previewImage" alt="">
+                        <img v-if="!ppimg" :src="userPet.petInfo.pet_photo" alt="">
+                        <img v-else :src="'data:image/jpeg;base64,' + ppimg" alt="">
                     </div>
                     <div class="inputFileArea">
                         <!-- 如果要可以選擇多個照片的話，加上此屬性：multiple="multiple" -->
@@ -944,4 +945,5 @@ $inputBorder: #e2dbca;
 
 .greenCard {
     background-color: $adoption;
-}</style>
+}
+</style>
