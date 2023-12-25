@@ -92,13 +92,14 @@ export default {
         text-decoration: none;
         background-image: linear-gradient(#ffffff, #ffffff);
         background-position: left bottom;
-        background-size: 0 2.5px;
+        background-size: 0 2.5px; // 設定漸變的大小，一開始為 0
         background-repeat: no-repeat;
-        transition: background-size 0.15s linear;
+        transition: background-size 0.15s linear; //背景的大小會在 0.15 秒內以線性方式變成 100%
         z-index: 100;
 
         &:hover {
             background-size: 100% 2.5px;
+
         }
     }
 
@@ -126,12 +127,15 @@ export default {
 
     //轉變header顏色
     #transColor {
-        background: #C79CA4;
-        animation: mymove 5s infinite;
-        -webkit-animation: mymove 5s infinite;
+        //ID 選擇器
+        background: #C79CA4; //初始背景
+        animation: mymove 5s alternate infinite; //指定動畫效果以及名稱，設置總時間為 5 秒，alternate每次迭代時反向執行，infinite表示動畫將無限循環
+        -webkit-animation: mymove 5s alternate infinite; //Webkit 前綴
     }
 
     @keyframes mymove {
+
+        //動畫關鍵幀
         from {
             background-color: #C79CA4;
         }
@@ -139,6 +143,7 @@ export default {
         to {
             background-color: #E9D2A6;
         }
+
 
     }
 }</style>
