@@ -107,21 +107,21 @@ export default {
         }
     },
     methods: {
-        getAdopterInfo(){
+        getAdopterInfo() {
 
             axios.get('http://localhost:8080/api/adoption/userInfo/findAdopters', {
                 params: {
                     idList: this.petInfo.adopter_id_list
                 }
             })
-            .then(response => {
-                console.log(response.data)
-                this.adopterList = response.data.userInfoList;
-            })
-            .catch(error => {
-                console.error(error)
-            })
-        
+                .then(response => {
+                    console.log(response.data)
+                    this.adopterList = response.data.userInfoList;
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+
         },
         getPath(type) {
             if (type == "狗") {
@@ -154,9 +154,9 @@ export default {
         closeMoal() {
             this.isShowModal = false;
         },
-        isChecked(checkVaccine){
+        isChecked(checkVaccine) {
 
-            if(this.petInfo.vaccine == null || this.petInfo.vaccine.trim() == ""){
+            if (this.petInfo.vaccine == null || this.petInfo.vaccine.trim() == "") {
                 return false;
             }
             let vaccineArr = this.petInfo.vaccine.split(',').map(vaccine => vaccine.trim());
@@ -169,16 +169,16 @@ export default {
                     "petId": this.petInfo.pet_id
                 }
             )
-            .then(response => {
-                console.log(response.data)
-            })
-            .catch(error => {
-                console.error(error);
-            })
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.error(error);
+                })
 
             this.$router.push('/MyPet')
         },
-        rejectApply(item){
+        rejectApply(item) {
             const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
 
             console.log("pet id", this.petInfo.pet_id)
@@ -192,27 +192,27 @@ export default {
                     adopterId: item.userId
                 }
             )
-            .then(response => {
-                console.log(response.data)
-                if (response.data.rtnCode == 'SUCCESSFUL') {
-                    sessionStorage.setItem("the pet", JSON.stringify(response.data.petInfo))
-                    Swal.fire({
-                        title: "拒絕成功！!",
-                        icon: "success"
-                    }).then((result) => {
-                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
-                            location.reload()
-                        }
-                    });
-                } else {
-                    Swal.fire('出了些錯誤，請再次檢查');
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            })
+                .then(response => {
+                    console.log(response.data)
+                    if (response.data.rtnCode == 'SUCCESSFUL') {
+                        sessionStorage.setItem("the pet", JSON.stringify(response.data.petInfo))
+                        Swal.fire({
+                            title: "拒絕成功！!",
+                            icon: "success"
+                        }).then((result) => {
+                            if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                                location.reload()
+                            }
+                        });
+                    } else {
+                        Swal.fire('出了些錯誤，請再次檢查');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                })
         },
-        confirmApply(item){
+        confirmApply(item) {
             const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
 
             axios.post('http://localhost:8080/api/adoption/petInfo/ownerConfirm',
@@ -222,25 +222,25 @@ export default {
                     adopterId: item.userId
                 }
             )
-            .then(response => {
-                console.log(response.data)
-                if (response.data.rtnCode == 'SUCCESSFUL') {
-                    sessionStorage.setItem("adopt pet detail", JSON.stringify(response.data.petInfo))
-                    Swal.fire({
-                        title: "已送出確認！!",
-                        icon: "success"
-                    }).then((result) => {
-                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
-                            location.reload()
-                        }
-                    });
-                } else {
-                    Swal.fire('出了些錯誤，請再次檢查');
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            })
+                .then(response => {
+                    console.log(response.data)
+                    if (response.data.rtnCode == 'SUCCESSFUL') {
+                        sessionStorage.setItem("adopt pet detail", JSON.stringify(response.data.petInfo))
+                        Swal.fire({
+                            title: "已送出確認！!",
+                            icon: "success"
+                        }).then((result) => {
+                            if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                                location.reload()
+                            }
+                        });
+                    } else {
+                        Swal.fire('出了些錯誤，請再次檢查');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                })
         },
         emitGo() {
             let objInfo = Object.assign({}, { userInfo: this.userInfo }, { petInfo: this.petInfo })
@@ -436,7 +436,10 @@ export default {
                         <div class="adopterFile" v-for="(item, index) in adopterList">
                             <div class="adopterFileTop">
                                 <div class="adopterPhoto">
-                                    <div class="circle"></div>
+                                    <div class="circle">
+                                        <img :src="'data:image/jpeg;base64,' + item.userPhoto" alt="">
+
+                                    </div>
                                 </div>
                                 <div class="adopterText">
                                     <p>{{ item.userName }}</p>
@@ -445,7 +448,7 @@ export default {
                             </div>
 
                             <div class="adopterFileMiddle">
-                                <p>{{ item.profile ? item.profile : "未填寫"}}</p>
+                                <p>{{ item.profile ? item.profile : "未填寫" }}</p>
                             </div>
 
                             <div class="adopterFileBtn">
@@ -460,19 +463,20 @@ export default {
                                 </button>
                             </div>
                             <!-- Modal -->
-                            <div class="modal fade" id="detailModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1"
-                                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal fade" id="detailModal" data-bs-backdrop="true" data-bs-keyboard="true"
+                                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                                @click="closeModal()"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close" @click="closeModal()"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="modalBodyTop">
                                                 <div class="usernameAndid">
                                                     <p>{{ item.userName }}</p>
-                                                    <i class="fa-solid fa-circle-user"></i>
+                                                    <img :src="'data:image/jpeg;base64,' + item.userPhoto" alt="">
+                                                    <!-- <i class="fa-solid fa-circle-user"></i> -->
                                                     <p>@{{ item.account }}</p>
                                                 </div>
                                             </div>
@@ -502,15 +506,18 @@ export default {
 
                                             </div>
                                             <div class="modal-footer">
-                                                <button v-if="!this.isGived" class="btn btn-specialRed modal-btn" @click="rejectApply(item)">
+                                                <button v-if="!this.isGived" class="btn btn-specialRed modal-btn"
+                                                    @click="rejectApply(item)">
                                                     <i class="fa-solid fa-xmark" style="color: white;"></i>
                                                     <p style="color: white;">拒絕送養</p>
                                                 </button>
-                                                <button v-if="!this.isGived" class="btn btn-green modal-btn" @click="confirmApply(item)">
+                                                <button v-if="!this.isGived" class="btn btn-green modal-btn"
+                                                    @click="confirmApply(item)">
                                                     <i class="fa-solid fa-check" style="color: white"></i>
                                                     <p style="color: white;">接受送養</p>
                                                 </button>
-                                                <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close">
+                                                <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal"
+                                                    aria-label="Close">
                                                     <i class="fa-solid fa-comments" style="color: white;"></i>
                                                     <p style="color: white;">聊聊了解</p>
                                                 </button>
@@ -521,7 +528,7 @@ export default {
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
 
@@ -704,6 +711,7 @@ export default {
                         .blockStatus {
                             width: 35%;
                             font-size: 12pt;
+
                             .blockStatusContent {
                                 height: 190px;
                             }
@@ -903,6 +911,12 @@ export default {
     align-items: center;
     color: white;
 
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
     svg {
         width: 50px;
         height: 45px;
@@ -953,6 +967,12 @@ export default {
                     font-size: 35pt;
                     position: absolute;
                     left: 200px;
+                }
+
+                img{
+                    height: 50px;
+                    width: 50px;
+                    border-radius: 50%;
                 }
             }
         }
@@ -1059,5 +1079,4 @@ export default {
 
 .greenCard {
     background-color: $adoption;
-}
-</style>
+}</style>
