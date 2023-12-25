@@ -76,11 +76,14 @@ export default {
             <!-- 使用者名稱和ID -->
             <div class="usernameAndid">
                 <p>{{ foundUser.userName }}</p>
-                <img v-if="this.foundUser.userPhoto" :src="this.foundUser.filePath" alt=""
-                    style="border-radius: 50%; border: 3px solid;" height="100px" width="100px">
-                <div v-if="!this.foundUser.userPhoto"
-                    style="border: 3px solid; height: 100px; width: 100px; border-radius: 50%;">
+                <div class="toMid">
+                    <img v-if="this.foundUser.userPhoto" :src="this.foundUser.filePath" alt=""
+                        style="border-radius: 50%; border: 3px solid;" height="100px" width="100px">
+                    <div v-if="!this.foundUser.userPhoto"
+                        style="border: 3px solid; height: 100px; width: 100px; border-radius: 50%;">
+                    </div>
                 </div>
+
                 <p>@{{ foundUser.account }}</p>
             </div>
 
@@ -391,7 +394,7 @@ $inputBorder: #e2dbca;
                     border: 2.5px solid #978989;
                     border-radius: 10px;
 
-                    p{
+                    p {
                         margin-left: 15px;
                         margin-top: 15px;
                     }

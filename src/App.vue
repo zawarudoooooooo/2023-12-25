@@ -48,11 +48,12 @@ export default{
 </div>
 </template>
 
-<style lang="scss" scoped>
-// .header{
-//   width: 100vw;
-//   height: 15vh;
-// }
+<style lang="scss">
+.header{
+   width: 100vw;
+   height: 15vh;
+ 
+ }
 .content{
   width: 100vw;
   min-height: 85vh;

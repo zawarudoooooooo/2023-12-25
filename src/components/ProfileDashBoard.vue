@@ -1,28 +1,45 @@
 <script>
+import Swal from 'sweetalert2'
 import notification from '../views/negi/notification.vue'
 import axios from 'axios';
+import { mapState, mapActions } from "pinia";
+import indexState from "../stores/indexState";
 
 export default {
     data() {
         return {
             foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
-            noti_state: false,
+            noti_state : false,
             isread: true,
         }
     },
+    computed: {
+        ...mapState(indexState, ["foundUserInfo"]),
+    },
+
+
     methods: {
+        ...mapActions(indexState, ["updateUserInfo", "clearUserInfo"]),
+
+        // 举例：在某个地方需要更新用户信息时调用此方法
+        updateUser(newUserInfo) {
+            this.updateUserInfo(newUserInfo);
+        },
+
         goTo(x) {
             this.$router.push(x);
         },
         logout() {
-            sessionStorage.removeItem('foundUserInfo');
-            sessionStorage.removeItem('petInfo');
-            alert("成功登出")
-
-            this.$router.push('/') //回到首頁
-
-
-            this.$router.push('/Login')
+            Swal.fire({
+                title: "成功登出",
+                icon: "success"
+            }).then((result) => {
+                if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                    sessionStorage.clear();
+                    this.updateUserInfo(null);
+                    this.$router.push('/'); // 回到首頁
+                }
+            });
         },
         tap_noti() {
             this.noti_state = !this.noti_state
@@ -52,18 +69,10 @@ export default {
 
 <template>
     <div class="dashboardArea">
-        <div class="notification line" @click="goTo('/')">
-            <i class="fa-solid fa-house"></i>
-            <p>首頁</p>
-        </div>
         <div class="notification line">
             <i class="fa-solid fa-bell" :class="{ 'isread_false': !isread }"></i>
             <p @click="tap_noti()">Notification</p>
-            <notification @isread="show_isread" :noti_state="noti_state" />
-        </div>
-        <div class="setting line" @click="goTo('/Profile')">
-            <i class="fa-solid fa-user"></i>
-            <p>Profile</p>
+            <notification  @isread="show_isread" :noti_state = "noti_state"/>
         </div>
         <div class="setting line" @click="goTo('/ProfileSetting')">
             <i class="fa-solid fa-user-gear"></i>
@@ -99,8 +108,9 @@ export default {
 
 <style lang="scss" scoped>
 .dashboardArea {
-    width: 170px;
+    width: 185px;
     height: auto;
+    min-height: 370px;
     background-color: white;
     border-radius: 20px;
     color: #978989;
@@ -120,7 +130,7 @@ export default {
     }
 
     .notification {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
@@ -133,49 +143,49 @@ export default {
     }
 
     .setting {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
     }
 
     .pet {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
     }
 
     .article {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
     }
 
     .adopt {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
     }
 
     .chat {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
     }
 
     .logout {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
     }
 
     .BE {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
@@ -193,26 +203,25 @@ export default {
         }
     }
 }
-
 @keyframes shake {
 
-    0%{
-        transform: rotate(15deg);
-    }
+0%{
+    transform: rotate(15deg);
+}
 
-    10% {
-        transform: rotate(-15deg);
-    }
+10% {
+    transform: rotate(-15deg);
+}
 
-    20% {
-        transform: rotate(15deg);
-    }
+20% {
+    transform: rotate(15deg);
+}
 
-    30%{
-        transform: rotate(0deg);
-    }
+30%{
+    transform: rotate(0deg);
+}
 
-    100% {
-        transform: rotate(0deg);
-    }
+100% {
+    transform: rotate(0deg);
+}
 }</style>

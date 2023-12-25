@@ -1,6 +1,6 @@
 <script>
-import axios from 'axios'
-import Swal from 'sweetalert2'
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -40,7 +40,13 @@ export default {
             isAdopted: false,
             isGived: false,
             // 待接到資料之後，由字串轉為陣列
-            adopterList: [],
+            adopterList: [
+                "a",
+                "b",
+                "c",
+                "d",
+                "e"
+            ],
             // 待接到資料後，由字串轉成陣列
             petWaterfall: [
                 "1",
@@ -50,78 +56,41 @@ export default {
                 "5",
                 "6",
             ],
-            adopterInfo: {},
             isShowModal: false,
-            // 領養申請人的寵物
-            pets: [
-                {
-                    pet_id: "",
-                    user_id: "",
-                    pet_name: "Ruby",
-                    adopter_list: "a; b; c; d",
-                    final_adopter: "",
-                    pet_breed: "",
-                    pet_status: "很健康; 親人親貓; 貪吃",
-                    adoption_status: "正常",
-                    adoption_conditions: "",
-                    age: "三歲九個月",
-                    vaccine: "三合一疫苗, 狂犬病疫苗",
-                    pet_profile: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cum assumenda cumque amet molestias sapiente id provident perferendis voluptatibus aliquid quia ea praesentium totam eveniet aspernatur, nobis, quod.",
-                    ligation: false,
-                    type: "狗",
-                    pet_photo: "",
-                    pet_other_phote: "",
-                    location: "",
-                }
-            ],
         }
     },
-    //12.20 新增圖片前綴
+    props: [
+        "petId"
+    ],
     mounted() {
-        this.userInfo = JSON.parse(sessionStorage.getItem('foundUserInfo'));
-        console.log("user info", this.userInfo);
-
-        this.petInfo = JSON.parse(sessionStorage.getItem('the pet'));
-        console.log("pet info", this.petInfo);
-
-        this.getAdopterInfo()
-
-        // 重新生成帶有前綴的寵物圖片路徑
-        if (this.petInfo.pet_photo) {
-            const prefix = "data:image/jpeg;base64,"; // 圖片的前綴
-            this.petInfo.pet_photo = prefix + this.petInfo.pet_photo;
-        }
-
-        // 重新生成帶有前綴的user圖片路徑
-        if (this.userInfo.userPhoto) {
-            const prefix = "data:image/jpeg;base64,"; // 圖片的前綴
-            this.userInfo.userPhoto = prefix + this.userInfo.userPhoto;
-        }
+        console.log("pet id", this.petId);
+        this.getPetUser();
     },
     computed: {
-        isAlreadyAdopted() {
-            if (this.isAdopted && this.isGived) {
+        checkAdopted() {
+            if (this.petInfo.final_adopter == this.userInfo.account) {
                 return true;
             }
             return false;
-        }
+        },
     },
     methods: {
-        getAdopterInfo(){
-
-            axios.get('http://localhost:8080/api/adoption/userInfo/findAdopters', {
+        getPetUser() {
+            axios.get('http://localhost:8080/api/adoption/petInfo/getAdoptPetInfoAndUserInfo', {
                 params: {
-                    idList: this.petInfo.adopter_id_list
+                    petId: this.petId
                 }
             })
-            .then(response => {
-                console.log(response.data)
-                this.adopterList = response.data.userInfoList;
-            })
-            .catch(error => {
-                console.error(error)
-            })
-        
+                .then(response => {
+                    console.log("response pet & user", response.data)
+                    this.petInfo = response.data.vo.petInfo;
+                    // console.log(this.petInfo)
+                    this.userInfo = response.data.vo.userInfo;
+                    // console.log(this.userInfo)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
         },
         getPath(type) {
             if (type == "狗") {
@@ -147,112 +116,48 @@ export default {
             }
             return bgc;
         },
-        showModal(item) {
-            this.adopterInfo = item;
+        showModal() {
             this.isShowModal = true;
         },
         closeMoal() {
             this.isShowModal = false;
         },
-        isChecked(checkVaccine){
-
-            if(this.petInfo.vaccine == null || this.petInfo.vaccine.trim() == ""){
+        isChecked(checkVaccine) {
+            if (this.petInfo.vaccine == null || this.petInfo.vaccine.trim() == "") {
                 return false;
             }
             let vaccineArr = this.petInfo.vaccine.split(',').map(vaccine => vaccine.trim());
             return vaccineArr.includes(checkVaccine);
         },
-        deleteData() {
-            axios.post('http://localhost:8080/api/adoption/petInfo/deletePetInfo',
-                {
-                    "userId": this.petInfo.user_id,
-                    "petId": this.petInfo.pet_id
-                }
-            )
-            .then(response => {
-                console.log(response.data)
-            })
-            .catch(error => {
-                console.error(error);
-            })
-
-            this.$router.push('/MyPet')
-        },
-        rejectApply(item){
-            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
-
-            console.log("pet id", this.petInfo.pet_id)
-            console.log("owner id", user.userId)
-            console.log("adopter id", item.userId)
-
-            axios.post('http://localhost:8080/api/adoption/petInfo/rejectAdoptPet',
-                {
-                    petId: this.petInfo.pet_id,
-                    ownerId: user.userId,
-                    adopterId: item.userId
-                }
-            )
-            .then(response => {
-                console.log(response.data)
-                if (response.data.rtnCode == 'SUCCESSFUL') {
-                    sessionStorage.setItem("the pet", JSON.stringify(response.data.petInfo))
-                    Swal.fire({
-                        title: "拒絕成功！!",
-                        icon: "success"
-                    }).then((result) => {
-                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
-                            location.reload()
-                        }
-                    });
-                } else {
-                    Swal.fire('出了些錯誤，請再次檢查');
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            })
-        },
-        confirmApply(item){
-            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
-
-            axios.post('http://localhost:8080/api/adoption/petInfo/ownerConfirm',
-                {
-                    petId: this.petInfo.pet_id,
-                    ownerId: user.userId,
-                    adopterId: item.userId
-                }
-            )
-            .then(response => {
-                console.log(response.data)
-                if (response.data.rtnCode == 'SUCCESSFUL') {
-                    sessionStorage.setItem("adopt pet detail", JSON.stringify(response.data.petInfo))
-                    Swal.fire({
-                        title: "已送出確認！!",
-                        icon: "success"
-                    }).then((result) => {
-                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
-                            location.reload()
-                        }
-                    });
-                } else {
-                    Swal.fire('出了些錯誤，請再次檢查');
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            })
-        },
-        emitGo() {
-            let objInfo = Object.assign({}, { userInfo: this.userInfo }, { petInfo: this.petInfo })
-            console.log("emit from pet detail", objInfo)
-            this.$emit("userPetInfo", objInfo);
-            this.$router.push('/PetDetailModify')
-        },
         goTo(x) {
-            sessionStorage.removeItem('the pet');
-            this.$router.push(x)
+            sessionStorage.removeItem('adopt pet detail');
+            this.$router.back();
+        },
+        sendApply(){
+            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
+
+            axios.post('http://localhost:8080/api/adoption/petInfo/adoptPet', {
+                petId: this.petInfo.pet_id,
+                userId: user.userId
+            })
+            .then(response => {
+                console.log(response.data);
+                if (response.data.rtnCode == 'SUCCESSFUL') {
+                    Swal.fire({
+                        title: "申請領養成功！!",
+                        icon: "success"
+                    })
+                } else if (response.data.rtnCode == 'THE_USER_HAS_ALREADY_ADOPTED_THE_PET'){
+                    Swal.fire('您已認養過此寵物！');
+                } else {
+                    Swal.fire('出了些錯誤，請再次檢查');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
         }
-    },
+    }
 }
 </script>
 
@@ -266,7 +171,7 @@ export default {
             <div class="top">
                 <div class="topLeft">
                     <div class="topLeftPhoto">
-                        <img :src="this.userInfo.userPhoto" alt="">
+                        <img :src="'data:image/jpeg;base64,' + this.userInfo.userPhoto" alt="">
                     </div>
                     <div class="topLeftText">
                         <p>{{ this.userInfo.userName }}</p>
@@ -274,32 +179,37 @@ export default {
                     </div>
                 </div>
                 <div class="topRight">
-                    <i class="fa-solid fa-trash" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>
-                    <i v-if="!isAlreadyAdopted" class="fa-solid fa-pen" @click="emitGo()"></i>
+                    <button class="btn btn-specialRed modal-btn" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                        <i class="fa-solid fa-hand-holding-heart" style="color: white"></i>
+                        <p style="color: white;">申請領養</p>
+                    </button>
+                    <button class="btn btn-specialBlue modal-btn">
+                        <i class="fa-solid fa-comments" style="color: white;"></i>
+                        <p style="color: white;">聊聊了解</p>
+                    </button>
                 </div>
-            </div>
-            <!-- Modal -->
-            <div class="modal fade" id="deleteModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1"
-                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                @click="closeModal()"></button>
-                        </div>
-                        <div class="modal-body">
-                            <h4>確定要刪除 {{ this.petInfo.pet_name }} 的資料嗎？</h4>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close">
-                                <i class="fa-solid fa-chevron-right" style="color: white;"></i>
-                                <p style="color: white;">再想一下</p>
-                            </button>
-                            <button class="btn btn-specialRed modal-btn" data-bs-dismiss="modal" aria-label="Close"
-                                @click="deleteData()">
-                                <i class="fa-solid fa-xmark" style="color: white;"></i>
-                                <p style="color: white;">刪除資料</p>
-                            </button>
+                <!-- Modal -->
+                <div class="modal fade" id="confirmModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1"
+                    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                    @click="closeModal()"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h4>確定要申請認養 {{ this.petInfo.pet_name }} 嗎？</h4>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close">
+                                    <i class="fa-solid fa-chevron-right" style="color: white;"></i>
+                                    <p style="color: white;">再想一下</p>
+                                </button>
+                                <button class="btn btn-specialRed modal-btn" @click="sendApply()">
+                                    <i class="fa-solid fa-hand-holding-heart" style="color: white"></i>
+                                    <p style="color: white;">確認申請</p>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -310,7 +220,7 @@ export default {
                 <!-- 寵物照片 -->
                 <div class="middleLeft">
                     <div class="middleLeftPic">
-                        <img :src=this.petInfo.pet_photo alt="">
+                        <img :src="'data:image/jpeg;base64,' + this.petInfo.pet_photo" alt="">
                     </div>
                 </div>
 
@@ -331,7 +241,8 @@ export default {
                                 <p>基本資料</p>
                                 <div class="block blockDataContent">
                                     <p>地點：{{ this.petInfo.location }}</p>
-                                    <p>年齡： {{ this.petInfo.age }}</p>
+                                    <p>年齡：</p>
+                                    <p> {{ this.petInfo.age }}</p>
                                     <p>品種：{{ this.petInfo.pet_breed }}</p>
                                 </div>
                             </div>
@@ -405,126 +316,6 @@ export default {
                 </div>
             </div>
 
-            <!-- 送養資訊 -->
-            <div v-if="isAdopted" class="middleAdoption">
-                <div class="condition">
-                    <div class="conditionTop blockTitle">
-                        <div :class="{ 'yellowCard': this.petInfo.adoption_status == '正常' }, { 'redCard': this.petInfo.adoption_status == '送養中' }, { 'greenCard': this.petInfo.adoption_status == '已送養' }"
-                            class="circle">
-                            <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path :d="getPath(this.petInfo.type)" fill="white" />
-                            </svg>
-                        </div>
-                        <h5>認養條件</h5>
-                    </div>
-                    <div class="conditionContent">
-                        <p>{{ this.petInfo.adoption_conditions }}</p>
-                    </div>
-                </div>
-                <div class="adopter">
-                    <div class="adopterTop blockTitle">
-                        <div :class="{ 'yellowCard': this.petInfo.adoption_status == '正常' }, { 'redCard': this.petInfo.adoption_status == '送養中' }, { 'greenCard': this.petInfo.adoption_status == '已送養' }"
-                            class="circle">
-                            <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path :d="getPath(this.petInfo.type)" fill="white" />
-                            </svg>
-                        </div>
-                        <h5>申請認養</h5>
-                    </div>
-                    <!-- v-for -->
-                    <div class="adopterContent">
-                        <div class="adopterFile" v-for="(item, index) in adopterList">
-                            <div class="adopterFileTop">
-                                <div class="adopterPhoto">
-                                    <div class="circle"></div>
-                                </div>
-                                <div class="adopterText">
-                                    <p>{{ item.userName }}</p>
-                                    <p>@{{ item.account }}</p>
-                                </div>
-                            </div>
-
-                            <div class="adopterFileMiddle">
-                                <p>{{ item.profile ? item.profile : "未填寫"}}</p>
-                            </div>
-
-                            <div class="adopterFileBtn">
-                                <button class="btn btn-specialRed" data-bs-toggle="modal" data-bs-target="#detailModal"
-                                    @click="showModal(item)">
-                                    <i class="fa-solid fa-circle-info" style="color: white;"></i>
-                                    <p style="color: white;">查看詳細</p>
-                                </button>
-                                <button class="btn btn-specialBlue">
-                                    <i class="fa-solid fa-comments" style="color: white;"></i>
-                                    <p style="color: white;">聊聊了解</p>
-                                </button>
-                            </div>
-                            <!-- Modal -->
-                            <div class="modal fade" id="detailModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1"
-                                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                                @click="closeModal()"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="modalBodyTop">
-                                                <div class="usernameAndid">
-                                                    <p>{{ item.userName }}</p>
-                                                    <i class="fa-solid fa-circle-user"></i>
-                                                    <p>@{{ item.account }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="modalBodyMiddle">
-                                                <div class="modalBodyMiddleText">
-                                                    <p>{{ item.profile ? item.profile : "未填寫" }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="modalBodyLast">
-                                                <div class="modalBodyLastShow">
-                                                    <div class="modalBodyLastTitle">
-                                                        <h6>My Pet</h6>
-                                                    </div>
-                                                    <!-- v-for -->
-                                                    <div class="modalBodyLastPet">
-                                                        <div class="showCard" v-for="(pet, index) in pets">
-                                                            <div :class="{ 'yellowCard': pet.adoption_status == '正常' }, { 'redCard': pet.adoption_status == '送養中' }, { 'greenCard': pet.adoption_status == '已送養' }"
-                                                                class="middleCard">
-                                                                <svg viewBox="0 0 180 180" fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg">
-                                                                    <path :d="getPath(pet.type)" fill="white" />
-                                                                </svg>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button v-if="!this.isGived" class="btn btn-specialRed modal-btn" @click="rejectApply(item)">
-                                                    <i class="fa-solid fa-xmark" style="color: white;"></i>
-                                                    <p style="color: white;">拒絕送養</p>
-                                                </button>
-                                                <button v-if="!this.isGived" class="btn btn-green modal-btn" @click="confirmApply(item)">
-                                                    <i class="fa-solid fa-check" style="color: white"></i>
-                                                    <p style="color: white;">接受送養</p>
-                                                </button>
-                                                <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close">
-                                                    <i class="fa-solid fa-comments" style="color: white;"></i>
-                                                    <p style="color: white;">聊聊了解</p>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-
             <!-- 寵物照片 -->
             <div class="last">
                 <div class="picArea">
@@ -539,7 +330,7 @@ export default {
 
             <!-- btn -->
             <div class="btnArea">
-                <button class="btn btn-big btn-specialBlue" @click="goTo('/MyPet')">
+                <button class="btn btn-big btn-specialBlue" @click="goTo('/MyAdopt')">
                     <i class="fa-solid fa-right-to-bracket" style="color: white"></i>
                     <p style="color: white;">回到列表</p>
                 </button>
@@ -591,13 +382,26 @@ export default {
                 display: flex;
                 align-items: center;
 
-                i {
-                    font-size: 20pt;
-                    margin: 0px 10px 0px 10px;
+                .btn {
+                    width: 150px;
+                    height: 50px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 14pt;
+                    margin-right: 20px;
+
+                    i {
+                        margin-right: 10px;
+                    }
+                }
+
+                .btn-green {
+                    background-color: $adoption;
 
                     &:hover {
-                        color: #b59e9e;
-                        transition: 0.5s;
+                        background-color: $adoptionBgc;
+                        transition: 0.3s;
                     }
                 }
             }
@@ -605,7 +409,7 @@ export default {
 
         .middle {
             width: 90%;
-            height: auto;
+            height: 430px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -666,23 +470,21 @@ export default {
                         align-items: center;
 
                         .blockData {
-                            width: 32%;
+                            width: 25%;
                             font-size: 12pt;
 
                             .blockDataContent {
                                 width: 100%;
-                                height: 190px;
                             }
                         }
 
                         .blockVaccine {
-                            width: 27%;
-                            height: auto;
+                            width: 25%;
                             font-size: 12pt;
 
                             .blockVaccineContent {
                                 width: 100%;
-                                height: 190px;
+                                height: auto;
 
                                 .vaccine {
                                     display: flex;
@@ -702,11 +504,8 @@ export default {
                         }
 
                         .blockStatus {
-                            width: 35%;
+                            width: 40%;
                             font-size: 12pt;
-                            .blockStatusContent {
-                                height: 190px;
-                            }
                         }
                     }
 
@@ -894,21 +693,6 @@ export default {
     margin: 10px 0px 10px 0px;
 }
 
-.circle {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-
-    svg {
-        width: 50px;
-        height: 45px;
-    }
-}
-
 
 // modal
 .modal-content {
@@ -928,98 +712,13 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: center;
-
-        .modalBodyTop {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            margin-bottom: 20px;
-
-            .usernameAndid {
-                width: 85%;
-                height: 50px;
-                background-color: white;
-                border-radius: 10px;
-                padding: 10px 10px 10px 10px;
-                box-shadow: 3px 3px 3px 3px gray;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-size: 16pt;
-
-                i {
-                    color: #E9D2A6;
-                    font-size: 35pt;
-                    position: absolute;
-                    left: 200px;
-                }
-            }
-        }
-
-        .modalBodyMiddle {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-
-            .modalBodyMiddleText {
-                width: 90%;
-                height: 100px;
-                background-color: white;
-                border-radius: 10px;
-                padding: 10px 10px 10px 10px;
-                box-shadow: 3px 3px 3px 3px gray;
-                overflow: hidden;
-                font-size: 12pt;
-            }
-        }
-
-        .modalBodyLast {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            .modalBodyLastShow {
-                width: 90%;
-                height: auto;
-                background-color: white;
-                border-radius: 10px;
-                padding: 10px 10px 10px 10px;
-                box-shadow: 3px 3px 3px 3px gray;
-                font-size: 12pt;
-
-                .modalBodyLastPet {
-                    width: 100%;
-                    height: auto;
-                    display: flex;
-                    justify-content: center;
-                    flex-wrap: wrap;
-
-                    .middleCard {
-                        width: 65px;
-                        height: 50px;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        border-radius: 10px;
-                        margin: 10px 5px 5px 5px;
-                        color: white;
-
-                        svg {
-                            width: 50px;
-                            height: 45px;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     .modal-footer {
         width: 90%;
         display: flex;
         justify-content: center;
+        ;
         align-items: center;
 
         .btn-green {
@@ -1045,6 +744,21 @@ export default {
                 margin-right: 5px;
             }
         }
+    }
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+
+    svg {
+        width: 50px;
+        height: 45px;
     }
 }
 
