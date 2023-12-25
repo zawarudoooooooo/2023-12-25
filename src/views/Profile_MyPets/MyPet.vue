@@ -207,7 +207,7 @@ export default{
             <!-- 顏色 -->
             <div class="colorSpace">
                 <div class="yellowCircle"></div>
-                <p>正常</p>
+                <p>一般</p>
                 <div class="redCircle"></div>
                 <p>送養中</p>
                 <div class="greenCircle"></div>

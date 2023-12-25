@@ -563,7 +563,7 @@ export default {
                         align-items: center;
 
                         .blockData {
-                            width: 25%;
+                            width: 32%;
                             font-size: 12pt;
 
                             .blockDataContent {
@@ -580,7 +580,7 @@ export default {
                         }
 
                         .blockVaccine {
-                            width: 25%;
+                            width: 27%;
                             font-size: 12pt;
 
                             .blockVaccineContent {
@@ -610,7 +610,7 @@ export default {
                         }
 
                         .blockStatus {
-                            width: 40%;
+                            width: 35%;
                             font-size: 12pt;
 
                             .blockStatusContent {

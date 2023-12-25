@@ -331,8 +331,7 @@ export default {
                                 <p>基本資料</p>
                                 <div class="block blockDataContent">
                                     <p>地點：{{ this.petInfo.location }}</p>
-                                    <p>年齡：</p>
-                                    <p> {{ this.petInfo.age }}</p>
+                                    <p>年齡： {{ this.petInfo.age }}</p>
                                     <p>品種：{{ this.petInfo.pet_breed }}</p>
                                 </div>
                             </div>
@@ -446,7 +445,7 @@ export default {
                             </div>
 
                             <div class="adopterFileMiddle">
-                                <p>{{ item.profile }}</p>
+                                <p>{{ item.profile ? item.profile : "未填寫"}}</p>
                             </div>
 
                             <div class="adopterFileBtn">
@@ -479,7 +478,7 @@ export default {
                                             </div>
                                             <div class="modalBodyMiddle">
                                                 <div class="modalBodyMiddleText">
-                                                    <p>{{ item.profile }}</p>
+                                                    <p>{{ item.profile ? item.profile : "未填寫" }}</p>
                                                 </div>
                                             </div>
                                             <div class="modalBodyLast">
@@ -503,19 +502,19 @@ export default {
 
                                             </div>
                                             <div class="modal-footer">
-                                            <button v-if="!this.isGived" class="btn btn-specialRed modal-btn" @click="rejectApply(item)">
-                                                <i class="fa-solid fa-xmark" style="color: white;"></i>
-                                                <p style="color: white;">拒絕送養</p>
-                                            </button>
-                                            <button v-if="!this.isGived" class="btn btn-green modal-btn" @click="confirmApply(item)">
-                                                <i class="fa-solid fa-check" style="color: white"></i>
-                                                <p style="color: white;">接受送養</p>
-                                            </button>
-                                            <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close">
-                                                <i class="fa-solid fa-comments" style="color: white;"></i>
-                                                <p style="color: white;">聊聊了解</p>
-                                            </button>
-                                        </div>
+                                                <button v-if="!this.isGived" class="btn btn-specialRed modal-btn" @click="rejectApply(item)">
+                                                    <i class="fa-solid fa-xmark" style="color: white;"></i>
+                                                    <p style="color: white;">拒絕送養</p>
+                                                </button>
+                                                <button v-if="!this.isGived" class="btn btn-green modal-btn" @click="confirmApply(item)">
+                                                    <i class="fa-solid fa-check" style="color: white"></i>
+                                                    <p style="color: white;">接受送養</p>
+                                                </button>
+                                                <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal" aria-label="Close">
+                                                    <i class="fa-solid fa-comments" style="color: white;"></i>
+                                                    <p style="color: white;">聊聊了解</p>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -667,23 +666,23 @@ export default {
                         align-items: center;
 
                         .blockData {
-                            width: 25%;
+                            width: 32%;
                             font-size: 12pt;
 
                             .blockDataContent {
                                 width: 100%;
-                                height: 100%;
+                                height: 190px;
                             }
                         }
 
                         .blockVaccine {
-                            width: 25%;
+                            width: 27%;
                             height: auto;
                             font-size: 12pt;
 
                             .blockVaccineContent {
                                 width: 100%;
-                                height: auto;
+                                height: 190px;
 
                                 .vaccine {
                                     display: flex;
@@ -703,9 +702,11 @@ export default {
                         }
 
                         .blockStatus {
-                            width: 40%;
+                            width: 35%;
                             font-size: 12pt;
-
+                            .blockStatusContent {
+                                height: 190px;
+                            }
                         }
                     }
 
@@ -1019,7 +1020,6 @@ export default {
         width: 90%;
         display: flex;
         justify-content: center;
-        ;
         align-items: center;
 
         .btn-green {

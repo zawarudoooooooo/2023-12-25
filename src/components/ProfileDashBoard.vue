@@ -108,8 +108,9 @@ export default {
 
 <style lang="scss" scoped>
 .dashboardArea {
-    width: 170px;
+    width: 185px;
     height: auto;
+    min-height: 370px;
     background-color: white;
     border-radius: 20px;
     color: #978989;
@@ -129,7 +130,7 @@ export default {
     }
 
     .notification {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
@@ -142,49 +143,49 @@ export default {
     }
 
     .setting {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
     }
 
     .pet {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
     }
 
     .article {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
     }
 
     .adopt {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
     }
 
     .chat {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
     }
 
     .logout {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;
     }
 
     .BE {
-        height: 5vh;
+        height: 35px;
         display: flex;
         justify-content: start;
         align-items: center;

@@ -61,7 +61,7 @@ export default {
                     location: "",
                 },
             },
-            vaccineArr: [],
+            vaccineArr: null,
         }
     },
     props: [
@@ -103,12 +103,6 @@ export default {
                 this.userPet.petInfo.adoption_status = "送養中";
             } else {
                 this.userPet.petInfo.adoption_status = "正常";
-            }
-        },
-        'userPet.petInfo.type': function (newValue, oldValue) {
-            if (newValue != oldValue) {
-                this.vaccineArr = [];
-                this.userPet.petInfo.ligation = false;
             }
         },
     },
@@ -189,6 +183,8 @@ export default {
             }
 
             this.userPet.petInfo.vaccine = this.vaccineArr.join(',');
+            this.userPet.petInfo.pet_photo = this.userPet.petInfo.pet_photo.split(',')[1];
+
             console.log(this.userPet.petInfo);
 
             axios.post('http://localhost:8080/api/adoption/petInfo/updatePetInfo',
@@ -628,7 +624,7 @@ $inputBorder: #e2dbca;
                         align-items: center;
 
                         .blockData {
-                            width: 25%;
+                            width: 32%;
                             font-size: 12pt;
 
                             .blockDataContent {
@@ -645,7 +641,7 @@ $inputBorder: #e2dbca;
                         }
 
                         .blockVaccine {
-                            width: 25%;
+                            width: 27%;
                             font-size: 12pt;
 
                             .blockVaccineContent {
@@ -675,11 +671,12 @@ $inputBorder: #e2dbca;
                         }
 
                         .blockStatus {
-                            width: 40%;
+                            width: 35%;
                             font-size: 12pt;
 
                             .blockStatusContent {
                                 height: 190px;
+                                width: 100%;
                                 border: $inputBorder solid 2px;
                             }
                         }
@@ -904,7 +901,7 @@ $inputBorder: #e2dbca;
     }
 
     .modal-footer {
-        width: 90%;
+        width: 95%;
         display: flex;
         justify-content: center;
         ;

@@ -247,8 +247,7 @@ export default {
                                 <p>基本資料</p>
                                 <div class="block blockDataContent">
                                     <p>地點：{{ this.petInfo.location }}</p>
-                                    <p>年齡：</p>
-                                    <p> {{ this.petInfo.age }}</p>
+                                    <p>年齡：{{ this.petInfo.age }}</p>
                                     <p>品種：{{ this.petInfo.pet_breed }}</p>
                                 </div>
                             </div>
@@ -448,7 +447,7 @@ export default {
                         align-items: center;
 
                         .blockData {
-                            width: 25%;
+                            width: 32%;
                             font-size: 12pt;
 
                             .blockDataContent {
@@ -457,7 +456,7 @@ export default {
                         }
 
                         .blockVaccine {
-                            width: 25%;
+                            width: 27%;
                             font-size: 12pt;
 
                             .blockVaccineContent {
@@ -481,7 +480,7 @@ export default {
                         }
 
                         .blockStatus {
-                            width: 40%;
+                            width: 35%;
                             font-size: 12pt;
                         }
                     }
