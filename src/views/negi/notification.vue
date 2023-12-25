@@ -24,8 +24,11 @@ export default {
             axios.get(`http://localhost:8080/api/notification/getNoti?userId=${id}`,
             )
                 .then(response => {
+                    if(response.data.rtnCode != "SUCCESSFUL"){
+                        return
+                    }
                     this.notifi_arr = response.data.notifiReq
-                    this.notifi_arr.reverse()
+                    this.notifi_arr.reverse();
                     // console.log(this.notifi_arr.reverse())//反轉了就整個反轉了
                     let stat = false;
                     this.notifi_arr.forEach((noti)=>{
