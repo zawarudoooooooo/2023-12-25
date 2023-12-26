@@ -251,7 +251,7 @@ export default {
         goTo(x) {
             sessionStorage.removeItem('the pet');
             this.$router.push(x)
-        }
+        },
     },
 }
 </script>
@@ -433,12 +433,11 @@ export default {
                     </div>
                     <!-- v-for -->
                     <div class="adopterContent">
-                        <div class="adopterFile" v-for="(item, index) in adopterList">
-                            <div class="adopterFileTop">
+                        <div class="adopterFile" v-for="(item, index) in adopterList" :key="index" :style="{ backgroundColor: petInfo.final_adopter_id == item.userId ? '#fdf6e6' : 'white' }">
+                            <div class="adopterFileTop" >
                                 <div class="adopterPhoto">
-                                    <div class="circle">
+                                    <div class="circle" >
                                         <img :src="'data:image/jpeg;base64,' + item.userPhoto" alt="">
-
                                     </div>
                                 </div>
                                 <div class="adopterText">
@@ -447,12 +446,12 @@ export default {
                                 </div>
                             </div>
 
-                            <div class="adopterFileMiddle">
+                            <div class="adopterFileMiddle" :style="{ backgroundColor: petInfo.final_adopter_id == item.userId ? '#fefaf2' : 'white' }">
                                 <p>{{ item.profile ? item.profile : "未填寫" }}</p>
                             </div>
 
                             <div class="adopterFileBtn">
-                                <button class="btn btn-specialRed" data-bs-toggle="modal" data-bs-target="#detailModal"
+                                <button class="btn btn-specialRed" data-bs-toggle="modal" :data-bs-target="'#detailModal'+index"
                                     @click="showModal(item)">
                                     <i class="fa-solid fa-circle-info" style="color: white;"></i>
                                     <p style="color: white;">查看詳細</p>
@@ -463,7 +462,7 @@ export default {
                                 </button>
                             </div>
                             <!-- Modal -->
-                            <div class="modal fade" id="detailModal" data-bs-backdrop="true" data-bs-keyboard="true"
+                            <div class="modal fade" :id="'detailModal'+index" data-bs-backdrop="true" data-bs-keyboard="true"
                                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
@@ -778,7 +777,7 @@ export default {
                     align-items: center;
 
                     .adopterFile {
-                        width: 350px;
+                        width: 250px;
                         height: 250px;
                         padding: 10px 15px 10px 15px;
                         border: 2px solid lightgray;
@@ -944,6 +943,7 @@ export default {
         justify-content: center;
 
         .modalBodyTop {
+            width: 450px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -952,7 +952,7 @@ export default {
 
             .usernameAndid {
                 width: 85%;
-                height: 50px;
+                height: 60px;
                 background-color: white;
                 border-radius: 10px;
                 padding: 10px 10px 10px 10px;
@@ -973,11 +973,14 @@ export default {
                     height: 50px;
                     width: 50px;
                     border-radius: 50%;
+                    position: absolute;
+                    left: 200px;
                 }
             }
         }
 
         .modalBodyMiddle {
+            width: 450px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -1008,6 +1011,7 @@ export default {
                 padding: 10px 10px 10px 10px;
                 box-shadow: 3px 3px 3px 3px gray;
                 font-size: 12pt;
+                margin-bottom: 20px;
 
                 .modalBodyLastPet {
                     width: 100%;
@@ -1037,7 +1041,8 @@ export default {
     }
 
     .modal-footer {
-        width: 90%;
+        width: 100%;
+        height: 50px;
         display: flex;
         justify-content: center;
         align-items: center;

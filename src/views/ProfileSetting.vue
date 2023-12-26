@@ -442,7 +442,7 @@ $inputBorder: #e2dbca;
                 .userinfo {
                     width: 100%;
                     height: 390px;
-                    border: 2.5px solid #978989;
+                    border: 2px solid #978989;
                     border-radius: 10px;
                     margin-top: 1vmin;
                     padding: 15px 25px 15px 25px;
@@ -469,7 +469,7 @@ $inputBorder: #e2dbca;
                     .contactinfo {
                         width: inherit;
                         height: 230px;
-                        border: 2.5px solid #978989;
+                        border: 2px solid #978989;
                         border-radius: 10px;
                         margin-top: 1vmin;
                         padding: 10px 25px 10px 25px;
@@ -489,7 +489,6 @@ $inputBorder: #e2dbca;
                     .familyinfo {
                         width: inherit;
                         height: 100px;
-                        border: 2.5px solid #978989;
                         border-radius: 10px;
                         margin-top: 1vmin;
                     }
@@ -507,7 +506,6 @@ $inputBorder: #e2dbca;
             .memoArea {
                 width: 60vw;
                 height: 120px;
-                border: 2.5px solid #978989;
                 border-radius: 10px;
                 margin-top: 1vmin;
             }

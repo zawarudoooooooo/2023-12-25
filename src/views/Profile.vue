@@ -107,7 +107,7 @@ export default {
                     <!-- 基本資料 -->
                     <div class="user">
                         <label for="">基本資料</label>
-                        <div class="userinfo">
+                        <div class="userinfoData">
                             <div class="name">
                                 <span>真實姓名 : </span>
                                 <span>{{ foundUser.userRealName ? foundUser.userRealName : "未填寫" }}</span>
@@ -268,6 +268,7 @@ $inputBorder: #e2dbca;
             border-radius: 10px;
             box-shadow: 3px 3px 3px 3px gray;
             margin-top: 10vmin;
+            margin-bottom: 10vmin;
             padding: 5vmin;
             font-weight: bold;
 
@@ -308,10 +309,10 @@ $inputBorder: #e2dbca;
                 .user {
                     width: 20vw;
 
-                    .userinfo {
+                    .userinfoData {
                         width: 100%;
                         height: 390px;
-                        border: 2.5px solid #978989;
+                        border: 2px solid #978989;
                         border-radius: 10px;
                         margin-top: 1vmin;
                         padding: 15px 25px 15px 25px;
@@ -341,7 +342,7 @@ $inputBorder: #e2dbca;
                         .contactinfo {
                             width: inherit;
                             height: 230px;
-                            border: 2.5px solid #978989;
+                            border: 2px solid #978989;
                             border-radius: 10px;
                             margin-top: 1vmin;
                             padding: 10px 25px 10px 25px;
@@ -366,7 +367,7 @@ $inputBorder: #e2dbca;
                         .family2 {
                             width: 35vw;
                             height: 100px;
-                            border: 2.5px solid #978989;
+                            border: 2px solid #978989;
                             border-radius: 10px;
                             margin-top: 1vmin;
                             padding: 10px 25px 10px 25px;
@@ -391,7 +392,7 @@ $inputBorder: #e2dbca;
 
                     width: 60vw;
                     height: 120px;
-                    border: 2.5px solid #978989;
+                    border: 2px solid #978989;
                     border-radius: 10px;
 
                     p {

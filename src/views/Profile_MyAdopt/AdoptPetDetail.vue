@@ -293,6 +293,24 @@ export default {
                 </div>
             </div>
 
+            <!-- 送養資訊 -->
+            <div class="middleAdoption">
+                <div class="condition">
+                    <div class="conditionTop blockTitle">
+                        <div :class="{ 'yellowCard': this.petInfo.adoption_status == '正常' }, { 'redCard': this.petInfo.adoption_status == '送養中' }, { 'greenCard': this.petInfo.adoption_status == '已送養' }"
+                            class="circle">
+                            <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path :d="getPath(this.petInfo.type)" fill="white" />
+                            </svg>
+                        </div>
+                        <h5>認養條件</h5>
+                    </div>
+                    <div class="conditionContent">
+                        <p>{{ this.petInfo.adoption_conditions }}</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- 寵物照片 -->
             <div class="last">
                 <div class="picArea">
@@ -497,7 +515,7 @@ export default {
 
         .middleAdoption {
             width: 90%;
-            height: 700px;
+            height: 300px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -521,82 +539,6 @@ export default {
                     border: 2px solid lightgray;
                     border-radius: 10px;
                     margin-bottom: 10px;
-                }
-            }
-
-            .adopter {
-                width: 100%;
-                height: 400px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                background-color: #fff;
-                border-radius: 20px;
-                box-shadow: 0 0 2px 2px lightgray;
-                margin-bottom: 30px;
-                padding: 10px 10px 10px 10px;
-
-                .adopterContent {
-                    width: 90%;
-                    height: 280px;
-                    padding: 0px 10px 0px 10px;
-                    display: flex;
-                    overflow: scroll;
-                    align-items: center;
-
-                    .adopterFile {
-                        width: 350px;
-                        height: 250px;
-                        padding: 10px 15px 10px 15px;
-                        border: 2px solid lightgray;
-                        border-radius: 10px;
-                        margin-right: 15px;
-                        margin-bottom: 15px;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-
-                        .adopterFileTop {
-                            width: 95%;
-                            height: 50px;
-                            display: flex;
-                            align-items: center;
-                            margin-bottom: 10px;
-                        }
-
-                        .adopterFileMiddle {
-                            width: 90%;
-                            height: 120px;
-                            overflow: hidden;
-                            border: 2px solid lightgray;
-                            border-radius: 10px;
-                            padding: 0px 10px 0px 10px;
-                            margin-bottom: 10px;
-                        }
-
-                        .adopterFileBtn {
-                            width: 95%;
-                            height: 40px;
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-
-                            .btn {
-                                width: 100px;
-                                height: 30px;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                font-size: 9pt;
-                                padding-left: 10px;
-                                padding-right: 10px;
-
-                                i {
-                                    margin-right: 5px;
-                                }
-                            }
-                        }
-                    }
                 }
             }
 
