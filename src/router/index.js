@@ -103,8 +103,6 @@ const router = createRouter({
       name: 'create_Article',
       component: () => import('../views/negi/create_Article.vue'),
     },
-
-
     //從這裡開始路由是yxz的
     {
       path: '/PlatformEntrance',
@@ -170,6 +168,12 @@ const router = createRouter({
       path: '/ChitChatting',
       name: 'ChitChatting',
       component: () => import('../views/ChitChatting.vue'),
+    },
+    //怕打亂版型先在這邊做更新
+    {
+      path: '/create_Brticale',
+      name: 'create_Brticale',
+      component: () => import('@/views/negi/create_Brticale.vue'),
     },
   ]
 })
