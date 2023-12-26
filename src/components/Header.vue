@@ -92,7 +92,6 @@ export default {
             <!-- <i class="fa-solid fa-user" style="color: white;"></i> -->
             <img style="width: 50px; height: 50px; border-radius: 50%;" :src="'data:image/jpeg;base64,' + foundUserInfo.userPhoto" alt="">
             <i v-if="foundUserInfo.userPhoto==null" class="fa-solid fa-user" style="color: white;"></i>
-            <img style="width: 90px; height: 90x; border-radius: 50%;" :src="'data:image/jpeg;base64,' + foundUserInfo.userPhoto" alt="">
         </div>
     </div>
 </template>
