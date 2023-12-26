@@ -5,18 +5,26 @@ import indexState from "../stores/indexState"
 import ProfileDashBoard from '../components/ProfileDashBoard.vue'
 import Swal from 'sweetalert2'
 
+import VueCropper from 'vue-cropperjs';
+import 'cropperjs/dist/cropper.css';
 
 export default {
     data() {
         return {
-            foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
+            // 與圖片處理有關
+            imageUrl: null, // 顯示預覽圖的變數
+            croppedImageUrl: null, // 保存裁切後圖片的變數
+            showCropper: false, // 控制是否顯示裁切範圍的變數
 
+            userPhoto: null, // 用於儲存上傳的圖片資料
+            cropper: null, // Cropper 實例
+            croppedImageUrl: null, // 儲存裁切後的圖片資料
+            croppedImageUrlwithoutPrefix: null,//沒有前綴
+
+            foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
             foundUser: null,
             userInfoList: null,
-            imageUrl: null,
             foundFileName: null,
-
-            ///更新資料 For V-model
             userName: null,
             profile: null,
             jobOccupation: null,
@@ -27,11 +35,13 @@ export default {
             userRealName: null,
             age: null,
             gender: null,
-
-            imageUrl: null, // 新增用於顯示預覽圖的變數
-
         }
     },
+
+    computed: {
+        ...mapState(indexState, ["foundUserInfo"]),
+    },
+
     //進入頁面時，變更背景顏色
     beforeCreate() {
         document.querySelector('body').setAttribute('style', 'background:#F8F5EE')
@@ -43,14 +53,81 @@ export default {
 
     methods: {
 
+        ...mapActions(indexState, ["updateUserInfo", "clearUserInfo"]),
+
+        // 举例：在某个地方需要更新用户信息时调用此方法
+        updateUser(newUserInfo) {
+            this.updateUserInfo(newUserInfo);
+        },
+
+
+        handleFileChange(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                this.imageUrl = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        },
+        saveCroppedImage() {
+            this.cropper = this.$refs.cropper;
+            const croppedCanvas = this.cropper && this.cropper.getCroppedCanvas();
+            this.croppedImageUrl = croppedCanvas ? croppedCanvas.toDataURL('image/jpeg') : null;
+            console.log('Cropped image saved:', this.croppedImageUrl);
+        },
+        saveAndCloseCropper() {
+            // 在這裡執行保存裁切圖片的操作
+            this.saveCroppedImage();
+
+            // 新增一個變數，不含 Base64 前綴
+            this.croppedImageUrlwithoutPrefix = this.croppedImageUrl.replace(/^data:image\/[a-z]+;base64,/, '');
+
+            // 打印新變數
+            console.log('Cropped image without prefix:', this.croppedImageUrlwithoutPrefix);
+
+            // 將裁切後的值賦予到 Uploaded Image
+            this.$nextTick(() => {
+                // 在這裡將裁切後的值賦予到 Uploaded Image
+                const uploadedImage = this.croppedImageUrl;
+
+                // 如果裁切後的值存在，將其賦值給 imageUrl 以顯示
+                if (uploadedImage) {
+                    this.imageUrl = uploadedImage;
+                }
+
+                // 隱藏裁切範圍並重置圖片變數
+                this.showCropper = false;
+                this.imageUrl = null;
+            });
+        },
+
+
         chooseImage() {
             document.getElementById('imageInput').click(); // 觸發選擇檔案的 input 欄位
         },
 
         onFileChange(event) {
             const file = event.target.files[0];
-            if (file) {
-                this.readFile(file);
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                // 將選擇的圖片設置為imageUrl
+                this.imageUrl = reader.result;
+
+                // 在成功讀取圖片後將 showCropper 設置為真
+                this.showCropper = true;
+            };
+
+            console.log('Selected file:', file);
+
+            if (!file) {
+                // 如果未選擇圖片或選擇不支持的類型，重置圖片區域
+                console.log('No file selected or unsupported type.');
+                this.imageUrl = null; // 或者設置為空字符串，視需求而定
+            } else {
+                // 讀取選擇的圖片
+                console.log('Reading file...');
+                reader.readAsDataURL(file);
             }
         },
         readFile(file) {
@@ -99,7 +176,9 @@ export default {
                 });
         },
 
-
+        handleError(event) {
+            event.target.style.display = 'none';
+        },
 
         update() {
             const userInfo = {
@@ -120,6 +199,10 @@ export default {
                 gender: this.gender,
 
             };
+            // 檢查是否有更新圖片
+            if (this.croppedImageUrlwithoutPrefix) {
+                userInfo.userPhoto = this.croppedImageUrlwithoutPrefix;
+            }
 
             console.log(userInfo)
             fetch('http://localhost:8080/api/adoption/userInfo/updateUserInfo', {
@@ -144,6 +227,8 @@ export default {
                     }).then((result) => {
                         if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
                             this.$router.push('/Profile')
+                            sessionStorage.setItem('foundUserInfo', JSON.stringify(userInfo));
+                            this.updateUser(foundUser); // 调用 updateUser 方法更新用户信息
                         }
                     });
 
@@ -161,7 +246,8 @@ export default {
 
 
     components: {
-        ProfileDashBoard
+        ProfileDashBoard,
+        VueCropper,
     },
 }
 </script>
@@ -179,23 +265,36 @@ export default {
             <div class="logoutAndsave">
                 <i class="fa-solid fa-floppy-disk" @click="update()"></i>
             </div>
-            <!-- 使用者名稱和ID -->
+
+            <!-- 使用者名稱和ID 圖片處理區域 -->
             <div class="usernameAndid">
-                <input class="block" type="text" name="" id="" style="width: 200px;" :placeholder=foundUser.userName
-                    v-model="this.userName">
+                <!-- Input field for username -->
+                <input class="block" type="text" v-model="userName" :placeholder=foundUser.userName>
+
+                <!-- Cropper popup -->
+                <div v-if="showCropper" class="cropper-popup">
+                    <h3 style="text-align: center;">裁切大頭貼</h3>
+                    <!-- VueCropper component -->
+                    <vue-cropper v-if="imageUrl" :src="imageUrl" :key="imageUrl" ref="cropper"></vue-cropper>
+                    <!-- Button to save and close cropper -->
+                    <button @click="saveAndCloseCropper">儲存並關閉</button>
+                </div>
 
                 <div class="image-upload">
-                    <img v-if="!imageUrl" :src="this.foundUser.filePath" alt=""
-                        style="border-radius: 50%; border: 3px solid;" height="100px" width="100px">
-                    <img v-else :src="imageUrl" alt="Uploaded Image" style="border-radius: 50%; border: 3px solid;"
-                        height="100px" width="100px">
+                    <img v-if="croppedImageUrl" :src="croppedImageUrl" class="cropped-image">
+                    <img v-else-if="!imageUrl && foundUser.filePath" :src="foundUser.filePath" class="uploaded-image"
+                        @error="handleError">
+                    <img v-else :src="imageUrl" class="default-image">
+
                     <div class="add-icon" @click="chooseImage">
                         <i class="fa-solid fa-plus"></i>
                         <input type="file" accept="image/*" id="imageInput" style="display: none;" @change="onFileChange">
                     </div>
                 </div>
 
-                <p>@{{ foundUser.account }}</p>
+
+                <!-- User account information -->
+                <p>{{ foundUser.account }}</p>
             </div>
             <div>
             </div>
@@ -329,29 +428,44 @@ $inputBorder: #e2dbca;
         align-items: center;
         font-size: 26pt;
         margin-top: 30px;
+        position: relative;
+        /* 將父元素設置為相對定位 */
 
         .image-upload {
             position: relative;
-            display: inline-block;
-            margin-right: 20px;
-            /* 調整位置 */
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid;
+            // overflow: hidden;
+            /* 其他樣式 */
 
-            .add-icon {
-                position: absolute;
-                bottom: -10px;
-                /* 控制底部位置 */
-                right: -10px;
-                /* 控制右側位置 */
-                background-color: #ffffff;
+
+            .cropped-image,
+            .uploaded-image,
+            .default-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
                 border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
             }
         }
+
+        .add-icon {
+            position: absolute;
+            bottom: -12px;
+            right: -12px;
+            background-color: #ffffff;
+            z-index: 1;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+        }
+
 
         p {
             color: #978989;
@@ -526,5 +640,45 @@ $inputBorder: #e2dbca;
     border: $inputBorder solid 2px;
     border-radius: 10px;
     margin: 10px 0px 10px 0px;
+}
+
+.cropper-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    /* 添加陰影效果 */
+
+    h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        /* 增加標題底部間距 */
+        font-size: 20px;
+        /* 調整標題字體大小 */
+    }
+
+    button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-top: 20px;
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+
+        &:hover {
+            background-color: #45a049;
+        }
+    }
 }
 </style>

@@ -124,6 +124,13 @@ const router = createRouter({
       component: () => import('../views/yxz/BeManagement.vue'),
     },
 
+    //12.25 test
+    {
+      path: '/yxztest',
+      name: 'yxztest',
+      component: () => import('../views/yxz/yxztest.vue'),
+    },
+
 
     
     //這是Mebice的
