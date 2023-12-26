@@ -250,6 +250,7 @@ export default {
                             <select class="selectType" name="" id="type" v-model="petInfo.type">
                                 <option value="狗">狗</option>
                                 <option value="貓">貓</option>
+                                <option value="其他">其他</option>
                             </select>
                         </div>
                         <div class="isAdopt">
@@ -614,6 +615,7 @@ export default {
                             font-size: 12pt;
 
                             .blockStatusContent {
+                                width: 100%;
                                 height: 190px;
                                 border: $inputBorder solid 2px;
                             }
@@ -659,6 +661,12 @@ export default {
                     border-radius: 10px;
                     margin-bottom: 10px;
                 }
+            }
+            .blockTitle {
+                width: 90%;
+                height: 80px;
+                display: flex;
+                align-items: center;
             }
         }
 

@@ -313,6 +313,7 @@ export default {
                             <select class="selectType" name="" id="type" v-model="this.userPet.petInfo.type">
                                 <option value="狗">狗</option>
                                 <option value="貓">貓</option>
+                                <option value="其他">其他</option>
                             </select>
                         </div>
                         <div class="isAdopt">

@@ -216,6 +216,8 @@ export default {
                     })
                 } else if (response.data.rtnCode == 'THE_USER_HAS_ALREADY_ADOPTED_THE_PET'){
                     Swal.fire('您已認養過此寵物！');
+                } else if (response.data.rtnCode == 'ADOPT_ERROR'){
+                    Swal.fire('不能認養自己的寵物！');
                 } else {
                     Swal.fire('出了些錯誤，請再次檢查');
                 }
