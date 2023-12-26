@@ -171,9 +171,9 @@ const router = createRouter({
     },
     //怕打亂版型先在這邊做更新
     {
-      path: '/create_Brticale',
-      name: 'create_Brticale',
-      component: () => import('@/views/negi/create_Brticale.vue'),
+      path: '/create_Brticle',
+      name: 'create_Brticle',
+      component: () => import('@/views/negi/create_Brticle.vue'),
     },
   ]
 })
