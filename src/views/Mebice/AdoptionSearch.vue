@@ -141,16 +141,43 @@ export default {
             },
             inputType: "",
             inputLocation: "",
+            area: null,//區域
+            city: "",//城市
         }
-    },
-    //進入頁面時，變更背景顏色
-    beforeCreate() {
     },
 
     mounted() {
         this.search()
     },
 
+    computed: {//計算屬性 filteredCities
+        // 根據選擇的區域動態生成城市選項
+        filteredCities() {
+            if (this.area) {
+                // 如果選擇了區域，根據不同的區域返回相應的城市列表
+                switch (this.area) {
+                    case "北部":
+                        return ["台北市", "新北市", "基隆市", "新竹市", "桃園市", "新竹縣", "宜蘭縣"];
+                    case "中部":
+                        return ["台中市", "苗栗縣", "彰化縣", "南投縣", "雲林縣"];
+                    case "南部":
+                        return ["高雄市", "台南市", "嘉義市", "嘉義縣", "屏東縣", "澎湖縣"];
+                    case "東部":
+                        return ["花蓮縣", "台東縣"];
+                    default:
+                        return [];
+                }
+            } else {
+                // 如果未選擇區域，顯示所有城市選項
+                return [
+                    "台北市", "新北市", "基隆市", "新竹市", "桃園市", "新竹縣", "宜蘭縣",
+                    "台中市", "苗栗縣", "彰化縣", "南投縣", "雲林縣",
+                    "高雄市", "台南市", "嘉義市", "嘉義縣", "屏東縣", "澎湖縣",
+                    "花蓮縣", "台東縣"
+                ];
+            }
+        },
+    },
 
     methods: {
         getPath(type) {
@@ -162,6 +189,9 @@ export default {
             }
         },
         search(){
+            this.inputLocation = this.city;
+            console.log(this.city);
+
             axios.get('http://localhost:8080/api/adoption/petInfo/getAdoptablePetList', {
                 params: {
                     "type": this.inputType,
@@ -243,11 +273,32 @@ export default {
                     <option value=""></option>
                     <option value="貓">貓</option>
                     <option value="狗">狗</option>
+                    <option value="其他">其他</option>
                 </select>
 
-                <span>地點</span>
-                <input type="text" v-model="inputLocation">
-                <button @click="search()">Search</button>
+                <!-- <span>地點</span>
+                <input type="text" v-model="inputLocation"> -->
+
+
+                <!--  -->
+                <span>區域</span>
+                <select v-model="this.area">
+                    <option value=""></option>
+                    <option value="北部">北部</option>
+                    <option value="中部">中部</option>
+                    <option value="南部">南部</option>
+                    <option value="東部">東部</option>
+                </select>
+
+                <span>縣市</span>
+                <select v-model="this.city">
+                    <option value=""></option>
+                    <option v-for="cityOption in filteredCities" :value="cityOption">
+                        {{ cityOption }}
+                    </option>
+                </select>
+
+                <button @click="search()">Search</button> 
 
             </div>
 
@@ -436,6 +487,7 @@ export default {
 
     .cardArea {
         width: 90%;
+        // min-height: 50vh;
         height: auto;
         background-color: #fff;
         border-radius: 3vw;

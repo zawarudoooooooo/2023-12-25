@@ -116,7 +116,7 @@ export default {
             })
                 .then(response => {
                     console.log(response.data)
-                    this.adopterList = response.data.userInfoList;
+                    this.adopterList = response.data.voList;
                 })
                 .catch(error => {
                     console.error(error)
@@ -433,26 +433,26 @@ export default {
                     </div>
                     <!-- v-for -->
                     <div class="adopterContent">
-                        <div class="adopterFile" v-for="(item, index) in adopterList" :key="index" :style="{ backgroundColor: petInfo.final_adopter_id == item.userId ? '#fdf6e6' : 'white' }">
+                        <div class="adopterFile" v-for="(item, index) in adopterList" :key="index" :style="{ backgroundColor: petInfo.final_adopter_id == item.userInfo.userId ? '#fdf6e6' : 'white' }">
                             <div class="adopterFileTop" >
                                 <div class="adopterPhoto">
                                     <div class="circle" >
-                                        <img :src="'data:image/jpeg;base64,' + item.userPhoto" alt="">
+                                        <img :src="'data:image/jpeg;base64,' + item.userInfo.userPhoto" alt="">
                                     </div>
                                 </div>
                                 <div class="adopterText">
-                                    <p>{{ item.userName }}</p>
-                                    <p>@{{ item.account }}</p>
+                                    <p>{{ item.userInfo.userName }}</p>
+                                    <p>@{{ item.userInfo.account }}</p>
                                 </div>
                             </div>
 
-                            <div class="adopterFileMiddle" :style="{ backgroundColor: petInfo.final_adopter_id == item.userId ? '#fefaf2' : 'white' }">
-                                <p>{{ item.profile ? item.profile : "未填寫" }}</p>
+                            <div class="adopterFileMiddle" :style="{ backgroundColor: petInfo.final_adopter_id == item.userInfo.userId ? '#fefaf2' : 'white' }">
+                                <p>{{ item.userInfo.profile ? item.userInfo.profile : "未填寫" }}</p>
                             </div>
 
                             <div class="adopterFileBtn">
                                 <button class="btn btn-specialRed" data-bs-toggle="modal" :data-bs-target="'#detailModal'+index"
-                                    @click="showModal(item)">
+                                    @click="showModal(item.userInfo)">
                                     <i class="fa-solid fa-circle-info" style="color: white;"></i>
                                     <p style="color: white;">查看詳細</p>
                                 </button>
@@ -473,15 +473,15 @@ export default {
                                         <div class="modal-body">
                                             <div class="modalBodyTop">
                                                 <div class="usernameAndid">
-                                                    <p>{{ item.userName }}</p>
-                                                    <img :src="'data:image/jpeg;base64,' + item.userPhoto" alt="">
+                                                    <p>{{ item.userInfo.userName }}</p>
+                                                    <img :src="'data:image/jpeg;base64,' + item.userInfo.userPhoto" alt="">
                                                     <!-- <i class="fa-solid fa-circle-user"></i> -->
-                                                    <p>@{{ item.account }}</p>
+                                                    <p>@{{ item.userInfo.account }}</p>
                                                 </div>
                                             </div>
                                             <div class="modalBodyMiddle">
                                                 <div class="modalBodyMiddleText">
-                                                    <p>{{ item.profile ? item.profile : "未填寫" }}</p>
+                                                    <p>{{ item.userInfo.profile ? item.userInfo.profile : "未填寫" }}</p>
                                                 </div>
                                             </div>
                                             <div class="modalBodyLast">
@@ -491,10 +491,10 @@ export default {
                                                     </div>
                                                     <!-- v-for -->
                                                     <div class="modalBodyLastPet">
-                                                        <div class="showCard" v-for="(pet, index) in pets">
+                                                        <div class="showCard" v-for="(pet, index) in item.petInfoList">
                                                             <div :class="{ 'yellowCard': pet.adoption_status == '正常' }, { 'redCard': pet.adoption_status == '送養中' }, { 'greenCard': pet.adoption_status == '已送養' }"
                                                                 class="middleCard">
-                                                                <svg viewBox="0 0 180 180" fill="none"
+                                                                <svg viewBox="10 0 140 110" fill="none"
                                                                     xmlns="http://www.w3.org/2000/svg">
                                                                     <path :d="getPath(pet.type)" fill="white" />
                                                                 </svg>
@@ -506,12 +506,12 @@ export default {
                                             </div>
                                             <div class="modal-footer">
                                                 <button v-if="!this.isGived" class="btn btn-specialRed modal-btn"
-                                                    @click="rejectApply(item)">
+                                                    @click="rejectApply(item.userInfo)">
                                                     <i class="fa-solid fa-xmark" style="color: white;"></i>
                                                     <p style="color: white;">拒絕送養</p>
                                                 </button>
                                                 <button v-if="!this.isGived" class="btn btn-green modal-btn"
-                                                    @click="confirmApply(item)">
+                                                    @click="confirmApply(item.userInfo)">
                                                     <i class="fa-solid fa-check" style="color: white"></i>
                                                     <p style="color: white;">接受送養</p>
                                                 </button>
