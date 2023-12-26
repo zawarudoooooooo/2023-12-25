@@ -1,6 +1,8 @@
 <script>
 import Swal from 'sweetalert2'
 import axios from 'axios';
+import VueCropper from 'vue-cropperjs';
+import 'cropperjs/dist/cropper.css';
 
 export default {
     data() {
@@ -40,8 +42,21 @@ export default {
             },
             vaccineArr: [],
             petWaterfall: [],
+
+            imageUrl: null, // 顯示預覽圖的變數
+            croppedImageUrl: null, // 保存裁切後圖片的變數
+            showCropper: false, // 控制是否顯示裁切範圍的變數
+
+            userPhoto: null, // 用於儲存上傳的圖片資料
+            cropper: null, // Cropper 實例
+            croppedImageUrlwithoutPrefix: null,//沒有前綴
+
         }
     },
+    components: {
+        VueCropper,
+    },
+
     mounted() {
         this.userInfo = JSON.parse(sessionStorage.getItem('foundUserInfo'));
         this.petInfo.user_id = this.userInfo.userId;
@@ -68,6 +83,54 @@ export default {
 
     },
     methods: {
+
+        handleFileChange() {
+            const fileInput = this.$refs.fileInput;
+            const reader = new FileReader();
+
+            if (fileInput.files && fileInput.files[0]) {
+                reader.onload = (e) => {
+                    this.imageUrl = e.target.result; // 设置预览图片的值
+                    this.$refs.preview.src = this.imageUrl;
+                    this.showCropper = true;
+
+                    const imageDataWithoutPrefix = e.target.result.split(',')[1];
+                    this.petInfo.pet_photo = imageDataWithoutPrefix;
+                };
+            }
+            reader.readAsDataURL(fileInput.files[0]);
+            console.log("file changed!!");
+        },
+        saveCroppedImage() {
+            this.cropper = this.$refs.cropper;
+            const croppedCanvas = this.cropper && this.cropper.getCroppedCanvas();
+            this.croppedImageUrl = croppedCanvas ? croppedCanvas.toDataURL('image/jpeg') : null;
+            console.log('Cropped image saved:', this.croppedImageUrl);
+        },
+        saveAndCloseCropper() {
+            // 在这里执行保存裁切图片的操作
+            this.saveCroppedImage();
+
+            // 新增一个变量，不含 Base64 前缀
+            this.croppedImageUrlwithoutPrefix = this.croppedImageUrl.replace(/^data:image\/[a-z]+;base64,/, '');
+
+            // 打印新变量
+            console.log('Cropped image without prefix:', this.croppedImageUrlwithoutPrefix);
+
+            // 将裁切后的值赋予到 Uploaded Image
+            this.$nextTick(() => {
+                // 如果裁切后的值存在，将其赋值给 imageUrl 以显示
+                if (this.croppedImageUrl) {
+                    this.imageUrl = this.croppedImageUrl;
+                }
+
+                // 隐藏裁切范围并重置图片变量
+                this.showCropper = false;
+                this.imageUrl = null;
+            });
+        },
+
+
 
 
         getPath(type) {
@@ -115,47 +178,36 @@ export default {
             this.petInfo.ligation = !this.petInfo.ligation;
         },
 
-        //12.20 圖片邏輯更新
         previewImg() {
-            const fileInput = this.$refs.fileInput;
-            const reader = new FileReader();
-
-            if (fileInput.files && fileInput.files[0]) {
-                reader.onload = (e) => {
-                    this.$refs.preview.src = e.target.result;
-
-                    // 刪除前綴部分並設置圖片資料到 pet_photo 中
-                    const imageDataWithoutPrefix = e.target.result.split(',')[1]; // 刪除前綴部分
-                    this.petInfo.pet_photo = imageDataWithoutPrefix;
-                };
-            }
-            reader.readAsDataURL(fileInput.files[0]);
-            console.log("file changed!!");
+            this.handleFileChange();
         },
 
 
         //12.20 圖片邏輯更新
         createData() {
             if (this.petInfo.pet_name == null || this.petInfo.pet_name.trim() == "") {
-                alert("請輸入該寵物的名字！")
+                alert("請輸入該寵物的名字！");
                 return;
             }
 
-            this.petInfo.vaccine = this.vaccineArr.join(',')
-            console.log("create pet", this.petInfo)
+            this.petInfo.vaccine = this.vaccineArr.join(',');
+            console.log("create pet", this.petInfo);
 
-            axios.post('http://localhost:8080/api/adoption/petInfo/createPetInfo',
-                {
-                    petInfo: this.petInfo
-                }
-            )
+            // 檢查是否有裁切後的圖片資料，若有則賦值給 pet_photo
+            if (this.croppedImageUrlwithoutPrefix) {
+                this.petInfo.pet_photo = this.croppedImageUrlwithoutPrefix;
+            }
+
+            axios.post('http://localhost:8080/api/adoption/petInfo/createPetInfo', {
+                petInfo: this.petInfo
+            })
                 .then(response => {
-                    console.log(response.data)
-                    this.$router.push('/MyPet')
+                    console.log(response.data);
+                    this.$router.push('/MyPet');
                 })
                 .catch(error => {
                     console.error(error);
-                })
+                });
 
             Swal.fire({
                 title: "成功新增寵物資料",
@@ -219,13 +271,22 @@ export default {
                     </div>
                 </div>
             </div>
-
+            
+            <!-- Cropper popup -->
+            <div v-if="showCropper" class="cropper-popup">
+                <h3 style="text-align: center;">裁切大頭貼</h3>
+                <!-- VueCropper component -->
+                <vue-cropper v-if="imageUrl" :src="imageUrl" :key="imageUrl" ref="cropper"></vue-cropper>
+                <!-- Button to save and close cropper -->
+                <button @click="saveAndCloseCropper">儲存並關閉</button>
+            </div>
             <!-- 寵物基本資訊 -->
             <div class="middle">
                 <!-- 寵物照片 -->
                 <div class="middleLeft">
                     <div class="middleLeftPic">
-                        <img class="previewImg" ref="preview" src="" alt="">
+                        <img v-if="!croppedImageUrl" class="previewImg" ref="preview" src="" alt="">
+                        <img class="croppedImg" :src="croppedImageUrl" v-if="croppedImageUrl" alt="Cropped Image">
                     </div>
                     <div class="inputFileArea">
                         <!-- 如果要可以選擇多個照片的話，加上此屬性：multiple="multiple" -->
@@ -889,5 +950,47 @@ export default {
 
 .greenCard {
     background-color: $adoption;
+}
+
+.cropper-popup {
+    // width: 30vw;
+    // height: 30vh;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    /* 添加陰影效果 */
+
+    h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        /* 增加標題底部間距 */
+        font-size: 20px;
+        /* 調整標題字體大小 */
+    }
+
+    button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-top: 20px;
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+
+        &:hover {
+            background-color: #45a049;
+        }
+    }
 }
 </style>

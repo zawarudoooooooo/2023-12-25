@@ -1,6 +1,8 @@
 <script>
 import Swal from 'sweetalert2'
 import axios from 'axios'
+import VueCropper from 'vue-cropperjs';
+import 'cropperjs/dist/cropper.css';
 
 export default {
     data() {
@@ -63,6 +65,15 @@ export default {
             },
             vaccineArr: null,
             ppimg: null,
+
+            imageUrl: null, // 顯示預覽圖的變數
+            showCropper: false, // 控制是否顯示裁切範圍的變數
+
+            userPhoto: null, // 用於儲存上傳的圖片資料
+            cropper: null, // Cropper 實例
+            croppedImageUrl: null, // 儲存裁切後的圖片資料
+            croppedImageUrlwithoutPrefix: null,//沒有前綴
+
         }
     },
     props: [
@@ -81,7 +92,9 @@ export default {
             return `data:image/jpeg;base64,${this.userPet.petInfo.pet_photo}`;
         }
     },
-
+    components: {
+        VueCropper,
+    },
 
     mounted() {
         // 接emit回來使用
@@ -108,6 +121,56 @@ export default {
         },
     },
     methods: {
+        handleFileChange() {
+            const fileInput = this.$refs.fileInput;
+            const reader = new FileReader();
+
+            if (fileInput.files && fileInput.files[0]) {
+                reader.onload = (e) => {
+                    this.imageUrl = e.target.result; // 设置预览图片的值
+                    // this.$refs.preview.src = this.imageUrl;
+                    this.showCropper = true; // 在这里设置 showCropper 为 true，以显示 Cropper
+
+                    const imageDataWithoutPrefix = e.target.result.split(',')[1];
+                    this.petInfo.pet_photo = imageDataWithoutPrefix;
+                };
+            }
+            reader.readAsDataURL(fileInput.files[0]);
+            console.log("file changed!!");
+        },
+
+        saveCroppedImage() {
+            this.cropper = this.$refs.cropper;
+            const croppedCanvas = this.cropper && this.cropper.getCroppedCanvas();
+            this.croppedImageUrl = croppedCanvas ? croppedCanvas.toDataURL('image/jpeg') : null;
+            console.log('Cropped image saved:', this.croppedImageUrl);
+        },
+        saveAndCloseCropper() {
+            // 在这里执行保存裁切图片的操作
+            this.saveCroppedImage();
+
+            // 新增一个变量，不含 Base64 前缀
+            this.croppedImageUrlwithoutPrefix = this.croppedImageUrl.replace(/^data:image\/[a-z]+;base64,/, '');
+
+            // 打印新变量
+            console.log('Cropped image without prefix:', this.croppedImageUrlwithoutPrefix);
+
+            // 将裁切后的值赋予到 Uploaded Image
+            this.$nextTick(() => {
+                // 如果裁切后的值存在，将其赋值给 imageUrl 以显示
+                if (this.croppedImageUrl) {
+                    this.imageUrl = this.croppedImageUrl;
+                }
+
+                // 隐藏裁切范围并重置图片变量
+
+                this.showCropper = false;
+                this.ppimg = this.croppedImageUrlwithoutPrefix;
+            });
+        },
+
+
+
         getPath(type) {
             if (type == "狗") {
                 return this.dog;
@@ -159,22 +222,7 @@ export default {
             this.userPet.petInfo.ligation = !this.userPet.petInfo.ligation;
         },
         previewImg() {
-            const fileInput = this.$refs.fileInput;
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = (e) => {
-                    // 獲取 Base64 編碼的圖片資料，不包含前綴部分
-                    const base64Data = e.target.result.split(',')[1];
-                    console.log(base64Data);
-
-                    this.ppimg = base64Data;
-                };
-
-                // 讀取並處理選擇的圖片文件
-                reader.readAsDataURL(fileInput.files[0]);
-            }
+            this.handleFileChange();
         },
 
 
@@ -186,7 +234,7 @@ export default {
             }
 
             this.userPet.petInfo.vaccine = this.vaccineArr.join(',');
-            this.userPet.petInfo.pet_photo=this.ppimg
+            this.userPet.petInfo.pet_photo = this.ppimg
 
             console.log(this.userPet.petInfo);
 
@@ -295,6 +343,16 @@ export default {
                         <input class="inputFile" id="file-uploader" type="file" accept="image/*" ref="fileInput"
                             @change="previewImg()">
                     </div>
+                </div>
+
+                <!-- Cropper popup -->
+                <div v-if="showCropper" class="cropper-popup">
+                    <h3 style="text-align: center;">裁切大頭貼</h3>
+                    <!-- VueCropper component -->
+                    <vue-cropper v-if="imageUrl" :src="imageUrl" :key="imageUrl" ref="cropper"
+                        class="vue-cropper-element"></vue-cropper>
+                    <!-- Button to save and close cropper -->
+                    <button @click="saveAndCloseCropper">儲存並關閉</button>
                 </div>
 
                 <!-- 寵物資訊 -->
@@ -945,5 +1003,36 @@ $inputBorder: #e2dbca;
 
 .greenCard {
     background-color: $adoption;
+}
+
+/* .vue-cropper 的樣式 */
+.vue-cropper {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* .cropper-popup 的樣式 */
+.cropper-popup {
+    /* 其他樣式... */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    max-width: 80vw;
+    max-height: 80vh;
+    overflow: auto;
+    /* 其他樣式... */
+}
+
+/* 在 Vue 組件中使用 vue-cropper 元素 */
+.vue-cropper-element {
+    max-width: 100%;
+    max-height: 100%;
 }
 </style>
