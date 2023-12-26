@@ -12,6 +12,12 @@ export default {
     components:{
         view_Article,create_Article,
         ArticleDashBoard
+    },
+    methods:{
+        goTo(x){
+            this.$router.push(x)
+        }
+
     }
 }
 </script>
@@ -36,7 +42,7 @@ export default {
                                 <!-- <img loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/92ac77e2db42db1011e0d83c7bedd38c0d20f66a14115177c96e2b0a532073bf?"
                                 class="img-3" /> -->
-                                <i class="fa-solid fa-pen img-3"></i>
+                                <i class="fa-solid fa-pen img-3" @click="goTo('/ForumEntrance/edit_myArticle')"></i>
                         </div>
                         <div class="article">
                             <div class="poster_area">
@@ -210,8 +216,8 @@ export default {
     padding: 45px 0;
     height: auto;
     color: #978989;
-    font-size: 14pt;
     padding: 20px 30px 20px 30px ;
+    font-size: 20pt;
 }
 
 @media (max-width: 991px) {
@@ -223,26 +229,12 @@ export default {
 
 .function_icon_area {
     display: flex;
-    margin-right: 60px;
+    align-items: center;
     width: 119px;
-    max-width: 100%;
-    padding-right: 5px;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-@media (max-width: 991px) {
-    .function_icon_area {
-        margin-right: 10px;
+    height: 50px;
+    i{
+        margin-right: 20px;
     }
-}
-
-.img-2 {
-    font-size: 32pt;
-}
-
-.img-3 {
-    font-size: 32pt;
 }
 
 .article {
