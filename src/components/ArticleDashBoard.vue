@@ -16,18 +16,15 @@ export default {
 <template>
     <div class="dashboardArea">
         <div class="setting line">
-            <p>論壇首頁</p>
-        </div>
-        <div class="pet line">
-            <p>科普版</p>
+            <p @click="goTo()">論壇首頁</p>
         </div>
         <div class="article line">
-            <p>閒聊版</p>
+            <p @click="goTo()">閒聊版</p>
         </div>
         <div class="adopt line">
-            <p>我的文章</p>
+            <p @click="goTo('/ForumEntrance/ForumMyArticle')">我的文章</p>
         </div>
-        <button class="dashboard_btn">
+        <button class="dashboard_btn"  @click="goTo('/ForumEntrance/create_Article')">
             <i class="fa-solid fa-plus plus_icon"></i>
             <div class="dashboard_btn_text">我要發文</div>
         </button>

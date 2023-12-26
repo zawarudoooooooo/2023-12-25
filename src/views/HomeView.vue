@@ -185,7 +185,9 @@ export default {
     overflow: hidden;//溢出隱藏
     white-space: nowrap;//避免換行，單行顯示
     animation: marquee-scroll 20s linear infinite;//動畫時間為 20 秒，動畫效果為線性，且無限循環
-    height: 3vh;
+    height: 5vh;
+    display: flex;
+    align-items: center;
 }
 
 .trumpet{
