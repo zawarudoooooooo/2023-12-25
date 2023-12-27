@@ -184,6 +184,12 @@ const router = createRouter({
       name: 'MyArticle',
       component: () => import('../views/Mebice/MyArticle.vue'),
     },
+    {
+      path: '/NewInfoAll',
+      name: 'NewInfoAll',
+      component: () => import('../views/Mebice/NewInfoAll.vue'),
+    },
+
 
 
 
