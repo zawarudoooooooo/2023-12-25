@@ -81,6 +81,7 @@ export default{
                         title: "取消申請成功！!",
                         icon: "success"
                     })
+                    this.send_noti_type2(item.user_id,user.userId,item.pet_id)
                 } else {
                     Swal.fire('出了些錯誤，請再次檢查');
                 }
@@ -88,6 +89,26 @@ export default{
             .catch(error => {
                 console.error(error);
             })
+            
+        },
+        send_noti_type2(userId,sendId,petId){
+            axios.post(`http://localhost:8080/api/notification/Noti`, {
+                notification: {
+                    userId: userId,
+                    sendId: sendId,
+                    petId: petId,
+                    notifiType: 2
+                }
+            }
+            )
+                .then(response => {
+                    console.log(response.data)
+                    // this.notifi_arr = response.data.notifiReq
+                    // console.log(this.notifi_arr.reverse())//反轉了就整個反轉了
+                })
+                .catch(error => {
+                    console.error(error);
+                })
         }
     }
 }

@@ -147,6 +147,9 @@ export default {
                         title: "申請領養成功！!",
                         icon: "success"
                     })
+                    let adopterId = JSON.parse(sessionStorage.getItem("foundUserInfo")).userId
+                    console.log(adopterId);
+                    this.send_noti_type1(response.data.petInfo.user_id,adopterId,response.data.petInfo.pet_id)
                 } else if (response.data.rtnCode == 'THE_USER_HAS_ALREADY_ADOPTED_THE_PET'){
                     Swal.fire('您已認養過此寵物！');
                 } else {
@@ -156,6 +159,26 @@ export default {
             .catch(error => {
                 console.error(error);
             })
+        },
+        send_noti_type1(userId,sendId,petId){
+            console.log(userId);
+            console.log(sendId);
+            console.log(petId);
+            axios.post(`http://localhost:8080/api/notification/Noti`, {
+                notification: {
+                    userId: userId,
+                    sendId: sendId,
+                    petId: petId,
+                    notifiType: 1
+                }
+            }
+            )
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.error(error);
+                })
         }
     }
 }

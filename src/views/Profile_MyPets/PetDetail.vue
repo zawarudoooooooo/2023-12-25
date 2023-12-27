@@ -181,16 +181,16 @@ export default {
         rejectApply(item) {
             const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
 
-            console.log("pet id", this.petInfo.pet_id)
             console.log("owner id", user.userId)
             console.log("adopter id", item.userId)
-
+            console.log("pet id", this.petInfo.pet_id)
+            
             axios.post('http://localhost:8080/api/adoption/petInfo/rejectAdoptPet',
-                {
-                    petId: this.petInfo.pet_id,
-                    ownerId: user.userId,
-                    adopterId: item.userId
-                }
+            {
+                petId: this.petInfo.pet_id,
+                ownerId: user.userId,
+                adopterId: item.userId
+            }
             )
                 .then(response => {
                     console.log(response.data)
@@ -199,7 +199,10 @@ export default {
                         Swal.fire({
                             title: "拒絕成功！!",
                             icon: "success"
-                        }).then((result) => {
+                        }) 
+                        
+                        this.send_noti_type4(user.userId,item.userId, this.petInfo.pet_id)
+                        .then((result) => {
                             if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
                                 location.reload()
                             }
@@ -211,17 +214,21 @@ export default {
                 .catch(error => {
                     console.error(error);
                 })
+                
         },
         confirmApply(item) {
             const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
-
+            console.log("owner id", user.userId)
+            console.log("adopter id", item.userId)
+            console.log("pet id", this.petInfo.pet_id)
+            
             axios.post('http://localhost:8080/api/adoption/petInfo/ownerConfirm',
-                {
+            {
                     petId: this.petInfo.pet_id,
                     ownerId: user.userId,
                     adopterId: item.userId
                 }
-            )
+                )
                 .then(response => {
                     console.log(response.data)
                     if (response.data.rtnCode == 'SUCCESSFUL') {
@@ -229,7 +236,9 @@ export default {
                         Swal.fire({
                             title: "已送出確認！!",
                             icon: "success"
-                        }).then((result) => {
+                        })
+                        this.send_noti_type3(user.userId,item.userId, this.petInfo.pet_id)
+                        .then((result) => {
                             if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
                                 location.reload()
                             }
@@ -241,6 +250,7 @@ export default {
                 .catch(error => {
                     console.error(error);
                 })
+                
         },
         emitGo() {
             let objInfo = Object.assign({}, { userInfo: this.userInfo }, { petInfo: this.petInfo })
@@ -251,6 +261,44 @@ export default {
         goTo(x) {
             sessionStorage.removeItem('the pet');
             this.$router.push(x)
+        },
+        send_noti_type3(userId,sendId,petId){
+            axios.post(`http://localhost:8080/api/notification/Noti`, {
+                notification: {
+                    userId: sendId,
+                    sendId: userId,
+                    petId: petId,
+                    notifiType: 3
+                }
+            }
+            )
+                .then(response => {
+                    console.log(response.data)
+                    // this.notifi_arr = response.data.notifiReq
+                    // console.log(this.notifi_arr.reverse())//反轉了就整個反轉了
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+        },
+        send_noti_type4(userId,sendId,petId){
+            axios.post(`http://localhost:8080/api/notification/Noti`, {
+                notification: {
+                    userId: sendId,
+                    sendId: userId,
+                    petId: petId,
+                    notifiType: 4
+                }
+            }
+            )
+                .then(response => {
+                    console.log(response.data)
+                    // this.notifi_arr = response.data.notifiReq
+                    // console.log(this.notifi_arr.reverse())//反轉了就整個反轉了
+                })
+                .catch(error => {
+                    console.error(error);
+                })
         }
     },
 }

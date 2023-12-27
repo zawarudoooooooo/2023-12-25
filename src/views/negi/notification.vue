@@ -29,16 +29,24 @@ export default {
                     }
                     this.notifi_arr = response.data.notifiReq
                     this.notifi_arr.reverse();
-                    // console.log(this.notifi_arr.reverse())//反轉了就整個反轉了
                     let stat = false;
+                    let count = 0;
                     this.notifi_arr.forEach((noti)=>{
                         if(!noti.read){
                             stat = true;
+                            count++
+                            //控制鈴鐺
                             this.$emit("isread",noti.read);
                         }
                     })
+                    //傳送通知數
+                    this.$emit("noti_count",count);
+                    // console.log("count= "+count);
+
+
                     if(stat&&this.noti_state){
-                        // console.log(this.noti_state);
+                        
+                        //如果頁面打開的話，鈴鐺要熄
                         this.$emit("isread",stat);
                     }
                 })
@@ -224,13 +232,15 @@ export default {
 <template>
     <ul class="notifi_area" :class="{'notifi_area':noti_state,'notifi_off':!noti_state}">
         <div v-for="no, index in this.notifi_arr">
+        <!-- 已讀 -->
             <li class="notifi_text" v-if="no.read == true" @click="getData(no.petId, no.notifiType,no.sendId)"
                 style="cursor: pointer;">
                 <span>{{ no.notifiContain }}</span>
                 <p style="font-size: 12pt;">{{ no.dateTime.replace("T", " ") }}</p>
             </li>
+        <!-- 未讀 background-color: rgb(255 228 196 / 37%);-->
             <li class="notifi_text" v-if="no.read == false" @click="getData(no.petId, no.notifiType,no.sendId)"
-                style="background-color: rgb(255 228 196 / 37%);cursor: pointer;">
+                style="font-weight:700;cursor: pointer;">
                 <span>{{ no.notifiContain }}</span>
                 <p style="font-size: 12pt;">{{ no.dateTime.replace("T", " ") }}</p>
             </li>
@@ -264,8 +274,8 @@ export default {
     // transition: width 0.5s , height 0.5s;
 
     .notifi_text {
-        border: 1px solid black;
-        padding: 20px;
+        // border: 1px solid black;
+        // padding: 20px;
     }
 
 }

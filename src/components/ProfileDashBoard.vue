@@ -9,8 +9,9 @@ export default {
     data() {
         return {
             foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
-            noti_state : false,
+            noti_state: false,
             isread: true,
+            noti_count: 0,
         }
     },
     computed: {
@@ -59,6 +60,10 @@ export default {
         },
         show_isread(read) {
             this.isread = read
+        },
+        get_noti_count(count) {
+            this.noti_count = count
+            // console.log(this.noti_count);
         }
     },
     components: {
@@ -70,9 +75,13 @@ export default {
 <template>
     <div class="dashboardArea">
         <div class="notification line">
-            <i class="fa-solid fa-bell" :class="{ 'isread_false': !isread }"></i>
-            <p @click="tap_noti()">Notification</p>
-            <notification  @isread="show_isread" :noti_state = "noti_state"/>
+
+            <i class="fa-solid fa-bell" :class="{ 'isread_false': !isread }">
+                <span class="count" v-if="this.noti_count != 0 && !isread" :class="{ 'isread_false': !isread }">{{
+                    this.noti_count }}</span>
+            </i>
+            <span @click="tap_noti()">Notification</span>
+            <notification @isread="show_isread" @noti_count="get_noti_count" :noti_state="noti_state" />
         </div>
         <div class="setting line" @click="goTo('/ProfileSetting')">
             <i class="fa-solid fa-user-gear"></i>
@@ -135,10 +144,32 @@ export default {
         justify-content: start;
         align-items: center;
         margin-top: 2vmin;
+        // position: relative;
 
         .isread_false {
             color: red;
             animation: shake 1s ease-in-out infinite;
+        }
+
+        .fa-bell {
+            position: relative;
+
+            .count {
+                position: absolute;
+                left: 8px;
+                top: -11px;
+                border: 1px solid;
+                border-radius: 10px;
+                background-color: #ffffff;
+                color: red;
+                font-size: 8pt;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: 700;
+            }
         }
     }
 
@@ -203,25 +234,27 @@ export default {
         }
     }
 }
+
 @keyframes shake {
 
-0%{
-    transform: rotate(15deg);
-}
+    0% {
+        transform: rotate(15deg);
+    }
 
-10% {
-    transform: rotate(-15deg);
-}
+    10% {
+        transform: rotate(-15deg);
+    }
 
-20% {
-    transform: rotate(15deg);
-}
+    20% {
+        transform: rotate(15deg);
+    }
 
-30%{
-    transform: rotate(0deg);
-}
+    30% {
+        transform: rotate(0deg);
+    }
 
-100% {
-    transform: rotate(0deg);
+    100% {
+        transform: rotate(0deg);
+    }
 }
-}</style>
+</style>
