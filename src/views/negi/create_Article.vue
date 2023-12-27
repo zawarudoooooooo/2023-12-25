@@ -137,11 +137,14 @@ export default {
             <ArticleDashBoard />
         </div>
         <div class="rightArea">
-            <div class="userInfo">
-                <img class="userPhoto" :src="'data:image/jpeg;base64,' + foundUser.userPhoto" alt="">
-                <div class="userNameAndId">
-                    <p class="poster_name">{{ foundUser.userName }}</p>
-                    <p class="poster_userId">{{ foundUser.account }}</p>
+            <div class="userArea">
+                <div class="userInfo">
+                    <img class="userPhoto" :src="'data:image/jpeg;base64,' + foundUser.userPhoto" alt=""
+                    style="border-radius: 50%; border: 3px solid;" height="100px" width="100px">
+                    <div class="userNameAndId">
+                        <p class="poster_name">{{ foundUser.userName }}</p>
+                        <p class="poster_userId">{{ foundUser.account }}</p>
+                    </div>
                 </div>
             </div>
             <div class="articleArea">
@@ -150,11 +153,11 @@ export default {
                 <div class="artitle_pic">
                     <input type="file" @change="handleFileChange">
                     <div class="cropper-modal" v-if="showImageCropper">
-                        <vue-cropper v-if="imageUrl" :src="imageUrl" :key="imageUrl" ref="cropper"></vue-cropper>
+                        <vue-cropper v-if="imageUrl" :src="imageUrl" :key="imageUrl" ref="cropper" class="cropper"></vue-cropper>
                         <button @click="cancelImageCrop">取消</button>
                         <button @click="saveCroppedImage">保存</button>
                     </div>
-                    <img :src="croppedImageUrl" alt="">
+                    <img :src="croppedImageUrl" alt="" class="cropper-img">
                 </div>
 
                 <div class="article_contain">
@@ -183,6 +186,14 @@ export default {
 
 
 <style lang="scss" scoped>
+.cropper{
+    width: 360px;
+    height: 600px;
+}
+.cropper-img{
+    width: 480px;
+    height: 600px;
+}
 .all {
     display: flex;
     margin-top: 25px;
@@ -197,7 +208,6 @@ export default {
         height: 600px;
         border-radius: 15px;
         box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
-
         .userInfo {
             display: flex;
 

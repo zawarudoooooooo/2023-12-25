@@ -2,6 +2,8 @@
 import ArticleDashBoard from '../../components/ArticleDashBoard.vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import VueCropper from 'vue-cropperjs';
+import 'cropperjs/dist/cropper.css';
 export default {
     data(){
         return{
@@ -26,26 +28,7 @@ export default {
                     pet_photo: "",
                     pet_other_phote: "",
                     location: "",
-                },
-                {
-                    pet_id: "",
-                    user_id: "",
-                    pet_name: "Ruby",
-                    adopter_list: "",
-                    final_adopter: "",
-                    pet_breed: "",
-                    pet_status: "",
-                    adoption_status: "送養中",
-                    adoption_conditions: "",
-                    age: "三歲",
-                    vaccine: "五合一疫苗, 狂犬病疫苗",
-                    pet_profile: "",
-                    ligation: true,
-                    type: "貓",
-                    pet_photo: "",
-                    pet_other_phote: "",
-                    location: "",
-                },
+                }
             ],
 
             isCheckPage:false,
@@ -61,10 +44,23 @@ export default {
                     description: '',
                     image: null,
             },
+
+            foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
+            foundUser: null,
+
+            //發文變數
+            title: null,
+            postContent: null,
+
+            //圖片邏輯
+            imageUrl: null,
+            croppedImageUrl: null,
+            showImageCropper: false, // 控制彈跳視窗顯示
         }
     },
     components:{
-        ArticleDashBoard
+        ArticleDashBoard,
+        VueCropper,
     },
     mounted() {
         this.searchAllUserInfo()
@@ -72,88 +68,11 @@ export default {
         this.getData()
     },
     methods:{
-        //主要發文功能
-        fetchCreateData() {
-            const postTime = new Date();
-            const file = document.querySelector('input[type="file"]').files[0];
-            const reader = new FileReader();//用來讀取文件內容
-
-            reader.onloadend = () => {//當文件加载完成时執行此事件
-                const arrayBuffer = reader.result;//result 將以 ArrayBuffer 物件來表示讀入的資料內容。
-                const bytes = new Uint8Array(arrayBuffer);//使用 Uint8Array 來表示二進制數據的一種類型。
-
-            const requestData = {
-                article: {
-                    userId: this.foundUser.userId,
-                    userName: this.foundUser.userName,
-                    account: this.foundUser.account,
-                    title: this.title,
-                    description: this.description,
-                    image: Array.from(bytes), // Convert Uint8Array to a regular array for JSON serialization
-                },
-            };
-            fetch('http://localhost:8080/api/adoption/postArticle', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestData),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                Swal.fire('新增成功!');
-            })
-            .catch(error => {
-                console.error('Error creating:', error);
-            });
-        };
-        reader.readAsArrayBuffer(file);
-        },
-
         //開關發文確認視窗
         switch_check_page(){
             this.isCheckPage = !this.isCheckPage
         },
-        //預覽圖片
-        handleFiles() {
-            const uploadButton = document.getElementById('upload');
-            const imgDOM = document.getElementById('article-img');
-            const fileList = uploadButton.files;
-            const [file] = fileList;
-            const p1 = this.createImageFromFile(imgDOM, file);
-            const p2 = this.getFileBase64Encode(file);
-            Promise.all([p1, p2])
-            .then(([img, b64]) => {
-                img.width = 360;
-                img.height = 400;
-            })
-            .catch(error => {
-            console.error(error);
-            }
-            );
-        },
-        //放圖片
-        createImageFromFile(img, file) {
-            return new Promise((resolve, reject) => {
-            img.src = URL.createObjectURL(file);
-            img.onload = () => {
-            URL.revokeObjectURL(img.src);
-            resolve(img);
-            };
-            img.onerror = () => reject('Failure to load image.');
-            });
-        },
-        //圖片轉碼
-        getFileBase64Encode(blob) {
-            return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-            });
-        },
-
+        //拿user資料
         searchAllUserInfo() {
             fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
                 method: 'GET',
@@ -185,7 +104,7 @@ export default {
                     }
                 });
         },
-
+        //拿寵物資料
         getData(){
             this.userId = this.userInfo.userId;
             this.pets = [];
@@ -205,6 +124,7 @@ export default {
                 console.error(error);
             })
         },
+        //貓狗
         getPath(type){
             if(type == "狗"){
                 return this.dog;
@@ -212,6 +132,64 @@ export default {
             if(type == "貓"){
                 return this.cat;
             }
+        },
+        //主要發文功能
+        publishPost() {
+            const postData = {
+                userId: this.foundUser.userId,
+                title: this.title,
+                postContent: this.postContent,
+                postPhoto: this.imageUrl.split(',')[1],
+            };
+
+            const requestData = {
+                forumEntrance: postData
+            };
+
+            fetch('http://localhost:8080/api/adoption/createNewPost', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Post published:', data);
+
+                    Swal.fire({
+                        title: "成功新增貼文",
+                        icon: "success"
+                    }).then((result) => {
+                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                            this.$router.push('/ForumEntrance/ForumMyArticle');
+                        }
+                    });
+
+
+                })
+                .catch(error => {
+                    console.error('Error publishing post:', error);
+                });
+        },
+        handleFileChange(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                this.imageUrl = event.target.result;
+                this.showImageCropper = true;
+            };
+            reader.readAsDataURL(file);
+        },
+        saveCroppedImage() {
+            this.cropper = this.$refs.cropper;
+            const croppedCanvas = this.cropper && this.cropper.getCroppedCanvas();
+            this.croppedImageUrl = croppedCanvas ? croppedCanvas.toDataURL('image/jpeg') : null;
+            console.log('Cropped image saved:', this.croppedImageUrl);
+            this.showImageCropper = false;
+        },
+        cancelImageCrop() {
+            this.showImageCropper = false;
         },
     },
 }
@@ -264,18 +242,15 @@ export default {
                             </div>
                             <div class="div-20"></div>
                             <input class="article_title" type="text" placeholder="輸入標題" v-model="title"/>
-                            <img loading="lazy" 
-                            class="article_img" 
-                            id="article-img"/>
-                            <input
-                                id="upload"
-                                class="article_file"
-                                type="file"
-                                accept="image/*"
-                                @change="handleFiles"
-                            />
+                            <input type="file" @change="handleFileChange">
+                    <div class="cropper-modal" v-if="showImageCropper">
+                        <vue-cropper v-if="imageUrl" :src="imageUrl" :key="imageUrl" ref="cropper" class="cropper"></vue-cropper>
+                        <button class="btm" @click="cancelImageCrop">取消</button>
+                        <button class="btm" @click="saveCroppedImage">保存</button>
+                    </div>
+                    <img :src="croppedImageUrl" alt="" class="cropper-img">
                             <div class="article_contain">
-                                <textarea class="article_text" v-model="description" type="text" placeholder="輸入內文"></textarea>
+                                <textarea class="article_text" v-model="postContent" type="text" placeholder="輸入內文"></textarea>
                             </div>
                             <button class="dashboard_btn">
                                 <i class="fa-solid fa-plus plus_icon"></i>
@@ -296,7 +271,7 @@ export default {
                 </div>
                 <div class="check_btn">
                     <button class="cancal" @click="switch_check_page()">再考慮一下</button>
-                    <button class="ok" @click="fetchCreateData()">好!現在就發</button>
+                    <button class="ok" @click="publishPost()">好!現在就發</button>
                 </div>
             </div>
         </div>
@@ -305,6 +280,19 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/RStyle.scss';
+
+.cropper{
+    width: 360px;
+    height: 600px;
+}
+.btm{
+        width: 100px;
+        height: 50px;
+    }
+.cropper-img{
+    width: 480px;
+    height: 600px;
+}
 .all {
     width: 100vw;
     height: auto;
@@ -474,30 +462,6 @@ export default {
     }
 }
 
-.function_icon_area {
-    display: flex;
-    margin-right: 60px;
-    width: 119px;
-    max-width: 100%;
-    padding-right: 5px;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-@media (max-width: 991px) {
-    .function_icon_area {
-        margin-right: 10px;
-    }
-}
-
-.img-2 {
-    font-size: 32pt;
-}
-
-.img-3 {
-    font-size: 32pt;
-}
-
 .article {
     align-self: stretch;
     display: flex;
@@ -644,47 +608,6 @@ export default {
     }
 }
 
-.pet {
-    border-radius: 37px;
-    background-color: #e9d2a6;
-    align-self: stretch;
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    gap: 4px;
-    padding: 14px 12px 0 24px;
-}
-
-@media (max-width: 991px) {
-    .pet {
-        padding-left: 20px;
-    }
-}
-
-.pet_name {
-    color: #fff;
-    flex-grow: 1;
-    white-space: nowrap;
-    font: 800 28px Lexend, sans-serif;
-}
-
-@media (max-width: 991px) {
-    .pet_name {
-        white-space: initial;
-    }
-}
-
-.pet_type {
-    aspect-ratio: 1.27;
-    object-fit: contain;
-    object-position: center;
-    width: 147px;
-    fill: #fff;
-    overflow: hidden;
-    margin-top: 10px;
-    max-width: 100%;
-}
-
 .div-20 {
     background-color: rgba(151, 137, 137, 0.4);
     align-self: stretch;
@@ -714,21 +637,6 @@ export default {
     }
 }
 
-.article_file {
-    margin-left: 65px;
-}
-
-.article_img {
-    aspect-ratio: 0.91;
-    object-fit: contain;
-    object-position: center;
-    width: 369px;
-    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
-    overflow: hidden;
-    align-self: start;
-    max-width: 100%;
-    margin: 24px 0 0 66px;
-}
 
 @media (max-width: 991px) {
     .article_img {
@@ -754,261 +662,5 @@ export default {
 .article_text{
     width: 600px;
     height: 400px;
-}
-
-.div-23 {
-    color: #978989;
-    align-self: start;
-    white-space: nowrap;
-    margin: 151px 0 0 23px;
-    font: 800 28px Lexend, sans-serif;
-}
-
-@media (max-width: 991px) {
-    .div-23 {
-        white-space: initial;
-        margin: 40px 0 0 10px;
-    }
-}
-
-.div-24 {
-    background-color: rgba(151, 137, 137, 0.4);
-    align-self: stretch;
-    margin-top: 11px;
-    height: 5px;
-}
-
-@media (max-width: 991px) {
-    .div-24 {
-        max-width: 100%;
-    }
-}
-
-.reply {
-    align-self: start;
-    display: flex;
-    align-items: start;
-    gap: 17px;
-    margin: 34px 0 0 23px;
-    flex-direction: column;
-}
-
-@media (max-width: 991px) {
-    .reply {
-        margin-left: 10px;
-    }
-}
-
-.replier_img {
-    aspect-ratio: 1.04;
-    object-fit: contain;
-    object-position: center;
-    width: 73px;
-    overflow: hidden;
-    max-width: 100%;
-}
-
-.replier {
-    display: flex;
-    flex-grow: 1;
-    flex-basis: 0%;
-    /* flex-direction: column; */
-}
-
-.replier_data {
-    color: #978989;
-    font: 800 12px Lexend, sans-serif;
-}
-
-.replier_text {
-    color: #978989;
-    margin-top: 12px;
-    font: 800 21px Lexend, sans-serif;
-}
-
-.replier_replier {
-    align-self: start;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 0px;
-    margin: 8px 0 0 90px;
-}
-
-@media (max-width: 991px) {
-    .replier_replier {
-        margin-left: 10px;
-        justify-content: center;
-    }
-}
-
-.img-8 {
-    aspect-ratio: 0.03;
-    object-fit: contain;
-    object-position: center;
-    width: 2px;
-    stroke-width: 2px;
-    stroke: rgba(151, 137, 137, 0.5);
-    overflow: hidden;
-    align-self: start;
-    max-width: 100%;
-}
-
-.img-9 {
-    aspect-ratio: 5.33;
-    object-fit: contain;
-    object-position: center;
-    width: 80px;
-    stroke-width: 2px;
-    stroke: rgba(151, 137, 137, 0.5);
-    overflow: hidden;
-    align-self: start;
-    margin-top: 57px;
-    max-width: 100%;
-}
-
-@media (max-width: 991px) {
-    .img-9 {
-        margin-top: 40px;
-    }
-}
-
-.replier_replier_img {
-    aspect-ratio: 1.03;
-    object-fit: contain;
-    object-position: center;
-    width: 73px;
-    overflow: hidden;
-    align-self: end;
-    margin-top: 26px;
-    max-width: 100%;
-}
-
-.replier_replier_data {
-    align-self: center;
-    display: flex;
-    flex-grow: 1;
-    flex-basis: 0%;
-    flex-direction: column;
-    margin: auto 0;
-}
-
-.div-31 {
-    color: #978989;
-    font: 800 12px Lexend, sans-serif;
-}
-
-.div-32 {
-    color: #978989;
-    margin-top: 12px;
-    font: 800 21px Lexend, sans-serif;
-}
-
-.div-33 {
-    background-color: rgba(151, 137, 137, 0.4);
-    align-self: stretch;
-    margin-top: 16px;
-    height: 2px;
-}
-
-@media (max-width: 991px) {
-    .div-33 {
-        max-width: 100%;
-    }
-}
-
-.div-34 {
-    align-self: start;
-    display: flex;
-    align-items: start;
-    gap: 17px;
-    margin: 24px 0 0 23px;
-}
-
-@media (max-width: 991px) {
-    .div-34 {
-        margin-left: 10px;
-    }
-}
-
-.img-11 {
-    aspect-ratio: 1.04;
-    object-fit: contain;
-    object-position: center;
-    width: 73px;
-    overflow: hidden;
-    max-width: 100%;
-}
-
-.div-35 {
-    display: flex;
-    flex-grow: 1;
-    flex-basis: 0%;
-    flex-direction: column;
-}
-
-.div-36 {
-    color: #978989;
-    font: 800 12px Lexend, sans-serif;
-}
-
-.div-37 {
-    color: #978989;
-    margin-top: 11px;
-    font: 800 21px Lexend, sans-serif;
-}
-
-.div-38 {
-    background-color: rgba(151, 137, 137, 0.4);
-    align-self: stretch;
-    margin-top: 33px;
-    height: 2px;
-}
-
-@media (max-width: 991px) {
-    .div-38 {
-        max-width: 100%;
-    }
-}
-
-.div-39 {
-    align-self: start;
-    display: flex;
-    align-items: start;
-    gap: 17px;
-    margin: 30px 0 0 23px;
-}
-
-@media (max-width: 991px) {
-    .div-39 {
-        margin-left: 10px;
-    }
-}
-
-.img-12 {
-    aspect-ratio: 1.04;
-    object-fit: contain;
-    object-position: center;
-    width: 73px;
-    overflow: hidden;
-    max-width: 100%;
-}
-
-.div-40 {
-    display: flex;
-    flex-grow: 1;
-    flex-basis: 0%;
-    flex-direction: column;
-}
-
-.div-41 {
-    color: #978989;
-    font: 800 12px Lexend, sans-serif;
-}
-
-.div-42 {
-    color: #978989;
-    margin-top: 12px;
-    font: 800 21px Lexend, sans-serif;
 }
 </style>
