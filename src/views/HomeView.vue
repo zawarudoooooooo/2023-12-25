@@ -16,8 +16,17 @@ export default {
         this.searchAllNewInfo()
         // 設置跑馬燈標題
         this.setMarqueeTitles();
-        // 對 newInfoList 進行排序由新到舊
-        this.sortNewInfoListByDate();
+    },
+    computed: {
+        // 計算每次包含三個項目的 newInfoList 塊
+        newInfoListShow() {
+            const newInfoListSize = 3;
+            const newInfoListMore = [];
+            for (let i = 0; this.newInfoList && i < this.newInfoList.length; i += newInfoListSize) {
+                newInfoListMore.push(this.newInfoList.slice(i, i + newInfoListSize));
+            }
+            return newInfoListMore;
+        },
     },
 
     methods: {
@@ -46,14 +55,12 @@ export default {
                             return info;
                         }
                     });
+
+                    // 將 newInfoList 按日期由最新到最舊排序
+                    this.newInfoList.sort((a, b) => new Date(b.date) - new Date(a.date));
+
                     this.setMarqueeTitles();//處理完數據用此方法
 
-                    if (this.newInfoList) {
-                        console.log("Logging dates in newInfoList:");
-                        this.newInfoList.forEach(info => {
-                            console.log(info.date);
-                        });
-                    }
                 })
                 .catch(error => {
                     // 處理錯誤
@@ -114,24 +121,11 @@ export default {
             }
             return indices;// 返回包含指定數量的隨機索引的陣列
         },
-// 對 newInfoList 按日期從新到舊排序
-sortNewInfoListByDate() {
-    if (this.newInfoList) {
-        // 使用數組的 sort 方法，比較每個元素的日期屬性
-        this.newInfoList.sort((a, b) => {
-            // 將日期字符串轉換為日期對象進行比較
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
 
-            // 記錄日期值
-            console.log("Date A:", dateA);
-            console.log("Date B:", dateB);
-
-            // 將比較結果反轉，以實現按日期從新到舊排序
-            return dateB.getTime() - dateA.getTime();
-        });
-    }
-},
+        //跳轉至全部的消息頁NewInfoAll
+        goTo(x) {
+            this.$router.push(x)
+        }
 
     }
 
@@ -150,9 +144,13 @@ sortNewInfoListByDate() {
         <!-- 最新消息標題 -->
         <div v-for="title in marqueeTitles" :key="title" class="marquee-item">{{ title }}</div>
     </div>
+    <div class="topCarousel"></div>
     <!-- 輪播 -->
     <!-- carousel-fade 表示使用淡入淡出的效果 -->
     <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="TitleArea">
+            <h1 class="strokeText" data-storke="毛起來愛" id="title">furry child love</h1>
+        </div>
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
                 aria-current="true" aria-label="Slide 1"></button>
@@ -181,26 +179,44 @@ sortNewInfoListByDate() {
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/06062d6238a6691ea533dbc096994639c6e1407d07d6742eb34d44f9d98fe771?"
                             class="img-2" /> -->
 
-        <div class="searchAllNewInfo">
-            <!-- 每個 newInfo 對象都被用來生成一個消息卡片。v-for 根據 newInfoList 的內容動態生成消息卡片。 -->
-            <div v-for="newInfo in newInfoList" :key="newInfo.serialNo" class="info-card" @click="expandCard(newInfo)">
-                <div>
-                    <div class="info-card2">
-                        <h2>{{ newInfo.title }}</h2>
-                        <p>Category: {{ newInfo.category }}</p>
-                        <p>Date: {{ newInfo.date }}</p>
-                        <!-- 使用截斷內容的方法 -->
-                        <p>{{ truncateContent(newInfo.content, 46) }}</p>
+        <!-- 輪播 -->
+        <div id="carouselNewInfo" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <!-- 循環遍歷 newInfoList 並每次顯示三張卡片 -->
+                <div v-for="(newInfoList, index) in newInfoListShow" :key="index"
+                    :class="['carousel-item', index === 0 ? 'active' : '']">
+                    <div class="searchAllNewInfo">
+                        <!-- 每個 newInfo 對象都被用來生成一個消息卡片。v-for 根據 newInfoList 的內容動態生成消息卡片。 -->
+                        <div v-for="newInfo in newInfoList" :key="newInfo.serialNo" class="info-card"
+                            @click="expandCard(newInfo)">
+                            <div>
+                                <div class="info-card2">
+                                    <h2>{{ newInfo.title }}</h2>
+                                    <p>Category: {{ newInfo.category }}</p>
+                                    <p>Date: {{ newInfo.date }}</p>
+                                    <!-- 使用截斷內容的方法 -->
+                                    <p>{{ truncateContent(newInfo.content, 46) }}</p>
+                                </div>
+                            </div>
+                            <div class="imgArea">
+                                <!-- 如果 newInfo.base64Image 存在，則顯示一個圖片。 -->
+                                <img v-if="newInfo.base64Image" :src="newInfo.base64Image" alt="New Info Image" />
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <!-- 如果 newInfo.base64Image 存在，則顯示一個圖片。 -->
-                    <img v-if="newInfo.base64Image" :src="newInfo.base64Image" alt="New Info Image" />
-                </div>
             </div>
-        </div>
-        <div class="footer">
 
+            <!-- 左右輪播控制按鈕 -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselNewInfo" data-bs-slide="prev">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselNewInfo" data-bs-slide="next">
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="infoMoreBtnArea">
+            <button class="infoMoreBtn" @click="goTo('/NewInfoAll')">查看更多消息</button>
         </div>
     </div>
 </template>
@@ -208,6 +224,7 @@ sortNewInfoListByDate() {
 
 
 <style lang="scss" scoped>
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 .marquee {
     overflow: hidden; //溢出隱藏
     white-space: nowrap; //避免換行，單行顯示
@@ -242,10 +259,12 @@ sortNewInfoListByDate() {
     }
 }
 
+
 //輪播圖片大小
 .carousel-item {
     width: 100%;
     height: 82vh;
+    position: relative
 }
 
 //輪播指示器按鈕位置
@@ -277,11 +296,23 @@ sortNewInfoListByDate() {
 
 }
 
+.TitleArea{
+    width: 20vw;
 
+.strokeText {
+    font-family: 'Pacifico', cursive;
+    font-weight: 700;
+    font-size: 7vw;
+    color: #ffffff;
+    z-index: 100;
+    position: absolute;
+    top: 10vh;
+    left: 5vw;
 
+}
+}
 .contentArea {
     position: relative;
-    top: 5vh;
     background-color: #F8F5EE;
 }
 
@@ -296,6 +327,7 @@ sortNewInfoListByDate() {
 }
 
 .info-card {
+    height: 65%;
     border: 1px solid #ddd;
     border-radius: 30px;
     margin: 20px 1px 0px 1px;
@@ -328,12 +360,21 @@ sortNewInfoListByDate() {
     color: #867e7e;
 }
 
+.imgArea {
+    vertical-align: middle;
+    border-radius: 0px 0px 30px 30px;
+    width: 100%;
+    padding: 0;
+}
+
 .info-card img {
     vertical-align: middle;
     width: 100%;
+    height: 100%;
     border-radius: 0px 0px 30px 30px;
     /* 设置圆角 上右下左 */
     padding: 0;
+    background-size: cover;
 }
 
 .info-card {
@@ -343,6 +384,65 @@ sortNewInfoListByDate() {
 
 .info-card:hover {
     box-shadow: 3px 3px 5px gray; // 放大效果
+}
+
+
+
+.fa-arrow-left,
+.fa-arrow-right {
+    background-color: #E9D2A6;
+    border-radius: 50%;
+    padding: 2vh 1vw;
+    font-size: 40pt;
+    box-shadow: 0px 5px 10px #000000;
+    transition: all 0.3s;
+    color: #ffffff;
+
+    &:hover {
+        // background-color: #E9D2A6;
+        // box-shadow: 0px 15px 25px -5px #0057ab;
+        background-color: #ffffff;
+        color: #E9D2A6;
+        box-shadow: 0px 2px 10px 5px #E9D2A6;
+        transform: scale(1.03);
+
+    }
+}
+
+.fa-arrow-left {
+    margin-right: 150px;
+    margin-bottom: 220px;
+}
+
+.fa-arrow-right {
+    margin-left: 150px;
+    margin-bottom: 220px;
+
+}
+
+.infoMoreBtnArea {
+    position: absolute;
+    left: 45vw;
+    bottom: 6vh;
+
+    .infoMoreBtn {
+        padding: 15px 20px;
+        font-size: 1vw;
+        border-radius: 1vw;
+        background-color: #c29f5d;
+        color: #ffffff;
+
+        box-shadow: 0 0 3px 2px lightgray;
+        font-weight: 600;
+
+        &:hover {
+            box-shadow: 0px 10px 5px -5px #0e0e0e;
+            transform: scale(1.03);
+            background-color: #E9D2A6;
+            font-weight: 700;
+        }
+
+    }
 }
 
 .footer {
