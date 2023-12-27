@@ -83,7 +83,6 @@ const router = createRouter({
       name: 'AdoptPetDetail',
       component: () => import('../views/Profile_MyAdopt/AdoptPetDetail.vue'),
     },
-
     //從這裡開始路由是yxz的
     {
       path: '/PlatformEntrance',
@@ -212,6 +211,12 @@ const router = createRouter({
       path: '/ChitChatting',
       name: 'ChitChatting',
       component: () => import('../views/ChitChatting.vue'),
+    },
+    //怕打亂版型先在這邊做更新
+    {
+      path: '/create_Brticle',
+      name: 'create_Brticle',
+      component: () => import('@/views/negi/create_Brticle.vue'),
     },
   ]
 })
