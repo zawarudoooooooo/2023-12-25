@@ -128,6 +128,11 @@ const router = createRouter({
           name: 'ForumMyArticle',
           component: () => import('../views/Forum/ForumMyArticle.vue'),
         },
+        {
+          path: 'ForumHome',
+          name: 'ForumHome',
+          component: () => import('../views/Forum/ForumHome.vue'),
+        },
       ]
     },
 

@@ -16,7 +16,7 @@ export default {
 <template>
     <div class="dashboardArea">
         <div class="setting line">
-            <p @click="goTo()">論壇首頁</p>
+            <p @click="goTo('/ForumEntrance/ForumHome')">論壇首頁</p>
         </div>
         <div class="article line">
             <p @click="goTo()">閒聊版</p>
@@ -50,6 +50,7 @@ export default {
 
     .line {
         margin-bottom: 10px;
+        cursor: pointer;
     }
 
 
