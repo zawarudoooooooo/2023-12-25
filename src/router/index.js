@@ -212,12 +212,6 @@ const router = createRouter({
       name: 'ChitChatting',
       component: () => import('../views/ChitChatting.vue'),
     },
-    //怕打亂版型先在這邊做更新
-    {
-      path: '/create_Brticle',
-      name: 'create_Brticle',
-      component: () => import('@/views/negi/create_Brticle.vue'),
-    },
   ]
 })
 

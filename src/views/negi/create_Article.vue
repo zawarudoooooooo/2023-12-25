@@ -206,10 +206,6 @@ export default {
                 </div>
                 <div class="out_article_area">
                     <div class="in_article_area">
-                        <div class="function_icon_area">
-                            <i class="fa-solid fa-right-from-bracket img-2"></i>
-                            <i class="fa-solid fa-floppy-disk img-3"></i>
-                        </div>
                         <div class="article">
                             <div class="poster_area">
                                 <div class="poster">
