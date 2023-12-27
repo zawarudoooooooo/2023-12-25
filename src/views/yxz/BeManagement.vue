@@ -10,9 +10,11 @@ export default {
                 date: '',
                 category: '',
                 image: null,
+                type:null,
             },
             newInfoList: null,//多個最新消息的List
 
+            
         };
     },
     mounted() {  //頁面初始化時調用searchAllNewInfo方法
@@ -21,6 +23,8 @@ export default {
 
 
     methods: {
+
+
         //新增
         createNewInfo() {
             // Fetch the image file from input
@@ -40,6 +44,7 @@ export default {
                         content: this.newInfo.content,
                         date: this.newInfo.date,
                         category: this.newInfo.category,
+                        type:this.newInfo.type,
                         image: Array.from(bytes), // Convert Uint8Array to a regular array for JSON serialization
                     }
                 };
@@ -65,6 +70,7 @@ export default {
                         this.newInfo.content = '';
                         this.newInfo.date = '';
                         this.newInfo.category = '';
+                        this.newInfo.type = null;
                         fileInput.value = null;
 
                     })
@@ -182,7 +188,7 @@ export default {
 
                     // 將處理後的 base64 圖片數據存儲到 newInfo 中
                     newInfo.image = base64WithoutPrefix;
-                   // 將處理後的 base64 圖片數據存儲到 newInfo 中，用於編輯時的預覽
+                    // 將處理後的 base64 圖片數據存儲到 newInfo 中，用於編輯時的預覽
                     newInfo.editedImage = `data:image/jpeg;base64,${base64WithoutPrefix}`;
 
                 };
@@ -255,29 +261,35 @@ export default {
         <!-- v-model雙向綁定到newInfo -->
         <table>
             <tr>
-                <td>Title:</td>
+                <td>標題:</td>
                 <td><input type="text" v-model="newInfo.title" /></td>
             </tr>
             <tr>
-                <td>Content:</td>
+                <td>內容:</td>
                 <td><textarea v-model="newInfo.content"></textarea></td>
             </tr>
             <tr>
-                <td>Date:</td>
+                <td>日期:</td>
                 <td><input type="date" v-model="newInfo.date" /></td>
             </tr>
             <tr>
-                <td>Category:</td>
+                <td>分類:</td>
                 <td><input type="text" v-model="newInfo.category" /></td>
             </tr>
             <tr>
-                <td>imgage:</td>
+                <td>類型:</td>
+                <td><select name="" id="" v-model="newInfo.type">
+                    <option value="新聞">新聞</option>
+                    <option value="科普">科普</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td>圖片:</td>
                 <td><input type="file" @change="handleFileUpload" /></td><!-- 這是用來上傳圖片的輸入框 -->
             </tr>
         </table>
         <button @click="createNewInfo">Create New Info</button><!-- 觸發新增的按鈕 -->
     </div>
-
 
     <div class="searchAllNewInfo">
         <!-- v-for迭代 newInfoList 中的每一則資訊。:key="newInfo.serialNo" 用於確保每個循環元素都有唯一的 key -->
@@ -335,22 +347,23 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-
 //新增的欄位
 .createNewInfo {
     margin: 20px;
 
     table {
-        border-collapse: collapse;//用於合併相鄰單元格的邊框。
+        border-collapse: collapse; //用於合併相鄰單元格的邊框。
         width: 100%;
 
         tr {
-            &:nth-child(odd) {//奇數行
+            &:nth-child(odd) {
+                //奇數行
                 background-color: #f2f2f2;
                 /* Alternate row background color */
             }
 
-            td { //單元格樣式
+            td {
+                //單元格樣式
                 padding: 8px;
                 border: 1px solid #ddd;
                 text-align: left;
@@ -363,7 +376,7 @@ export default {
                 padding: 8px;
                 border-radius: 5px;
                 border: 1px solid #ccc;
-                box-sizing: border-box;//設定框模型為邊框內計算
+                box-sizing: border-box; //設定框模型為邊框內計算
                 margin-bottom: 10px;
             }
 
@@ -378,7 +391,7 @@ export default {
                 padding: 10px 20px;
                 border: none;
                 border-radius: 5px;
-                cursor: pointer;//設定鼠標懸停時顯示為手型
+                cursor: pointer; //設定鼠標懸停時顯示為手型
 
                 &:hover {
                     background-color: #45a049;
@@ -393,7 +406,7 @@ export default {
 .searchAllNewInfo {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;//  設定子元素之間的間距間距
+    gap: 20px; //  設定子元素之間的間距間距
     margin-top: 20px;
 }
 
@@ -402,8 +415,9 @@ export default {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 16px;
-    width: calc(33.33% - 20px);/* 調整每個消息卡片的寬度，假設每行有三張卡片 */
-    box-sizing: border-box;//設定框模型為邊框內計算
+    width: calc(33.33% - 20px);
+    /* 調整每個消息卡片的寬度，假設每行有三張卡片 */
+    box-sizing: border-box; //設定框模型為邊框內計算
     background-color: #f9f9f9;
     display: flex;
     flex-direction: column;
@@ -415,8 +429,9 @@ export default {
     top: 10px;
     right: 10px;
     font-size: 1.5rem;
-    cursor: pointer;// 將游標設定為手型，表示該元素可點擊。
-    z-index: 1;    /* 設定層級，確保垃圾桶圖示在其他內容之上 */
+    cursor: pointer; // 將游標設定為手型，表示該元素可點擊。
+    z-index: 1;
+    /* 設定層級，確保垃圾桶圖示在其他內容之上 */
 
     &:hover {
         color: black;
@@ -429,7 +444,8 @@ export default {
     right: 45px;
     font-size: 2.5rem;
     cursor: pointer;
-    z-index: 1;    /* 確保編輯圖示在其他內容之上 */
+    z-index: 1;
+    /* 確保編輯圖示在其他內容之上 */
 
     &:hover {
         color: #2a6421;
@@ -442,7 +458,8 @@ export default {
     right: 10px;
     font-size: 2rem;
     cursor: pointer;
-    z-index: 1;    /* 確保儲存圖示在其他內容之上 */
+    z-index: 1;
+    /* 確保儲存圖示在其他內容之上 */
 
 
     &:hover {
@@ -460,5 +477,4 @@ export default {
     max-width: 100%;
     border-radius: 4px;
     margin-top: 10px;
-}
-</style>
+}</style>

@@ -141,7 +141,7 @@ export default {
             foundUser: null,
 
             myArticle: null,
-            userInfoList:null,
+            userInfoList: null,
 
         }
     },
@@ -149,8 +149,6 @@ export default {
         ArticleDashBoard
     },
     mounted() {
-        this.getMyArticle()
-        this.searchAllUserInfo()
         this.groupAll()
     },
     methods: {
@@ -173,148 +171,62 @@ export default {
             this.$emit("petInfo", item);
             this.$router.push('/AdoptPetDetail');
         },
-        goTo(x) {
-            this.$router.push(x)
-        },
-        getMyArticle() {
-            fetch('http://localhost:8080/api/adoption/searchAllPost', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('My articles:', data);
-                    console.log(this.foundUserInfo.userId);
-
-                    const filteredArticles = data.forumEntranceList.filter(article => article.userId === this.foundUserInfo.userId);
-                    console.log('Filtered articles:', filteredArticles);
-                    this.myArticle = filteredArticles
-                })
-                .catch(error => {
-                    console.error('Error fetching articles:', error);
-                });
-        },
-        searchAllUserInfo() {
-            fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
-                method: 'GET',
-            })
-                .then(response => {
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data);
-                    this.userInfoList = data.userInfoList;
-                    console.log(this.userInfoList);
-
-                    // 根據 foundUserId 找到對應的 foundUser
-                    const foundUser = this.userInfoList.find(user => user.userId === this.foundUserInfo.userId);
-
-                    // 如果找到了對應的 foundUser，你可以做一些操作
-                    if (foundUser) {
-                        console.log('找到了對應的使用者:', foundUser);
-
-                        // 在這裡加入 base64 前綴
-                        const base64Prefix = 'data:image/jpeg;base64,';
-                        const filePath = base64Prefix + foundUser.userPhoto; // 在這裡將路徑轉換為 base64 圖片前綴
-                        foundUser.filePath = filePath; // 將處理後的圖片路徑存儲在 foundUser 中的 filePath 屬性
-
-                        this.$emit("userInfo", foundUser);
-                        this.foundUser = foundUser; // 將整理後的 foundUser 存入 this.foundUser
-                    } else {
-                        console.log('找不到對應的使用者');
-                    }
-                });
+        goTo(serialNo) {
+            sessionStorage.setItem('postSerialNo', serialNo);
+            this.$router.push('/ForumEntrance/pre_myArticle')
         },
         groupAll() {
-
             fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
                 method: 'GET',
             })
-                .then(response => {
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data);
-                    this.userInfoList = data.userInfoList;
-                    console.log(this.userInfoList);
-
-                    // 根據 foundUserId 找到對應的 foundUser
-                    const foundUser = this.userInfoList.find(user => user.userId === this.foundUserInfo.userId);
-
-                    // 如果找到了對應的 foundUser，你可以做一些操作
-                    if (foundUser) {
-                        console.log('找到了對應的使用者:', foundUser);
-
-                        // 在這裡加入 base64 前綴
-                        const base64Prefix = 'data:image/jpeg;base64,';
-                        const filePath = base64Prefix + foundUser.userPhoto; // 在這裡將路徑轉換為 base64 圖片前綴
-                        foundUser.filePath = filePath; // 將處理後的圖片路徑存儲在 foundUser 中的 filePath 屬性
-
-                        this.$emit("userInfo", foundUser);
-                        this.foundUser = foundUser; // 將整理後的 foundUser 存入 this.foundUser
-                    } else {
-                        console.log('找不到對應的使用者');
-                    }
-                });
-
-            fetch('http://localhost:8080/api/adoption/searchAllPost', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('My articles:', data);
-                    console.log(this.foundUserInfo.userId);
+                    const userInfoList = data.userInfoList;
 
-                    const filteredArticles = data.forumEntranceList.filter(article => article.userId === this.foundUserInfo.userId);
-                    console.log('Filtered articles:', filteredArticles);
+                    fetch('http://localhost:8080/api/adoption/searchAllPost', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            const forumEntranceList = data.forumEntranceList;
 
+                            // 使用 reduce 方法整合資訊
+                            const integratedData = forumEntranceList.map(forumEntry => {
+                                const userInfo = userInfoList.find(user => user.userId === forumEntry.userId);
 
-                    // 創建包含所需資訊的新變數
-                    const combinedData = filteredArticles.map(article => {
-                        // 找到對應的用戶信息
-                        const foundUser = this.userInfoList.find(user => user.userId === article.userId);
+                                // 創建一個新的物件整合所需的資訊
+                                return {
+                                    postContent: forumEntry.postContent,
+                                    postPhoto: forumEntry.postPhoto,
+                                    serialNo: forumEntry.serialNo,
+                                    title: forumEntry.title,
+                                    userId: forumEntry.userId,
+                                    userName: userInfo.userName,
+                                    userPhoto: userInfo.userPhoto,
+                                    account: userInfo.account,
+                                };
+                            });
 
-                        // 如果找到了對應的用戶信息，整合用戶信息和文章信息
-                        if (foundUser) {
-                            return {
-                                userId: article.userId,
-                                userPhoto: foundUser.userPhoto,
-                                userName: foundUser.userName,
-                                account: foundUser.account,
-                                title:article.title,
-                                postContent:article.postContent,
-                                postPhoto:article.postPhoto,
-                                
-                            };
-                        } else {
-                            console.log('找不到對應的使用者');
-                            return null;
-                        }
-                    });
+                            // 在這裡處理整合後的資料 integratedData
+                            console.log(integratedData);
+                            console.log(this.foundUserInfo.userId)
+                            const specificUserArticles = integratedData.filter(entry => entry.userId === this.foundUserInfo.userId);
 
-                    // 去除可能的 null 值
-                    this.myArticle = combinedData.filter(article => article !== null);
-                    console.log('Combined data:', this.myArticle);
-
-                })
-                .catch(error => {
-                    console.error('Error fetching articles:', error);
+                            this.myArticle = specificUserArticles;
+                        });
                 });
+        },
 
-
-        }
     }
 }
 </script>
 
 
 <template>
-    <div class="content" v-if="foundUser">
+    <div class="content" >
         <!-- 側邊功能區 -->
         <div class="dashBoardArea">
             <ArticleDashBoard />
@@ -334,9 +246,10 @@ export default {
                     <div class="cardTop">
                         <img loading="lazy" class="poster_icon" :src="'data:image/jpeg;base64,' + item.userPhoto" />
                         <div class="poster_data">
-                            <p class="poster_name">{{item.userName}}</p>
+                            <p class="poster_name">{{ item.userName }}</p>
                             <!-- 短腿貓的爸<br /> -->
-                            <p class="poster_userId">{{item.account}}</p>
+                            <p class="poster_userId">{{ item.account }}</p>
+                            {{item.serialNo}}
                         </div>
 
                     </div>
@@ -348,11 +261,9 @@ export default {
                         <div class="cardInfo">
                             <p class="infoText">{{ item.postContent }}</p>
                         </div>
-
                     </div>
                     <div class="cardLast">
-
-                        <p class="moreInfo" @click="goTo('/ForumEntrance/pre_myArticle')">...點我看更多</p>
+                        <p class="moreInfo" @click="goTo(item.serialNo)">...點我看更多</p>
                     </div>
                 </div>
 

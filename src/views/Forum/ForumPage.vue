@@ -2,11 +2,47 @@
 export default {
     data() {
         return {
-            article: [1, 2, 3]
+            article: [1, 2, 3],
+
+            newInfoList: null,
         }
     },
-    methods:{
-        goTo(x){
+    mounted() {  //頁面初始化時調用searchAllNewInfo方法
+        this.searchAllNewInfo()
+    },
+    methods: {
+        searchAllNewInfo() {
+            //使用 fetch 函數向指定的後端端點發送 GET 請求
+            fetch('http://localhost:8080/api/adoption/searchAllNewUserInfo', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json' //發送的是 JSON 數據
+                },
+            })
+                .then(response => response.json()) //處理後端返回的數據，將返回的 JSON 字符串轉換為 JavaScript 對象
+                .then(data => {
+                    // 將每個含有圖片的資料轉換成可顯示的格式
+
+                    this.newInfoList = data.newInfoList
+                        // 過濾出 type 為 "科普" 的資料
+                        .filter(info => info.type === '科普')
+                        // 針對過濾出來的資料處理圖片，如果有圖片，則加上前綴，形成完整的 Base64 圖片數據
+                        .map(info => {
+                            if (info.image) {
+                                const base64Prefix = 'data:image/jpeg;base64,';
+                                return { ...info, base64Image: base64Prefix + info.image };
+                            } else {
+                                return info;
+                            }
+                        });
+                        console.log(this.newInfoList)
+                })
+                .catch(error => {
+                    // 處理錯誤
+                    console.error('Error fetching data:', error);
+                });
+        },
+        goTo(x) {
             this.$router.push(x)
         }
     }
@@ -21,24 +57,18 @@ export default {
             <div class="div-7">
                 <h1>你知道嗎?</h1>
             </div>
-            <div class="div-8">
+            <div class="div-8" v-for="item in this.newInfoList">
                 <div class="div-9">
                     <div class="column-3">
-                        <img loading="lazy" srcSet="..." class="img-2" />
+                        <img :src="item.base64Image" alt="">
                     </div>
                     <div class="div-10">
                         <div class="div-11">
-                            <h2>狂犬病也會傳染給人類!</h2>
+                            <h2>{{ item.title }}</h2>
                         </div>
                         <div class="div-12">
-                            <span>”依</span>
-                            <a href="https://db.lawbank.com.tw/FLAW/FLAWQRY03.aspx?lno=20&lsid=FL014716"
-                                style="color: rgba(110, 117, 168, 1)" target="_blank">
-                                動物傳染病防治條例第２０條第２款
-                            </a>
-                            <span>之規定，如防疫人員認為有必要，有可能對遭感染之動物進行撲殺，為保護家中動物並維護健康，防治狂犬病，防檢局呼籲飼主每年務必為犬貓施打狂犬病疫苗，並應繫掛證明牌，以維護人畜安全，避免受罰。”根據世界衛生組織估計：每年約有59,000~61,000死亡病例，其中亞洲國家以印度、中國、印尼及菲律賓病例數最多。在被疑似罹患狂犬病動物抓咬傷的受害者中，約有40%是15歲以下的孩童。人類狂犬病死亡病例絕大多數由病犬咬傷所引起。</span>
+                            <span>{{ item.content }}</span>
                         </div>
-
                     </div>
 
                 </div>
@@ -69,7 +99,7 @@ export default {
             </div>
             <div class="div-36">
                 <button class="btn btn-big btn-specialBlue" style="color: white;"
-                    @click="goTo('/ForumEntrance/view_Article')">閒聊版看更多</button>
+                    @click="goTo('/ForumEntrance/ForumHome')">閒聊版看更多</button>
             </div>
         </div>
     </div>
@@ -226,17 +256,12 @@ export default {
     background-color: #fff;
     align-self: center;
     margin-top: 15px;
-    width: 90%;
+    width: 95%;
     padding: 15px 50px 15px 32px;
     display: flex;
     align-items: center;
 }
 
-@media (max-width: 991px) {
-    .div-8 {
-        padding: 0 20px;
-    }
-}
 
 .div-9 {
     gap: 20px;
@@ -244,13 +269,6 @@ export default {
     align-items: center;
 }
 
-@media (max-width: 991px) {
-    .div-9 {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0px;
-    }
-}
 
 .column-3 {
     display: flex;
@@ -260,31 +278,9 @@ export default {
     margin-left: 0px;
 }
 
-@media (max-width: 991px) {
-    .column-3 {
-        width: 100%;
-    }
-}
-
-.img-2 {
-    aspect-ratio: 0.7;
-    object-fit: contain;
-    object-position: center;
-    width: 304px;
-    overflow: hidden;
-    max-width: 100%;
-}
-
-@media (max-width: 991px) {
-    .img-2 {
-        margin-top: 40px;
-    }
-}
-
-
-
 
 .div-10 {
+    width: 650px;
     height: 90%;
     display: flex;
     margin-top: 6px;
@@ -293,12 +289,6 @@ export default {
     align-items: end;
 }
 
-@media (max-width: 991px) {
-    .div-10 {
-        max-width: 100%;
-        margin-top: 40px;
-    }
-}
 
 .div-11 {
     color: #978989;
@@ -307,26 +297,13 @@ export default {
 
 }
 
-@media (max-width: 991px) {
-    .div-11 {
-        max-width: 100%;
-        white-space: initial;
-    }
-}
 
 .div-12 {
     color: #978989;
     text-decoration-line: underline;
     margin-top: 32px;
-
+    // max-width: 100%; /* 新增此行 */
 }
-
-@media (max-width: 991px) {
-    .div-12 {
-        max-width: 100%;
-    }
-}
-
 
 
 .div-14 {

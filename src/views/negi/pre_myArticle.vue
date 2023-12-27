@@ -4,17 +4,70 @@ import create_Article from './create_Article.vue';
 import ArticleDashBoard from '../../components/ArticleDashBoard.vue';
 
 export default {
-    data(){
-        return{
+    data() {
+        return {
+            postSerialNo: JSON.parse(sessionStorage.getItem('postSerialNo')),
 
+            myArticle:null,
         }
     },
-    components:{
-        view_Article,create_Article,
+
+    mounted() {
+        this.groupAll()
+    },
+
+    components: {
+        view_Article, create_Article,
         ArticleDashBoard
     },
-    methods:{
-        goTo(x){
+
+    methods: {
+        groupAll() {
+            fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const userInfoList = data.userInfoList;
+
+                    fetch('http://localhost:8080/api/adoption/searchAllPost', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            const forumEntranceList = data.forumEntranceList;
+
+                            // 使用 reduce 方法整合資訊
+                            const integratedData = forumEntranceList.map(forumEntry => {
+                                const userInfo = userInfoList.find(user => user.userId === forumEntry.userId);
+
+                                // 創建一個新的物件整合所需的資訊
+                                return {
+                                    postContent: forumEntry.postContent,
+                                    postPhoto: forumEntry.postPhoto,
+                                    serialNo: forumEntry.serialNo,
+                                    title: forumEntry.title,
+                                    userId: forumEntry.userId,
+                                    userName: userInfo.userName,
+                                    userPhoto: userInfo.userPhoto,
+                                    account: userInfo.account,
+                                };
+                            });
+
+                            // 在這裡處理整合後的資料 integratedData
+                            console.log(integratedData);
+                            console.log(this.postSerialNo)
+                            const specificUserArticles = integratedData.filter(entry => entry.serialNo === this.postSerialNo);
+                            this.myArticle = specificUserArticles
+                            console.log(this.myArticle)
+                        });
+                });
+        },
+
+        goTo(x) {
             this.$router.push(x)
         }
 
@@ -25,7 +78,7 @@ export default {
 
 <!-- 發文的人看自己發的文章 -->
 <template>
-    <div class="all">
+    <div class="all" v-if="myArticle">
         <!-- <div class="div-2"></div> -->
         <div class="out_contain">
             <div class="in_contain">
@@ -38,24 +91,25 @@ export default {
                             <!-- <img loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/0ff7096d667a444bfee3e58c74bcb7c887b73fbe23c5ab5d518081b07a882fcf?"
                                 class="img-2" /> -->
-                                <i class="fa-solid fa-trash-can img-2"></i>
-                                <!-- <img loading="lazy"
+                            <i class="fa-solid fa-trash-can img-2"></i>
+                            <!-- <img loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/92ac77e2db42db1011e0d83c7bedd38c0d20f66a14115177c96e2b0a532073bf?"
                                 class="img-3" /> -->
-                                <i class="fa-solid fa-pen img-3" @click="goTo('/ForumEntrance/edit_myArticle')"></i>
+                            <i class="fa-solid fa-pen img-3" @click="goTo('/ForumEntrance/edit_myArticle')"></i>
                         </div>
                         <div class="article">
                             <div class="poster_area">
                                 <div class="poster">
                                     <div class="div-13">
                                         <div class="div-14">
-                                            <img loading="lazy"
+                                            <img class="poster_icon" :src="'data:image/jpeg;base64,' + this.myArticle[0].userPhoto" alt="">
+                                            <!-- <img loading="lazy"
                                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/1a90f93bf046cb34155d14545eaf092cbb5340f95d7851405d718068990aeece?"
-                                                class="poster_icon" />
+                                                class="poster_icon" /> -->
                                             <div class="poster_data">
-                                                <p class="poster_name">短腿貓的爸</p>
+                                                <p class="poster_name">{{ this.myArticle[0].userName }}</p>
                                                 <!-- 短腿貓的爸<br /> -->
-                                                <p class="poster_userId">@wei0113__</p>
+                                                <p class="poster_userId">{{ this.myArticle[0].account }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -73,10 +127,11 @@ export default {
                                 </div>
                             </div>
                             <div class="div-20"></div>
-                            <div class="article_title">好像養了一隻迷因貓</div>
-                            <img loading="lazy" srcSet="..." class="article_img" />
+                            <div class="article_title">{{ this.myArticle[0].title }}</div>
+                            <img class="article_img" :src="'data:image/jpeg;base64,' + this.myArticle[0].postPhoto" alt="">
+                            <!-- <img loading="lazy" srcSet="..." class="article_img" /> -->
                             <div class="article_contain">
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus fugiat odio nostrum tempore, quisquam incidunt, reiciendis quas eveniet mollitia deleniti eos dolore aliquam quibusdam consequuntur totam possimus asperiores, unde maiores.</p>
+                                <p>{{ this.myArticle[0].postContent }}</p>
                                 <!-- 先上最愛的一張照片，<br />快樂迷因仔，<br />不知道是不是腿短又肥肥的，<br />每次覺得睡覺阿腿都很可愛<br />就是一隻小笨貓<br />哈哈 -->
                             </div>
                             <div class="div-23">Comment</div>
@@ -96,8 +151,8 @@ export default {
                                 </div>
                                 <div class="replier_replier">
                                     <img loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/325bf2b6904cc722a9fe82991fb721b3d31e009fcdf5fd2018580e2ecd595986?"
-                                    class="replier_replier_img" />
+                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/325bf2b6904cc722a9fe82991fb721b3d31e009fcdf5fd2018580e2ecd595986?"
+                                        class="replier_replier_img" />
                                     <div class="replier_data">
                                         <p class="replier_name">短腿貓的爸</p>
                                         <p class="replier_userId">@wei0113__</p>
@@ -216,7 +271,7 @@ export default {
     padding: 45px 0;
     height: auto;
     color: #978989;
-    padding: 20px 30px 20px 30px ;
+    padding: 20px 30px 20px 30px;
     font-size: 20pt;
 }
 
@@ -232,7 +287,8 @@ export default {
     align-items: center;
     width: 119px;
     height: 50px;
-    i{
+
+    i {
         margin-right: 20px;
     }
 }
@@ -309,6 +365,7 @@ export default {
     width: 96px;
     overflow: hidden;
     max-width: 100%;
+    border-radius: 50%;
 }
 
 .poster_data {
