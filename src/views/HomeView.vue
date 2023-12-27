@@ -6,6 +6,7 @@ export default {
         return {
             foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')), //儲存資訊
             newInfoList: null,//用來存儲新訊息列表
+            marqueeTitles: [], // 新增一個屬性用來存儲跑馬燈標題
         }
     },
     beforeCreate() {
@@ -13,6 +14,10 @@ export default {
 
     mounted() {//生命周期(mounted)：被創建之後，會調用方法，用於初始的搜尋。
         this.searchAllNewInfo()
+        // 設置跑馬燈標題
+        this.setMarqueeTitles();
+        // 對 newInfoList 進行排序由新到舊
+        this.sortNewInfoListByDate();
     },
 
     methods: {
@@ -41,6 +46,14 @@ export default {
                             return info;
                         }
                     });
+                    this.setMarqueeTitles();//處理完數據用此方法
+
+                    if (this.newInfoList) {
+                        console.log("Logging dates in newInfoList:");
+                        this.newInfoList.forEach(info => {
+                            console.log(info.date);
+                        });
+                    }
                 })
                 .catch(error => {
                     // 處理錯誤
@@ -73,7 +86,53 @@ export default {
                 width: '60%', // 調整內容區塊的寬度
 
             });
-        }
+        },
+
+        // 設置跑馬燈的標題
+        setMarqueeTitles() {
+            // 如果 newInfoList 存在，且有三個以上的項目，則隨機選擇三個標題
+            if (this.newInfoList && this.newInfoList.length >= 3) {
+                //使用 getRandomIndices 方法獲取三個隨機的索引
+                const randomIndices = this.getRandomIndices(this.newInfoList.length, 3);
+                // 使用這些隨機索引從 newInfoList 中選擇標題，並賦值給 marqueeTitles
+                this.marqueeTitles = randomIndices.map(index => this.newInfoList[index].title);
+            }
+        },
+
+        // 新增方法來獲取指定數量的隨機索引，生成並返回一個包含指定數量的不重複隨機索引的陣列
+        getRandomIndices(max, count) {
+            const indices = [];// 創建一個空陣列，用於存儲隨機索引
+            // 使用 while 循環，直到獲取到指定數量的隨機索引，或者已經獲取了所有可能的索引
+            while (indices.length < count && indices.length < max) {
+                // 生成一個介於 0 和 max 之間的隨機整數
+                const randomIndex = Math.floor(Math.random() * max);
+                // 檢查生成的隨機索引是否已經存在於 indices 陣列中
+                if (!indices.includes(randomIndex)) {
+                    // 如果不存在，將它添加到 indices 陣列中
+                    indices.push(randomIndex);
+                }
+            }
+            return indices;// 返回包含指定數量的隨機索引的陣列
+        },
+// 對 newInfoList 按日期從新到舊排序
+sortNewInfoListByDate() {
+    if (this.newInfoList) {
+        // 使用數組的 sort 方法，比較每個元素的日期屬性
+        this.newInfoList.sort((a, b) => {
+            // 將日期字符串轉換為日期對象進行比較
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+
+            // 記錄日期值
+            console.log("Date A:", dateA);
+            console.log("Date B:", dateB);
+
+            // 將比較結果反轉，以實現按日期從新到舊排序
+            return dateB.getTime() - dateA.getTime();
+        });
+    }
+},
+
     }
 
 }
@@ -82,6 +141,15 @@ export default {
 
 
 <template>
+    <!-- 跑馬燈 -->
+    <div class="marquee">
+        <!-- 喇叭圖示 -->
+        <img loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/06062d6238a6691ea533dbc096994639c6e1407d07d6742eb34d44f9d98fe771?"
+            class="trumpet" />
+        <!-- 最新消息標題 -->
+        <div v-for="title in marqueeTitles" :key="title" class="marquee-item">{{ title }}</div>
+    </div>
     <!-- 輪播 -->
     <!-- carousel-fade 表示使用淡入淡出的效果 -->
     <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -107,21 +175,12 @@ export default {
         </div>
     </div>
     <div class="contentArea">
-        <div class="div">
-            <div class="div-3">
-                <div class="div-4">
-                    <div class="column">
-                        <!-- 喇叭圖示 -->
-                        <img loading="lazy"
+
+        <!-- 喇叭圖示 -->
+        <!-- <img loading="lazy"
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/06062d6238a6691ea533dbc096994639c6e1407d07d6742eb34d44f9d98fe771?"
-                            class="img-2" />
-                    </div>
-                    <div class="column-2">
-                        <div class="div-5">Announce(平台入口)</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            class="img-2" /> -->
+
         <div class="searchAllNewInfo">
             <!-- 每個 newInfo 對象都被用來生成一個消息卡片。v-for 根據 newInfoList 的內容動態生成消息卡片。 -->
             <div v-for="newInfo in newInfoList" :key="newInfo.serialNo" class="info-card" @click="expandCard(newInfo)">
@@ -149,34 +208,63 @@ export default {
 
 
 <style lang="scss" scoped>
-body {
-    position: relative;
-
+.marquee {
+    overflow: hidden; //溢出隱藏
+    white-space: nowrap; //避免換行，單行顯示
+    animation: marquee-scroll 20s linear infinite; //動畫時間為 20 秒，動畫效果為線性，且無限循環
+    height: 5vh;
+    display: flex;
+    align-items: center;
 }
 
+.trumpet {
+    width: 30px;
+    height: 30px;
+    margin-right: 20px;
+}
 
-.carousel {
+.marquee-item {
+    display: inline-block; //將元素設置為內聯塊元素，使其既具有塊元素的特性又不會破壞文本流
+    margin-right: 20px;
+    font-size: 20px;
+    color: #756a6a;
+}
+
+@keyframes marquee-scroll {
+    from {
+        //起始
+        transform: translateX(100%);
+    }
+
+    to {
+        //結束
+        transform: translateX(-100%);
+    }
+}
+
+//輪播圖片大小
+.carousel-item {
     width: 100%;
-    height: 80%;
-    position: fixed;
-    top: 0;
-    overflow: hidden; //溢出隱藏
+    height: 82vh;
 }
 
 //輪播指示器按鈕位置
 .carousel-indicators {
     display: flex;
     justify-content: center;
-    position: fixed;
+    position: absolute;
     top: 35vw;
 }
+
 //輪播指示器按鈕改為圓形
 .carousel-indicators button {
     width: 10px;
     height: 10px;
-    border-radius: 50%;    /* 將長方形轉換為圓形 */
+    border-radius: 50%;
+    /* 將長方形轉換為圓形 */
     border: 1px solid #050505;
-    margin: 0 10px;    /* 調整圓形之間的間距 */
+    margin: 0 10px;
+    /* 調整圓形之間的間距 */
     background-color: white;
     cursor: pointer;
 }
@@ -189,75 +277,15 @@ body {
 
 }
 
-//喇叭圖示和平台入口的區塊
-.div {
-    // background-color: #fff;
-    display: flex;
-    padding-bottom: 50px;
-    flex-direction: column;
-}
-//喇叭圖示和平台入口的區塊
-.div-3 {
-    border-radius: 35px;
-    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
-    background-color: #fff;
-    align-self: center;
-    width: 1304px;
-    max-width: 100%;
-    margin: 58px 0 -23px;
-    padding: 10px 0 25px 175px;
-    z-index: 1;
-}
 
-.div-4 {
-    gap: 20px;//兩者之間有間距
-    display: flex;
-}
-
-
-
-.column {
-    display: flex;
-    flex-direction: column;
-    line-height: normal;
-    width: 23%;
-    margin-left: 0px;
-}
 
 .contentArea {
     position: relative;
-    top: 60vh;
+    top: 5vh;
     background-color: #F8F5EE;
 }
 
 
-.img-2 {
-    aspect-ratio: 1.11;
-    object-fit: contain;
-    object-position: center;
-    width: 60px;
-    overflow: hidden;
-    max-width: 100%;
-}
-
-
-
-.column-2 {
-    display: flex;
-    flex-direction: column;
-    line-height: normal;
-    width: 77%;
-    margin-left: 20px;
-}
-
-
-
-.div-5 {
-    color: #978989;
-    margin-top: 16px;
-    white-space: nowrap;
-    font: 800 40px Lexend, sans-serif;
-}
 
 .searchAllNewInfo {
     display: flex;
@@ -275,9 +303,10 @@ body {
     color: #978989;
     font-size: 14pt;
     box-shadow: 0 0 3px 5px rgb(202, 202, 202);
-    width: calc(33.33% - 20px);    /* 調整每個消息卡片的寬度，這裡假設每行三個 */
+    width: calc(33.33% - 20px);
+    /* 調整每個消息卡片的寬度，這裡假設每行三個 */
     box-sizing: border-box;
-    transition: all 0.4s;//過渡效果，持續時間為 0.4 秒
+    transition: all 0.4s; //過渡效果，持續時間為 0.4 秒
 
     &:hover {
         transform: scale(1.03);
@@ -302,7 +331,8 @@ body {
 .info-card img {
     vertical-align: middle;
     width: 100%;
-    border-radius: 0px 0px 30px 30px;    /* 设置圆角 上右下左 */
+    border-radius: 0px 0px 30px 30px;
+    /* 设置圆角 上右下左 */
     padding: 0;
 }
 
@@ -315,11 +345,9 @@ body {
     box-shadow: 3px 3px 5px gray; // 放大效果
 }
 
-.footer{
+.footer {
     width: 100%;
     height: 100px;
 
 }
-
-
 </style>

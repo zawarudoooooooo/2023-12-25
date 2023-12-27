@@ -182,8 +182,9 @@ export default {
             <div class="searchArea">
                 <span>機構名稱</span>
                 <input type="text" v-model="this.institutionName">
-                <!-- 當點擊按鈕就會調用search()方法 -->
-                <button @click="search()">Search</button>
+                <!-- 當點擊放大鏡按鈕就會調用search()方法 -->
+                <i class="fa-solid fa-magnifying-glass" @click="search()">
+                </i>
             </div>
 
         </div>
@@ -260,6 +261,7 @@ export default {
             select {
                 width: 15%;
                 height: 4.5vh;
+                font-size: 1.2vw;
                 margin-left: 4vw;
                 margin-right: 5vw;
                 border-radius: 2.5vw;
@@ -275,24 +277,22 @@ export default {
                 width: 63%;
                 height: 4.5vh;
                 border-radius: 2.5vw;
-                margin-left: 1vw;
-                margin-right: 5vw;
+                margin-left: 4vw;
+                margin-right: 3vw;
                 background-color: #DDDFEE;
                 border: none;
                 padding-left: 2vw;
             }
 
             //搜尋按鈕
-            button {
-                width: 15%;
-                height: 6vh;
-                border-radius: 3.5vw;
-                border: none;
-                background-color: #E9D2A6;
-                color: white;
-                font-weight: 900; //字體加粗
-                font-size: 2vw;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            .fa-magnifying-glass {
+                color: #E9D2A6;
+                font-size: 2.5vw;
+
+                &:hover {
+                    cursor: pointer;
+                    color: #93805c;
+                }
             }
         }
     }
@@ -308,67 +308,71 @@ export default {
         margin-bottom: 3vh;
 
 
-        }
-        //放圖片的區域
-        .img {
-            width: 40%;
-            height: 80%;
-            border: 1px solid #978989;
-            margin: 4vh 2.5vw;
+    }
+
+    //放圖片的區域
+    .img {
+        width: 40%;
+        height: 80%;
+        border: 1px solid #978989;
+        margin: 4vh 2.5vw;
+        border-radius: 2.5vw;
+
+        //讓圖片滿版
+        img {
+            width: 100%;
+            height: 100%;
             border-radius: 2.5vw;
-            //讓圖片滿版
-            img {
-                width: 100%;
-                height: 100%;
-                border-radius: 2.5vw;
-            }
-        }
-
-        //地點資訊
-        .info {
-            margin-top: 2vh;
-            //機構名稱
-            .title {
-                font-size: 2.5vw;
-                font-weight: bold;
-                color: #978989;
-                margin-bottom: 3vh;
-
-            }
-            //地址和營業時間
-            .main {
-                font-size: 1.5vw;
-                font-weight: bold;
-                color: #978989;
-            }
-
-            .icon {
-                margin-bottom: 4vh;
-                display: flex;
-                //外部連結icon
-                .fa-arrow-up-right-from-square {
-                    font-size: 3vw;
-                    margin-right: 2vw;
-                    margin-top: 8vh;
-
-                    &:hover {
-                        color: rgb(68, 51, 48);
-                    }
-
-                }
-                //手機icon
-                .fa-mobile-screen-button {
-                    font-size: 3vw;
-                    margin-top: 8vh;
-                }
-
-                .phone {
-                    font-size: 1.5vw;
-                    color: #978989;
-                    margin-left: 2vw;
-                }
-            }
         }
     }
 
-</style>
+    //地點資訊
+    .info {
+        margin-top: 2vh;
+
+        //機構名稱
+        .title {
+            font-size: 2.5vw;
+            font-weight: bold;
+            color: #978989;
+            margin-bottom: 3vh;
+
+        }
+
+        //地址和營業時間
+        .main {
+            font-size: 1.5vw;
+            font-weight: bold;
+            color: #978989;
+        }
+
+        .icon {
+            margin-bottom: 4vh;
+            display: flex;
+
+            //外部連結icon
+            .fa-arrow-up-right-from-square {
+                font-size: 3vw;
+                margin-right: 2vw;
+                margin-top: 8vh;
+
+                &:hover {
+                    color: rgb(68, 51, 48);
+                }
+
+            }
+
+            //手機icon
+            .fa-mobile-screen-button {
+                font-size: 3vw;
+                margin-top: 8vh;
+            }
+
+            .phone {
+                font-size: 1.5vw;
+                color: #978989;
+                margin-left: 2vw;
+            }
+        }
+    }
+}</style>

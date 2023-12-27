@@ -11,11 +11,13 @@
     "@popperjs/core": "^2.11.8",
     "axios": "^1.6.2",
     "bootstrap": "^5.3.2",
+    "cropperjs": "^1.6.1",
     "pinia": "^2.1.7",
     "sass": "^1.69.5",
     "sweetalert2": "^11.10.1",
     "vue": "^3.3.4",
     "vue-axios": "^3.5.2",
+    "vue-cropperjs": "^5.0.0",
     "vue-router": "^4.2.5",
     "vue-sanitize": "^0.2.3"
   },

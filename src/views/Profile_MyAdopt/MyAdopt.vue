@@ -48,7 +48,7 @@ export default{
             })
         },
         checkAdopted(adopter){
-            if(adopter == this.userInfo.account){
+            if(adopter == this.userInfo.userId){
                 return true;
             }
             return false;
@@ -89,6 +89,7 @@ export default{
             .catch(error => {
                 console.error(error);
             })
+
             
         },
         send_noti_type2(userId,sendId,petId){
@@ -109,6 +110,64 @@ export default{
                 .catch(error => {
                     console.error(error);
                 })
+
+        },
+        rejectApply(item){
+            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
+
+            axios.post('http://localhost:8080/api/adoption/petInfo/adopterConfirm', {
+                petId: item.pet_id,
+                ownerId: item.user_id,
+                adopterId: user.userId,
+                adopterRes: 2
+            })
+            .then(response => {
+                console.log(response.data);
+                if (response.data.rtnCode == 'SUCCESSFUL') {
+                    Swal.fire({
+                        title: "取消認養成功！!",
+                        icon: "success"
+                    })
+                } else {
+                    Swal.fire('出了些錯誤，請再次檢查');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
+        },
+        confirmApply(item){
+            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
+
+            const thing = {
+                petId: item.pet_id,
+                ownerId: item.user_id,
+                adopterId: user.userId,
+                adopterRes: 2
+            }
+            console.log("the entered thing", thing)
+
+            axios.post('http://localhost:8080/api/adoption/petInfo/adopterConfirm', {
+                petId: item.pet_id,
+                ownerId: item.user_id,
+                adopterId: user.userId,
+                adopterRes: 1
+            })
+            .then(response => {
+                console.log(response.data);
+                if (response.data.rtnCode == 'SUCCESSFUL') {
+                    Swal.fire({
+                        title: "同意領養成功！!",
+                        icon: "success"
+                    })
+                } else {
+                    Swal.fire('出了些錯誤，請再次檢查');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
+
         }
     }
 }
@@ -149,22 +208,22 @@ export default{
                         <p>{{ item.pet_status }}</p>
                     </div>
                 </div>
-                <div class="cardLast">
+                <div v-if=" !(item.adoption_status == '已送養' && item.final_adopter_id == this.userInfo.userId)" class="cardLast">
                     <!-- red btn -->
                     <!-- cancel -->
-                    <button v-if="checkAdopted(item.final_adopter)" class="btn btn-specialRed modal-btn" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                    <button v-if="checkAdopted(item.final_adopter_id)" class="btn btn-specialRed modal-btn" data-bs-toggle="modal" :data-bs-target="'#cancelModal'+index">
                         <i class="fa-solid fa-xmark" style="color: white"></i>
                         <p style="color: white;">取消領養</p>
                     </button>
                     <!-- quit -->
-                    <button v-else class="btn btn-specialRed modal-btn" data-bs-toggle="modal" data-bs-target="#quitModal">
+                    <button v-else class="btn btn-specialRed modal-btn" data-bs-toggle="modal" :data-bs-target="'#quitModal'+index">
                         <i class="fa-solid fa-xmark" style="color: white;"></i>
                         <p style="color: white;">取消申請</p>
                     </button>
                     
                     <!-- green btn -->
                     <!-- confirm -->
-                    <button v-if="checkAdopted(item.final_adopter)" class="btn btn-green modal-btn" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                    <button v-if="checkAdopted(item.final_adopter_id)" class="btn btn-green modal-btn" data-bs-toggle="modal" :data-bs-target="'#confirmModal'+index">
                         <i class="fa-solid fa-check" style="color: white"></i>
                         <p style="color: white;">確定領養</p>
                     </button>
@@ -175,8 +234,9 @@ export default{
                         <p style="color: white;">聊聊了解</p>
                     </button>
                 </div>
+                
                 <!-- quit Modal -->
-                <div  class="modal fade" id="quitModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div  class="modal fade" :id="'quitModal'+index" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -198,8 +258,9 @@ export default{
                         </div>
                     </div>
                 </div>
+
                 <!-- confirm Modal -->
-                <div  class="modal fade" id="confirmModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div  class="modal fade" :id="'confirmModal'+index" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -213,7 +274,7 @@ export default{
                                     <i class="fa-solid fa-chevron-right" style="color: white;"></i>
                                     <p style="color: white;">再想一下</p>
                                 </button>
-                                <button v-if="!this.isGived" class="btn btn-green modal-btn">
+                                <button v-if="!this.isGived" class="btn btn-green modal-btn" @click="confirmApply(item)">
                                     <i class="fa-solid fa-check" style="color: white"></i>
                                     <p style="color: white;">接受送養</p>
                                 </button>
@@ -221,8 +282,9 @@ export default{
                         </div>
                     </div>
                 </div>
+
                 <!-- cancel Modal -->
-                <div  class="modal fade" id="cancelModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div  class="modal fade" :id="'cancelModal'+index" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -236,7 +298,7 @@ export default{
                                     <i class="fa-solid fa-chevron-right" style="color: white;"></i>
                                     <p style="color: white;">再想一下</p>
                                 </button>
-                                <button class="btn btn-specialRed modal-btn">
+                                <button class="btn btn-specialRed modal-btn" @click="rejectApply(item)">
                                     <i class="fa-solid fa-xmark" style="color: white;"></i>
                                     <p style="color: white;">放棄領養</p>
                                 </button>
