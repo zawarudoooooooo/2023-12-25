@@ -171,6 +171,19 @@ export default {
             )
                 .then(response => {
                     console.log(response.data)
+                    if (response.data.rtnCode == 'SUCCESSFUL') {
+                        sessionStorage.setItem("the pet", JSON.stringify(response.data.petInfo))
+                        Swal.fire({
+                            title: "刪除成功！!",
+                            icon: "success"
+                        }).then((result) => {
+                            if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                                location.reload()
+                            }
+                        });
+                    } else {
+                        Swal.fire('出了些錯誤，請再次檢查');
+                    }
                 })
                 .catch(error => {
                     console.error(error);
