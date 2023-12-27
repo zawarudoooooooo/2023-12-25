@@ -136,12 +136,60 @@ export default {
                 family_status: "",
                 user_photo: "",
             },
+
+            integratedData:null,
         }
     },
     components: {
         ArticleDashBoard
     },
+    mounted() {
+        this.groupAll()
+    },
     methods: {
+        groupAll() {
+            fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const userInfoList = data.userInfoList;
+
+                    fetch('http://localhost:8080/api/adoption/searchAllPost', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            const forumEntranceList = data.forumEntranceList;
+
+                            // 使用 reduce 方法整合資訊
+                            const integratedData = forumEntranceList.map(forumEntry => {
+                                const userInfo = userInfoList.find(user => user.userId === forumEntry.userId);
+
+                                // 創建一個新的物件整合所需的資訊
+                                return {
+                                    postContent: forumEntry.postContent,
+                                    postPhoto: forumEntry.postPhoto,
+                                    serialNo: forumEntry.serialNo,
+                                    title: forumEntry.title,
+                                    userId: forumEntry.userId,
+                                    userName: userInfo.userName,
+                                    userPhoto: userInfo.userPhoto,
+                                    account: userInfo.account,
+                                };
+                            });
+
+                            // 在這裡處理整合後的資料 integratedData
+                            console.log(integratedData);
+                            this.integratedData=integratedData
+                        });
+                });
+        },
+
+
         checkAdopted(adopter) {
             if (adopter == this.userInfo.account) {
                 return true;
@@ -161,9 +209,10 @@ export default {
             this.$emit("petInfo", item);
             this.$router.push('/AdoptPetDetail');
         },
-        goTo(x){
-            this.$router.push(x)
-        }
+        goTo(serialNo) {
+            sessionStorage.setItem('postSerialNo', serialNo);
+            this.$router.push('/ForumEntrance/pre_myArticle')
+        },
     }
 }
 </script>
@@ -186,32 +235,27 @@ export default {
 
             <!-- v-for the card -->
             <div class="showCardArea">
-                <div class="showCard" v-for="(item, index) in pets" >
+                <div class="showCard" v-for="(item, index) in integratedData">
                     <div class="cardTop">
-                        <img loading="lazy"
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/1a90f93bf046cb34155d14545eaf092cbb5340f95d7851405d718068990aeece?"
-                            class="poster_icon" />
+                        <img loading="lazy" class="poster_icon" :src="'data:image/jpeg;base64,' + item.userPhoto" />
                         <div class="poster_data">
-                            <p class="poster_name">短腿貓的爸</p>
+                            <p class="poster_name">{{ item.userName }}</p>
                             <!-- 短腿貓的爸<br /> -->
-                            <p class="poster_userId">@wei0113__</p>
+                            <p class="poster_userId">{{ item.account }}</p>
                         </div>
 
                     </div>
                     <div class="cardMiddle">
-                        <div class="article_title">好像養了一隻迷因貓</div>
-                        <div class="img">
-
-                        </div>
+                        <div class="article_title">{{ item.title }}</div>
+                            <img class="img" :src="'data:image/jpeg;base64,' + item.postPhoto" alt="">
                         <div class="cardInfo">
-                            <p class="infoText">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate quaerat
-                                numquam minus? Hic, provident aliquam?</p>
+                            <p class="infoText">{{ item.postContent }}</p>
                         </div>
 
                     </div>
                     <div class="cardLast">
 
-                        <p class="moreInfo" @click="goTo('/ForumEntrance/pre_myArticle')">...點我看更多</p>
+                        <p class="moreInfo" @click="goTo(item.serialNo)">...點我看更多</p>
                     </div>
                 </div>
 
@@ -271,6 +315,7 @@ export default {
                     height: 60px;
                     position: absolute;
                     right: 105px;
+                    border-radius: 50%;
                 }
 
                 .poster_data {
