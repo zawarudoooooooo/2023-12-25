@@ -16,7 +16,8 @@ export default {
         this.searchAllNewInfo()
         // 設置跑馬燈標題
         this.setMarqueeTitles();
-
+        // 對 newInfoList 進行排序由新到舊
+        this.sortNewInfoListByDate();
     },
 
     methods: {
@@ -46,6 +47,13 @@ export default {
                         }
                     });
                     this.setMarqueeTitles();//處理完數據用此方法
+
+                    if (this.newInfoList) {
+                        console.log("Logging dates in newInfoList:");
+                        this.newInfoList.forEach(info => {
+                            console.log(info.date);
+                        });
+                    }
                 })
                 .catch(error => {
                     // 處理錯誤
@@ -98,7 +106,7 @@ export default {
             while (indices.length < count && indices.length < max) {
                 // 生成一個介於 0 和 max 之間的隨機整數
                 const randomIndex = Math.floor(Math.random() * max);
-                 // 檢查生成的隨機索引是否已經存在於 indices 陣列中
+                // 檢查生成的隨機索引是否已經存在於 indices 陣列中
                 if (!indices.includes(randomIndex)) {
                     // 如果不存在，將它添加到 indices 陣列中
                     indices.push(randomIndex);
@@ -106,6 +114,25 @@ export default {
             }
             return indices;// 返回包含指定數量的隨機索引的陣列
         },
+// 對 newInfoList 按日期從新到舊排序
+sortNewInfoListByDate() {
+    if (this.newInfoList) {
+        // 使用數組的 sort 方法，比較每個元素的日期屬性
+        this.newInfoList.sort((a, b) => {
+            // 將日期字符串轉換為日期對象進行比較
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+
+            // 記錄日期值
+            console.log("Date A:", dateA);
+            console.log("Date B:", dateB);
+
+            // 將比較結果反轉，以實現按日期從新到舊排序
+            return dateB.getTime() - dateA.getTime();
+        });
+    }
+},
+
     }
 
 }
@@ -120,7 +147,7 @@ export default {
         <img loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/06062d6238a6691ea533dbc096994639c6e1407d07d6742eb34d44f9d98fe771?"
             class="trumpet" />
-            <!-- 最新消息標題 -->
+        <!-- 最新消息標題 -->
         <div v-for="title in marqueeTitles" :key="title" class="marquee-item">{{ title }}</div>
     </div>
     <!-- 輪播 -->
@@ -182,33 +209,35 @@ export default {
 
 <style lang="scss" scoped>
 .marquee {
-    overflow: hidden;//溢出隱藏
-    white-space: nowrap;//避免換行，單行顯示
-    animation: marquee-scroll 20s linear infinite;//動畫時間為 20 秒，動畫效果為線性，且無限循環
+    overflow: hidden; //溢出隱藏
+    white-space: nowrap; //避免換行，單行顯示
+    animation: marquee-scroll 20s linear infinite; //動畫時間為 20 秒，動畫效果為線性，且無限循環
     height: 5vh;
     display: flex;
     align-items: center;
 }
 
-.trumpet{
+.trumpet {
     width: 30px;
     height: 30px;
     margin-right: 20px;
 }
 
 .marquee-item {
-    display: inline-block;//將元素設置為內聯塊元素，使其既具有塊元素的特性又不會破壞文本流
+    display: inline-block; //將元素設置為內聯塊元素，使其既具有塊元素的特性又不會破壞文本流
     margin-right: 20px;
     font-size: 20px;
-    color:#756a6a;
+    color: #756a6a;
 }
 
 @keyframes marquee-scroll {
-    from { //起始
+    from {
+        //起始
         transform: translateX(100%);
     }
 
-    to { //結束
+    to {
+        //結束
         transform: translateX(-100%);
     }
 }

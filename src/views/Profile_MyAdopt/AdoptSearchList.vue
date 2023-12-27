@@ -245,7 +245,8 @@ export default {
 
                 <span>地點</span>
                 <input type="text" v-model="inputLocation">
-                <button @click="search()">Search</button>
+                <i class="fa-solid fa-magnifying-glass"  @click="search()"></i>
+                <!-- <button @click="search()">Search</button> -->
 
             </div>
 
@@ -364,70 +365,60 @@ export default {
     align-items: center;
 
     .mapSearch {
-        width: 90%;
-        height: 80px;
+        width: 90vw;
+        height: 10vh;
         background-color: #fff;
-        border-radius: 3vw;
+        border-radius: 2vw;
         box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
-        margin-top: 70px;
-        margin-bottom: 50px;
+        margin-top: 5vh;
+        margin-bottom: 2vw;
         display: flex;
         align-items: center;
         position: relative;
 
         .searchArea {
-            width: 90%;
-            margin: 4vh 5vw;
+            width: 90vw;
             display: flex;
+            justify-content: center;
             align-items: center;
 
             span {
-                width: 50px;
-                font-size: 14pt;
+                font-size: 22pt;
                 font-weight: bold;
                 color: #978989;
+                margin-right: 2vw;
             }
 
             select {
-                width: 10%;
-                height: 30px;
+                width: 8%;
+                height: 40px;
+                font-size: 1.1vw;
                 border-radius: 2.5vw;
                 background-color: #DDDFEE;
                 border: none;
                 text-align: center;
-                margin-right: 30px;
+                margin-right: 4vw;
 
             }
 
-
-
             input {
                 width: 50%;
-                height: 30px;
+                height: 40px;
                 border-radius: 2.5vw;
                 background-color: #DDDFEE;
                 border: none;
                 padding-left: 2vw;
-                margin-right: 30px;
             }
 
-            button {
-                width: 120px;
-                height: 30px;
-                border-radius: 3.5vw;
-                border: none;
-                background-color: #E9D2A6;
-                color: white;
-                font-weight: 900;
-                font-size: 14pt;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-                // margin-left: 6vw;
-                position: absolute;
-                right: 6vw;
-                bottom: 3.6vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+            .fa-magnifying-glass {
+                color:  #C79CA4;
+                font-size: 30pt;
+                margin-left: 1.5vw;
+
+                &:hover{
+                    color: #762e3b;
+                    cursor: pointer;
+                }
             }
         }
     }
