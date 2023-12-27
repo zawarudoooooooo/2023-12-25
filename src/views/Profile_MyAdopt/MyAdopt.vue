@@ -114,7 +114,7 @@ export default{
         },
         rejectApply(item){
             const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
-
+            
             axios.post('http://localhost:8080/api/adoption/petInfo/adopterConfirm', {
                 petId: item.pet_id,
                 ownerId: item.user_id,
@@ -128,6 +128,8 @@ export default{
                         title: "取消認養成功！!",
                         icon: "success"
                     })
+                    
+                    this.send_noti_type6(item.user_id,user.userId,item.pet_id)
                 } else {
                     Swal.fire('出了些錯誤，請再次檢查');
                 }
@@ -135,6 +137,7 @@ export default{
             .catch(error => {
                 console.error(error);
             })
+            
         },
         confirmApply(item){
             const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
@@ -146,7 +149,7 @@ export default{
                 adopterRes: 2
             }
             console.log("the entered thing", thing)
-
+            
             axios.post('http://localhost:8080/api/adoption/petInfo/adopterConfirm', {
                 petId: item.pet_id,
                 ownerId: item.user_id,
@@ -160,6 +163,7 @@ export default{
                         title: "同意領養成功！!",
                         icon: "success"
                     })
+                    this.send_noti_type5(item.user_id,user.userId,item.pet_id)
                 } else {
                     Swal.fire('出了些錯誤，請再次檢查');
                 }
@@ -168,7 +172,47 @@ export default{
                 console.error(error);
             })
 
-        }
+        },
+        send_noti_type5(userId,sendId,petId){
+            console.log(userId);
+            console.log(sendId);
+            console.log(petId);
+            axios.post(`http://localhost:8080/api/notification/Noti`, {
+                notification: {
+                    userId: userId,
+                    sendId: sendId,
+                    petId: petId,
+                    notifiType: 5
+                }
+            }
+            )
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+        },
+        send_noti_type6(userId,sendId,petId){
+            console.log(userId);
+            console.log(sendId);
+            console.log(petId);
+            axios.post(`http://localhost:8080/api/notification/Noti`, {
+                notification: {
+                    userId: userId,
+                    sendId: sendId,
+                    petId: petId,
+                    notifiType: 6
+                }
+            }
+            )
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+        },
     }
 }
 </script>

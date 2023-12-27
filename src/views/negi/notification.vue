@@ -66,7 +66,8 @@ export default {
                     axios.get(`http://localhost:8080/api/adoption/petInfo/getAdoptPetInfoAndUserInfo?petId=${petId}`)
                         .then(response => {
                             console.log(response.data.vo.petInfo)
-                            this.emitGo("petInfo", response.data.vo.petInfo)
+                            sessionStorage.setItem("the pet", JSON.stringify(response.data.vo.petInfo))
+                            // this.emitGo("petInfo", response.data.vo.petInfo)
                             this.$router.push('/PetDetail');
                         })
                         .catch(error => {
@@ -77,10 +78,11 @@ export default {
                 case 3:
                     this.$router.push('/MyAdopt');
                     break;
-
-                case 5:
-                    console.log(sendId);
-                    this.$router.push({ name: 'ProfileForOther', params: { sendId } });
+                    
+                    case 5:
+                        console.log(sendId);
+                        this.$router.push('/MyPet');
+                    // this.$router.push({ name: 'ProfileForOther', params: { sendId } });
                     break;
 
                 default:
