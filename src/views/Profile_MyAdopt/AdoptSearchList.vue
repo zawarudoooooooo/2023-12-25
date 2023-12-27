@@ -28,101 +28,6 @@ export default {
                     pet_other_phote: "",
                     location: "",
                 },
-                {
-                    pet_id: "",
-                    user_id: "",
-                    pet_name: "Ruby",
-                    adopter_list: "",
-                    final_adopter: "admin",
-                    pet_breed: "",
-                    pet_status: "",
-                    adoption_status: "送養中",
-                    adoption_conditions: "",
-                    age: "三歲",
-                    vaccine: "",
-                    pet_profile: "",
-                    ligation: false,
-                    type: "貓",
-                    pet_photo: "",
-                    pet_other_phote: "",
-                    location: "",
-                },
-                {
-                    pet_id: "",
-                    user_id: "",
-                    pet_name: "Ruby",
-                    adopter_list: "",
-                    final_adopter: "",
-                    pet_breed: "",
-                    pet_status: "",
-                    adoption_status: "已送養",
-                    adoption_conditions: "",
-                    age: "三歲",
-                    vaccine: "",
-                    pet_profile: "",
-                    ligation: false,
-                    type: "狗",
-                    pet_photo: "",
-                    pet_other_phote: "",
-                    location: "",
-                },
-                {
-                    pet_id: "",
-                    user_id: "",
-                    pet_name: "Ruby",
-                    adopter_list: "",
-                    final_adopter: "",
-                    pet_breed: "",
-                    pet_status: "",
-                    adoption_status: "送養中",
-                    adoption_conditions: "",
-                    age: "三歲",
-                    vaccine: "",
-                    pet_profile: "",
-                    ligation: false,
-                    type: "狗",
-                    pet_photo: "",
-                    pet_other_phote: "",
-                    location: "",
-                },
-                {
-                    pet_id: "",
-                    user_id: "",
-                    pet_name: "Ruby",
-                    adopter_list: "",
-                    final_adopter: "",
-                    pet_breed: "",
-                    pet_status: "",
-                    adoption_status: "正常",
-                    adoption_conditions: "",
-                    age: "三歲",
-                    vaccine: "",
-                    pet_profile: "",
-                    ligation: false,
-                    type: "狗",
-                    pet_photo: "",
-                    pet_other_phote: "",
-                    location: "",
-                },
-                {
-                    pet_id: "",
-                    user_id: "",
-                    pet_name: "Ruby",
-                    adopter_list: "",
-                    final_adopter: "",
-                    pet_breed: "",
-                    pet_status: "",
-                    adoption_status: "送養中",
-                    adoption_conditions: "",
-                    age: "三歲",
-                    vaccine: "",
-                    pet_profile: "",
-                    ligation: false,
-                    type: "貓",
-                    pet_photo: "",
-                    pet_other_phote: "",
-                    location: "",
-                },
             ],
             userInfo: {
                 user_name: "短腿貓的爸",
@@ -140,15 +45,74 @@ export default {
                 user_photo: "",
             },
             inputType: "",
+            inputArea: "",
             inputLocation: "",
+            searchStatus: "送養中",
+            owner: {
+                userInfo: {
+                    user_name: "短腿貓的爸",
+                    account: "@wei0113__",
+                    password: "",
+                    email: "",
+                    phone: "",
+                    address: "",
+                    profile: "",
+                    age: 0,
+                    birthday: "",
+                    gender: "",
+                    job_occupation: "",
+                    family_status: "",
+                    user_photo: "",
+                },
+            },
+            adopter: {
+                userInfo: {
+                    user_name: "短腿貓的爸",
+                    account: "@wei0113__",
+                    password: "",
+                    email: "",
+                    phone: "",
+                    address: "",
+                    profile: "",
+                    age: 0,
+                    birthday: "",
+                    gender: "",
+                    job_occupation: "",
+                    family_status: "",
+                    user_photo: "",
+                },
+            },
         }
-    },
-    //進入頁面時，變更背景顏色
-    beforeCreate() {
     },
 
     mounted() {
         this.search()
+    },
+
+    computed: {
+        filteredCities() {
+            if (this.inputArea) {
+                switch (this.inputArea) {
+                    case "北部":
+                        return ["台北市", "新北市", "基隆市", "新竹市", "桃園市", "新竹縣", "宜蘭縣"];
+                    case "中部":
+                        return ["台中市", "苗栗縣", "彰化縣", "南投縣", "雲林縣"];
+                    case "南部":
+                        return ["高雄市", "台南市", "嘉義市", "嘉義縣", "屏東縣", "澎湖縣"];
+                    case "東部":
+                        return ["花蓮縣", "台東縣"];
+                    default:
+                        return [];
+                }
+            } else {
+                return [
+                    "台北市", "新北市", "基隆市", "新竹市", "桃園市", "新竹縣", "宜蘭縣",
+                    "台中市", "苗栗縣", "彰化縣", "南投縣", "雲林縣",
+                    "高雄市", "台南市", "嘉義市", "嘉義縣", "屏東縣", "澎湖縣",
+                    "花蓮縣", "台東縣"
+                ];
+            }
+        },
     },
 
 
@@ -162,9 +126,15 @@ export default {
             }
         },
         search(){
+            console.log("status", this.searchStatus)
+            console.log("type", this.inputType)
+            console.log("area", this.inputArea)
+            console.log("location", this.inputLocation)
             axios.get('http://localhost:8080/api/adoption/petInfo/getAdoptablePetList', {
                 params: {
+                    "status": this.searchStatus,
                     "type": this.inputType,
+                    "area": this.inputArea,
                     "location": this.inputLocation,
                 }
             })
@@ -223,7 +193,41 @@ export default {
             .catch(error => {
                 console.error(error);
             })
-        }
+        },
+        changeStatus(status){
+                this.searchStatus = status;
+                this.search();
+        },
+        getOwnerAndAdopterInfo(pet) {
+            console.log("x", pet)
+
+            const ownerId = pet.user_id;
+            const adopterId = pet.final_adopter_id;
+
+            const idString = `${ownerId},${adopterId}`;
+
+            axios.get('http://localhost:8080/api/adoption/userInfo/findAdopters', {
+                params: {
+                    idList: idString
+                }
+            })
+            .then(response => {
+                console.log(response.data)
+                const resList = response.data.voList;
+                for(let i = 0; i < resList.length; i++){
+                    if(resList[i].userInfo.userId == ownerId){
+                        this.owner = resList[i];
+                    } else if (resList[i].userInfo.userId == adopterId){
+                        this.adopter = resList[i];
+                    }
+                }
+                console.log("owner", this.owner)
+                console.log("adopter", this.adopter)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+        },
     }
 }
 </script>
@@ -232,26 +236,50 @@ export default {
 
         <div class="mapSearch">
 
-
             <div class="searchArea">
 
+                <div class="searchAreaSelect">
+                    <span>種類</span>
+                    <select v-model="inputType">
+                        <option value=""></option>
+                        <option value="貓">貓</option>
+                        <option value="狗">狗</option>
+                    </select>
+                    
+                    <span>區域</span>
+                    <select v-model="inputArea">
+                        <option value=""></option>
+                        <option value="北部">北部</option>
+                        <option value="中部">中部</option>
+                        <option value="南部">南部</option>
+                        <option value="東部">東部</option>
+                    </select>
 
-                <span>種類</span>
-                <select v-model="inputType">
-                    <option value=""></option>
-                    <option value="貓">貓</option>
-                    <option value="狗">狗</option>
-                </select>
+                    <span>縣市</span>
+                    <select v-model="inputLocation">
+                        <option value=""></option>
+                        <option v-for="cityOption in filteredCities" :value="cityOption">
+                            {{ cityOption }}
+                        </option>
+                    </select>
+                </div>
+                
 
-                <span>地點</span>
-                <input type="text" v-model="inputLocation">
-                <i class="fa-solid fa-magnifying-glass"  @click="search()"></i>
-                <!-- <button @click="search()">Search</button> -->
+                <div class="searchAreaIcon">
+                    <i class="fa-solid fa-magnifying-glass"  @click="search()"></i>
+                </div>
 
             </div>
 
 
         </div>
+
+
+        <div class="statusArea">
+            <button class="btn-choose" @click="changeStatus('送養中')" :class="{btnRedStyle: searchStatus == '送養中'}">送養中</button>
+            <button class="btn-choose" @click="changeStatus('已送養')" :class="{btnGreenStyle: searchStatus == '已送養'}">已送養</button>
+        </div>
+
 
         <div class="cardArea">
 
@@ -288,8 +316,8 @@ export default {
             </div> -->
 
 
-            <!-- new card -->
-            <div class="testCardArea" v-for="(item, index) in pets">
+            <!-- new card for 送養中 -->
+            <div v-show="searchStatus == '送養中'" class="testCardArea" v-for="(item, index) in pets">
                 <div class="testCard" @click="emitGo(item)">
                         <div class="cardTop">
                             <div :class="{'yellowCard' : item.adoption_status == '正常'}, {'redCard' : item.adoption_status == '送養中'}, {'greenCard' : item.adoption_status == '已送養'}" class="circle">
@@ -346,6 +374,118 @@ export default {
                 </div> -->
             </div>
 
+            <!-- new card for 已送養 -->
+            <div v-show="searchStatus == '已送養'" class="testCardArea" v-for="(item, index) in pets">
+                <div class="testCard">
+                        <div class="cardTop">
+                            <div :class="{'yellowCard' : item.adoption_status == '正常'}, {'redCard' : item.adoption_status == '送養中'}, {'greenCard' : item.adoption_status == '已送養'}" class="circle">
+                                <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path :d="getPath(item.type)" fill="white"/>
+                                </svg>
+                            </div>
+                            <h4 class="petNameClick" style="color: #978989;">{{ item.pet_name }}</h4>
+                        </div>
+                    <div class="cardMiddle">
+                        <img style="height: 240px; border-radius: 15px;"  :src="'data:image/jpeg;base64,' + item.pet_photo" alt="">
+                        <div class="additionalInfo">
+                            <p>{{ item.pet_status }}</p>
+
+                            <div class="btnAreaForAdopted">
+                                <button class="btn btn-specialBlue" data-bs-toggle="modal" :data-bs-target="'#detailModal'+index"
+                                    @click="getOwnerAndAdopterInfo(item)">
+                                    <i class="fa-solid fa-circle-info" style="color: white;"></i>
+                                    <p style="color: white;">查看詳細</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" :id="'detailModal'+index" data-bs-backdrop="true" data-bs-keyboard="true"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close" @click="closeModal()"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="modalBodyTop">
+                                    <div class="modalBodyTopTitle">
+                                        <h5>送養人</h5>
+                                    </div>
+                                    <div class="usernameAndid">
+                                        <p>{{ this.owner.userInfo.userName }}</p>
+                                        <img :src="'data:image/jpeg;base64,' + this.owner.userInfo.userPhoto" alt="">
+                                        <p>@{{ this.owner.userInfo.account }}</p>
+                                    </div>
+                                    <div class="modalBodyLast">
+                                        <div class="modalBodyLastShow">
+                                            <div class="modalBodyLastTitle">
+                                                <h6>{{ this.owner.userInfo.userName }}的寵物</h6>
+                                            </div>
+                                            <!-- v-for -->
+                                            <div class="modalBodyLastPet">
+                                                <div class="showCard" v-for="(pet, index) in this.owner.petInfoList">
+                                                    <div :class="{ 'yellowCard': pet.adoption_status == '正常' }, { 'redCard': pet.adoption_status == '送養中' }, { 'greenCard': pet.adoption_status == '已送養' }"
+                                                        class="middleCard">
+                                                        <svg viewBox="10 0 140 110" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path :d="getPath(pet.type)" fill="white" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modalBodyTop">
+                                    <div class="modalBodyTopTitle">
+                                        <h5>領養人</h5>
+                                    </div>
+                                    <div class="usernameAndid">
+                                        <p>{{ this.adopter.userInfo.userName }}</p>
+                                        <img :src="'data:image/jpeg;base64,' + this.adopter.userInfo.userPhoto" alt="">
+                                        <p>@{{ this.adopter.userInfo.account }}</p>
+                                    </div>
+                                    <div class="modalBodyLast">
+                                        <div class="modalBodyLastShow">
+                                            <div class="modalBodyLastTitle">
+                                                <h6>{{ this.adopter.userInfo.userName }}的寵物</h6>
+                                            </div>
+                                            <!-- v-for -->
+                                            <div class="modalBodyLastPet">
+                                                <div class="showCard" v-for="(pet, index) in this.adopter.petInfoList">
+                                                    <div :class="{ 'yellowCard': pet.adoption_status == '正常' }, { 'redCard': pet.adoption_status == '送養中' }, { 'greenCard': pet.adoption_status == '已送養' }"
+                                                        class="middleCard">
+                                                        <svg viewBox="10 0 140 110" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path :d="getPath(pet.type)" fill="white" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-specialBlue modal-btn" data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                    <i class="fa-solid fa-chevron-right" style="color: white;"></i>
+                                    <p style="color: white;">返回</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            
         </div>
     </div>
 </template>
@@ -358,7 +498,7 @@ export default {
 
 .bgArea {
     width: 100vw;
-    height: 100vh;
+    height: auto;
     background-color: $giveBgcLight;
     display: flex;
     flex-direction: column;
@@ -366,21 +506,27 @@ export default {
 
     .mapSearch {
         width: 90vw;
-        height: 10vh;
+        height: 120px;
         background-color: #fff;
         border-radius: 2vw;
         box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
-        margin-top: 5vh;
-        margin-bottom: 2vw;
+        margin-top: 80px;
+        margin-bottom: 30px;
         display: flex;
         align-items: center;
-        position: relative;
 
         .searchArea {
             width: 90vw;
+            height: 90px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            padding: 10px 50px 10px 50px;
+            .searchAreaSelect{
+                width: 80%;
+                display: flex;
+                align-items: center;
+            }
 
             span {
                 font-size: 22pt;
@@ -390,7 +536,7 @@ export default {
             }
 
             select {
-                width: 8%;
+                width: 15%;
                 height: 40px;
                 font-size: 1.1vw;
                 border-radius: 2.5vw;
@@ -401,31 +547,61 @@ export default {
 
             }
 
-            input {
-                width: 50%;
-                height: 40px;
-                border-radius: 2.5vw;
-                background-color: #DDDFEE;
-                border: none;
-                padding-left: 2vw;
-            }
-
             .fa-magnifying-glass {
                 color:  #C79CA4;
                 font-size: 30pt;
-                margin-left: 1.5vw;
+                margin-right: 3vw;
 
                 &:hover{
-                    color: #762e3b;
+                    color: #c25367;
+                    transition: 0.5s;
                     cursor: pointer;
                 }
             }
         }
     }
 
+    .statusArea{
+        width: 90%;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 30px;
+        .btn-choose{
+            background-color: transparent;
+            border: none;
+            font-size: 18pt;
+            // color:  #C79CA4;
+            color: #978989;
+            // 下劃線
+            text-decoration: none;
+            background-image: linear-gradient(#ffffff, #ffffff);
+            background-position: left bottom;
+            background-size: 0 3px; // 設定漸變的大小，一開始為 0
+            background-repeat: no-repeat;
+            transition: background-size 0.15s linear; //背景的大小會在 0.15 秒內以線性方式變成 100%
+            z-index: 1;
+            &:hover {
+                transition: 0.7s;
+                background-size: 100% 3px;
+            }
+        }
+        .btnRedStyle{
+            border-bottom: $specialRed 2px solid;
+            // color: #c25367;
+            color:  #C79CA4;
+        }
+        .btnGreenStyle{
+            border-bottom: $adoption 2px solid;
+            color: #B2D1C0;
+        }
+    }
+
     .cardArea {
         width: 90%;
         height: auto;
+        min-height: 40vh;
         background-color: #fff;
         border-radius: 3vw;
         box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
@@ -436,167 +612,113 @@ export default {
         justify-content: center;
         padding: 20px 10px 20px 10px;
 
-        .showCard {
-            width: 300px;
-            height: 380px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border-radius: 30px;
-            padding: 20px 20px 20px 20px;
-            margin: 20px 15px 25px 15px;
-            background-color: white;
-            color: #978989;
-            font-size: 14pt;
-            box-shadow: 0 0 3px 2px lightgray;
-            color: white;
+        // .showCard {
+        //     width: 300px;
+        //     height: 380px;
+        //     display: flex;
+        //     flex-direction: column;
+        //     align-items: center;
+        //     border-radius: 30px;
+        //     padding: 20px 20px 20px 20px;
+        //     margin: 20px 15px 25px 15px;
+        //     background-color: white;
+        //     color: #978989;
+        //     font-size: 14pt;
+        //     box-shadow: 0 0 3px 2px lightgray;
+        //     color: white;
 
-            &:hover {
-                box-shadow: 3px 3px 5px gray;
-                transition: 0.8s;
-            }
+        //     &:hover {
+        //         box-shadow: 3px 3px 5px gray;
+        //         transition: 0.8s;
+        //     }
 
-            .cardTop {
-                width: 90%;
-                height: 50px;
-                display: flex;
-                align-items: center;
-                margin-bottom: 20px;
+        //     .cardTop {
+        //         width: 90%;
+        //         height: 50px;
+        //         display: flex;
+        //         align-items: center;
+        //         margin-bottom: 20px;
 
-                .circle {
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    color: white;
+        //         .circle {
+        //             width: 50px;
+        //             height: 50px;
+        //             border-radius: 50%;
+        //             display: flex;
+        //             justify-content: center;
+        //             align-items: center;
+        //             color: white;
 
-                    svg {
-                        width: 50px;
-                        height: 45px;
-                    }
-                }
+        //             svg {
+        //                 width: 50px;
+        //                 height: 45px;
+        //             }
+        //         }
 
-                .petNameClick {
-                    &:hover {
-                        color: #978989;
-                        text-decoration: underline;
-                        transition: 0.3s;
-                    }
-                }
-            }
+        //         .petNameClick {
+        //             &:hover {
+        //                 color: #978989;
+        //                 text-decoration: underline;
+        //                 transition: 0.3s;
+        //             }
+        //         }
+        //     }
 
-            .cardMiddle {
-                width: 100%;
-                height: 250px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
+        //     .cardMiddle {
+        //         width: 100%;
+        //         height: 250px;
+        //         display: flex;
+        //         flex-direction: column;
+        //         align-items: center;
 
-                .cardMiddlePhoto {
-                    width: 90%;
-                    height: 120px;
-                    background-color: rgb(221, 234, 245);
-                }
+        //         .cardMiddlePhoto {
+        //             width: 90%;
+        //             height: 120px;
+        //             background-color: rgb(221, 234, 245);
+        //         }
 
-                .cardMiddleDescription {
-                    width: 90%;
-                    height: 100px;
-                    color: #978989;
-                    font-size: 12pt;
-                    padding: 5px 5px 5px 5px;
-                }
-            }
+        //         .cardMiddleDescription {
+        //             width: 90%;
+        //             height: 100px;
+        //             color: #978989;
+        //             font-size: 12pt;
+        //             padding: 5px 5px 5px 5px;
+        //         }
+        //     }
 
-            .cardLast {
-                width: 85%;
-                height: 50px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
+        //     .cardLast {
+        //         width: 85%;
+        //         height: 50px;
+        //         display: flex;
+        //         justify-content: space-between;
+        //         align-items: center;
 
-                .btn {
-                    width: 100px;
-                    height: 30px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 9pt;
-                    padding-left: 10px;
-                    padding-right: 10px;
+        //         .btn {
+        //             width: 100px;
+        //             height: 30px;
+        //             display: flex;
+        //             justify-content: center;
+        //             align-items: center;
+        //             font-size: 9pt;
+        //             padding-left: 10px;
+        //             padding-right: 10px;
 
-                    i {
-                        margin-right: 5px;
-                    }
-                }
+        //             i {
+        //                 margin-right: 5px;
+        //             }
+        //         }
 
-                .btn-green {
-                    background-color: $adoption;
+        //         .btn-green {
+        //             background-color: $adoption;
 
-                    &:hover {
-                        background-color: $adoptionBgc;
-                        transition: 0.3s;
-                    }
-                }
-            }
+        //             &:hover {
+        //                 background-color: $adoptionBgc;
+        //                 transition: 0.3s;
+        //             }
+        //         }
+        //     }
 
-        }
+        // }
 
-    }
-
-    // modal
-    .modal-content {
-        width: 600px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 10px 10px 10px 10px;
-
-        .modal-header {
-            width: 90%;
-            display: flex;
-            justify-content: end;
-        }
-
-        .modal-body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            color: #978989;
-        }
-
-        .modal-footer {
-            width: 90%;
-            display: flex;
-            justify-content: center;
-            ;
-            align-items: center;
-
-            .btn-green {
-                background-color: $adoption;
-
-                &:hover {
-                    background-color: $adoptionBgc;
-                    transition: 0.3s;
-                }
-            }
-
-            .modal-btn {
-                width: 120px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding-left: 10px;
-                padding-right: 10px;
-                font-size: 12pt;
-                margin: 5px;
-
-                i {
-                    margin-right: 5px;
-                }
-            }
-        }
     }
 
 }
@@ -686,7 +808,25 @@ export default {
                         
                     }
                 }
-                
+                .btnAreaForAdopted{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 10px 0px 10px 0px;
+                    button {
+                        width: 100px;
+                        height: 30px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding-left: 10px;
+                        padding-right: 10px;
+                        font-size: 10pt;
+                        i {
+                            margin-right: 5px;
+                        }
+                    }
+                }
             }
         }
 
@@ -716,5 +856,140 @@ export default {
 }
 .greenCard{
     background-color: $adoption;
+}
+
+
+// modal
+.modal-content {
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 10px 10px 10px;
+
+    .modal-header {
+        width: 90%;
+        display: flex;
+        justify-content: end;
+    }
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .modalBodyTop {
+            width: 450px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-bottom: 20px;
+
+            .usernameAndid {
+                width: 400px;
+                height: 60px;
+                background-color: white;
+                border-radius: 10px;
+                padding: 10px 10px 10px 10px;
+                box-shadow: 3px 3px 3px 3px gray;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 16pt;
+                margin-bottom: 20px;
+
+                i {
+                    color: #E9D2A6;
+                    font-size: 35pt;
+                    position: absolute;
+                    left: 200px;
+                }
+
+                img{
+                    height: 50px;
+                    width: 50px;
+                    border-radius: 50%;
+                    position: absolute;
+                    left: 200px;
+                }
+            }
+        }
+
+        .modalBodyLast {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .modalBodyLastShow {
+                width: 400px;
+                height: auto;
+                min-height: 80px;
+                background-color: white;
+                border-radius: 10px;
+                padding: 10px 10px 10px 10px;
+                box-shadow: 3px 3px 3px 3px gray;
+                font-size: 12pt;
+                margin-bottom: 20px;
+
+                .modalBodyLastPet {
+                    width: 100%;
+                    height: auto;
+                    display: flex;
+                    justify-content: center;
+                    flex-wrap: wrap;
+
+                    .middleCard {
+                        width: 65px;
+                        height: 50px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border-radius: 10px;
+                        margin: 10px 5px 5px 5px;
+                        color: white;
+
+                        svg {
+                            width: 50px;
+                            height: 45px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .modal-footer {
+        width: 100%;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .btn-green {
+            background-color: $adoption;
+
+            &:hover {
+                background-color: $adoptionBgc;
+                transition: 0.3s;
+            }
+        }
+
+        .modal-btn {
+            width: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: 12pt;
+            margin: 5px;
+
+            i {
+                margin-right: 5px;
+            }
+        }
+    }
 }
 </style>
