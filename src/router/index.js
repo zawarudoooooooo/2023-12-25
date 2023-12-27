@@ -83,7 +83,30 @@ const router = createRouter({
       name: 'AdoptPetDetail',
       component: () => import('../views/Profile_MyAdopt/AdoptPetDetail.vue'),
     },
+<<<<<<< HEAD
 
+=======
+    {
+      path: '/edit_myArticle',
+      name: 'edit_myArticle',
+      component: () => import('../views/negi/edit_myArticle.vue'),
+    },
+    {
+      path: '/pre_myArticle',
+      name: 'pre_myArticle',
+      component: () => import('../views/negi/pre_myArticle.vue'),
+    },
+    {
+      path: '/view_Article',
+      name: 'view_Article',
+      component: () => import('../views/negi/view_Article.vue'),
+    },
+    {
+      path: '/create_Article',
+      name: 'create_Article',
+      component: () => import('../views/negi/create_Article.vue'),
+    },
+>>>>>>> Xiufu
     //從這裡開始路由是yxz的
     {
       path: '/PlatformEntrance',
@@ -212,6 +235,12 @@ const router = createRouter({
       path: '/ChitChatting',
       name: 'ChitChatting',
       component: () => import('../views/ChitChatting.vue'),
+    },
+    //怕打亂版型先在這邊做更新
+    {
+      path: '/create_Brticle',
+      name: 'create_Brticle',
+      component: () => import('@/views/negi/create_Brticle.vue'),
     },
   ]
 })
