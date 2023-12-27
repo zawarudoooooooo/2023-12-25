@@ -156,22 +156,25 @@ export default {
             if(user == null){
                 Swal.fire('請先登錄！');
                 return;
-            } else {
-                Swal.fire({
-                    title: "確定要申請領養嗎？",
-                    icon: "question",
-                    showCancelButton: true,
-                    confirmButtonText: "確定",
-                    cancelButtonText: "取消"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.confirmApply(item, user)
-                    }
-                });
-                return;
+            // } else {
+            //     Swal.fire({
+            //         title: "確定要申請領養嗎？",
+            //         icon: "question",
+            //         showCancelButton: true,
+            //         confirmButtonText: "確定",
+            //         cancelButtonText: "取消"
+            //     }).then((result) => {
+            //         if (result.isConfirmed) {
+            //             this.confirmApply(item, user)
+            //         }
+            //     });
+            //     return; 
             }
+
         },
-        confirmApply(item, user){
+        confirmApply(item){
+
+            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
 
             axios.post('http://localhost:8080/api/adoption/petInfo/adoptPet', {
                 petId: item.pet_id,
@@ -184,6 +187,8 @@ export default {
                         title: "申請領養成功！!",
                         icon: "success"
                     })
+                    let adopterId = JSON.parse(sessionStorage.getItem("foundUserInfo")).userId
+                    this.send_noti_type1(response.data.petInfo.user_id,adopterId,response.data.petInfo.pet_id)
                 } else if (response.data.rtnCode == 'THE_USER_HAS_ALREADY_ADOPTED_THE_PET'){
                     Swal.fire('您已認養過此寵物！');
                 } else {
@@ -194,6 +199,7 @@ export default {
                 console.error(error);
             })
         },
+
         changeStatus(status){
                 this.searchStatus = status;
                 this.search();
@@ -228,6 +234,28 @@ export default {
                 console.error(error)
             })
         },
+
+        send_noti_type1(userId,sendId,petId){
+            console.log(userId);
+            console.log(sendId);
+            console.log(petId);
+            axios.post(`http://localhost:8080/api/notification/Noti`, {
+                notification: {
+                    userId: userId,
+                    sendId: sendId,
+                    petId: petId,
+                    notifiType: 1
+                }
+            }
+            )
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+        }
+
     }
 }
 </script>
@@ -333,7 +361,7 @@ export default {
                             <p>{{ item.pet_status }}</p>
 
                             <div class="btnArea">
-                                <button class="btn btn-specialRed modal-btn" data-bs-toggle="modal" data-bs-target="#confirmModal"  @click="adoptionApply(item)">
+                                <button class="btn btn-specialRed modal-btn" data-bs-toggle="modal" :data-bs-target="'#confirmModal'+index" @click="adoptionApply(item)">
                                     <i class="fa-solid fa-hand-holding-heart" style="color: white"></i>
                                     <p style="color: white;">申請領養</p>
                                 </button>
@@ -349,7 +377,7 @@ export default {
                     </div>
                 </div>
                 <!-- confirm  Modal -->
-                <!-- <div class="modal fade" id="confirmModal" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1"
+                <div class="modal fade" :id="'confirmModal'+index" data-bs-backdrop="true" data-bs-keyboard="true" tabindex="-1"
                         aria-labelledby="staticBackdropLabel" aria-hidden="true" ref="confirmModal">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -364,14 +392,14 @@ export default {
                                         <i class="fa-solid fa-chevron-right" style="color: white;"></i>
                                         <p style="color: white;">再想一下</p>
                                     </button>
-                                    <button class="btn btn-specialRed modal-btn">
+                                    <button class="btn btn-specialRed modal-btn" data-bs-dismiss="modal" aria-label="Close" @click="confirmApply(item)">
                                         <i class="fa-solid fa-hand-holding-heart" style="color: white;"></i>
                                         <p style="color: white;">確定申請</p>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                </div> -->
+                </div>
             </div>
 
             <!-- new card for 已送養 -->
