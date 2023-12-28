@@ -15,7 +15,9 @@ export default {
             //最後某筆數留言
             lastFiveComments: null,
 
-            showAllComments: false // 控制是否顯示所有留言的變數
+            showAllComments: false, // 控制是否顯示所有留言的變數
+
+            integratedData: null,
         }
     },
 
@@ -68,12 +70,77 @@ export default {
                             });
 
                             // 在這裡處理整合後的資料 integratedData
+
+
+                            fetch('http://localhost:8080/api/adoption/searchLikeByUserId?userId=' + this.foundUserInfo.userId, {
+                                method: 'GET',
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    const likesRecordList = data.likesRecordList;
+
+                                    // 將 obtainedLikesRecords 整合到 integratedData 中
+                                    integratedData.forEach(post => {
+                                        const found = likesRecordList.find(record => record.postId === post.serialNo);
+                                        post.liked = !!found; // 設置 liked 屬性為布爾值，表示是否按過讚
+                                    });
+                                });
                             console.log(integratedData);
+                            this.integratedData=integratedData
                             console.log(this.postSerialNo)
                             const specificUserArticles = integratedData.filter(entry => entry.serialNo === this.postSerialNo);
                             this.myArticle = specificUserArticles
                             console.log(this.myArticle)
                         });
+                });
+        },
+
+        createLike() {
+            
+            const requestBody = {
+                likesRecord: {
+                    postId: this.postSerialNo,
+                    userId: this.foundUserInfo.userId
+                }
+            };
+
+            fetch(`http://localhost:8080/api/adoption/createLike`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    const postToUpdate = this.integratedData.find(post => post.serialNo === this.postSerialNo);
+                    if (postToUpdate) {
+                        // 如果当前帖子已经被喜欢，执行取消喜欢操作
+                        if (postToUpdate.liked) {
+                            // 在这里实现取消喜欢的逻辑
+                            postToUpdate.liked = false; // 更新喜欢状态
+                            postToUpdate.likesCount--; // 减少喜欢数
+                        } else {
+                            // 否则，执行喜欢操作
+                            postToUpdate.liked = true; // 更新喜欢状态
+                            postToUpdate.likesCount++; // 增加喜欢数
+                        }
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        },
+        searchLikeByPostId() {
+            fetch(`http://localhost:8080/api/adoption/searchLikeByPostId?postId=${this.postSerialNo}`, {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
                 });
         },
 
@@ -226,8 +293,9 @@ export default {
                             <div class="div-23">
                                 <span>Comment</span>
                                 <div class="likesCount">
-                                    <i class="fa-regular fa-heart"></i>
-                                    <span>{{ this.myArticle[0].likesCount }}</span>
+                                    <i :class="{ 'fa-solid fa-heart': this.myArticle[0].liked, 'fa-regular fa-heart': !this.myArticle[0].liked }"
+                                        @click="createLike()"></i>
+                                    <span @click="searchLikeByPostId()">{{ this.myArticle[0].likesCount }}</span>
                                 </div>
                             </div>
                             <div class="div-24"></div>
@@ -603,7 +671,7 @@ export default {
 }
 
 .div-23 {
-    width:100%;
+    width: 100%;
     padding-right: 45px;
     color: #978989;
     align-self: start;
