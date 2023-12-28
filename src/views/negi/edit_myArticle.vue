@@ -1,4 +1,6 @@
 <script>
+import view_Article from './view_Article.vue';
+import create_Article from './create_Article.vue';
 import ArticleDashBoard from '../../components/ArticleDashBoard.vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -7,13 +9,12 @@ import 'cropperjs/dist/cropper.css';
 export default {
     data(){
         return{
-            
-            dog: "M149.365 19.2302H130.094L127.938 15.0094C127.138 13.4416 125.908 12.1231 124.386 11.2015C122.864 10.2799 121.11 9.79175 119.321 9.79163H103.176L94.9617 1.74528C91.9236 -1.22786 86.7356 0.878115 86.7356 5.08121V49.2772L125.277 62.7595V52.265H134.912C145.556 52.265 154.182 43.8146 154.182 33.388V23.9494C154.182 21.342 152.026 19.2302 149.365 19.2302ZM115.641 33.388C112.98 33.388 110.824 31.2761 110.824 28.6687C110.824 26.0613 112.98 23.9494 115.641 23.9494C118.303 23.9494 120.459 26.0613 120.459 28.6687C120.459 31.2761 118.303 33.388 115.641 33.388ZM28.9242 56.9843C23.6128 56.9843 19.289 52.7488 19.289 47.5458C19.289 42.3339 14.9742 38.1072 9.65379 38.1072C4.33333 38.1072 0.0185547 42.3339 0.0185547 47.5458C0.0185547 59.8336 8.09709 70.213 19.289 74.1212C19.289 74.1212 19.289 134.604 19.289 137.212C19.289 139.819 21.4449 141.931 24.1066 141.931H43.3771C46.0388 141.931 48.1947 139.819 48.1947 137.212V104.177H96.3709V137.212C96.3709 139.819 98.5267 141.931 101.188 141.931H120.459C123.121 141.931 125.277 139.819 125.277 137.212V72.7791L80.1265 56.9843H28.9242Z",
-            cat: "M83.3225 39.3704C77.5361 39.3704 52.6931 39.847 36.7016 60.0611V39.3704C36.7016 26.6261 24.3546 16.2603 9.17467 16.2603C4.108 16.2603 -0.000976562 19.7099 -0.000976562 23.9636C-0.000976562 28.2173 4.108 31.667 9.17467 31.667C14.2328 31.667 18.3503 35.1239 18.3503 39.3704V100.997C18.3503 109.495 26.5797 116.404 36.7016 116.404H87.1677C89.7025 116.404 91.7555 114.68 91.7555 112.552V108.701C91.7555 104.447 87.6466 100.997 82.5799 100.997H73.4042L110.107 77.8872V112.552C110.107 114.68 112.16 116.404 114.695 116.404H123.87C126.405 116.404 128.458 114.68 128.458 112.552V62.9282C125.508 63.571 122.468 64.0211 119.282 64.0211C101.559 64.0211 86.7319 53.417 83.3225 39.3704ZM128.458 16.2603H110.107L91.7555 0.853516V33.2077C91.7555 45.9712 104.08 56.3178 119.282 56.3178C134.485 56.3178 146.809 45.9712 146.809 33.2077V0.853516L128.458 16.2603ZM107.813 35.5187C105.278 35.5187 103.225 33.795 103.225 31.667C103.225 29.5389 105.278 27.8153 107.813 27.8153C110.348 27.8153 112.401 29.5389 112.401 31.667C112.401 33.795 110.348 35.5187 107.813 35.5187ZM130.752 35.5187C128.217 35.5187 126.164 33.795 126.164 31.667C126.164 29.5389 128.217 27.8153 130.752 27.8153C133.287 27.8153 135.34 29.5389 135.34 31.667C135.34 33.795 133.287 35.5187 130.752 35.5187Z",
-        
+
             foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
+            postSerialNo: JSON.parse(sessionStorage.getItem('postSerialNo')),
             foundUser: null,
             userInfoList: null,
+            updateDataList:null,
             article: {
                     userId: '',
                     userName: '',
@@ -26,6 +27,9 @@ export default {
             foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
             foundUser: null,
 
+            imgChA: false,
+            imgChB: true,
+
             //發文變數
             title: null,
             postContent: null,
@@ -37,14 +41,104 @@ export default {
         }
     },
     components:{
+        view_Article, create_Article,
         ArticleDashBoard,
         VueCropper,
     },
     mounted() {
+        this.groupAll()
         this.searchAllUserInfo()
         this.userInfo = JSON.parse(sessionStorage.getItem('foundUserInfo'));
     },
     methods:{
+        // A是更新後的圖片 B是更新前的圖片
+        // A預設是不顯示而B是顯示的
+        showImgChange(){
+            if (!this.imgChA) {
+                this.imgChA = true;
+                this.imgChB = true;
+            }
+        },
+        //抓使用者+文章資料
+        groupAll() {
+            fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const userInfoList = data.userInfoList;
+
+                    fetch('http://localhost:8080/api/adoption/searchAllPost', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            const forumEntranceList = data.forumEntranceList;
+
+                            // 使用 reduce 方法整合資訊
+                            const integratedData = forumEntranceList.map(forumEntry => {
+                                const userInfo = userInfoList.find(user => user.userId === forumEntry.userId);
+
+                                // 創建一個新的物件整合所需的資訊
+                                return {
+                                    postContent: forumEntry.postContent,
+                                    postPhoto: forumEntry.postPhoto,
+                                    serialNo: forumEntry.serialNo,
+                                    title: forumEntry.title,
+                                    userId: forumEntry.userId,
+                                    userName: userInfo.userName,
+                                    userPhoto: userInfo.userPhoto,
+                                    account: userInfo.account,
+                                };
+                            });
+
+                            // 在這裡處理整合後的資料 integratedData
+                            console.log(integratedData);
+                            console.log(this.postSerialNo)
+                            const specificUserArticles = integratedData.filter(entry => entry.serialNo === this.postSerialNo);
+                            this.myArticle = specificUserArticles
+                            console.log(this.myArticle)
+                        });
+                });
+        },
+        //更新文章
+        updateArticle(){
+            const updateData = {
+                serialNo: this.postSerialNo,
+                title: this.title,
+                postContent: this.postContent,
+                postPhoto: this.imageUrl.split(',')[1],
+            };
+            const requestData = {
+                forumEntrance: updateData
+            };
+            fetch('http://localhost:8080/api/adoption/updatePost', {
+                method:'Post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(data=>{
+                console.log(data);
+                this.updateDataList = data.updateDataList;
+                console.log(this.updateDataList);
+                Swal.fire({
+                    title: "成功更新貼文",
+                    icon: "success"
+                })
+            })
+            .catch(error => {
+                    console.error('Error publishing post:', error);
+            });
+        },
+
         //拿user資料
         searchAllUserInfo() {
             fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
@@ -77,6 +171,8 @@ export default {
                 }
             });
         },
+
+        //上傳檔案
         handleFileChange(event) {
             const file = event.target.files[0];
             const reader = new FileReader();
@@ -104,7 +200,7 @@ export default {
 
 <!-- 發文的人編輯自己發的文章 -->
 <template>
-    <div class="all">
+    <div class="all" v-if="myArticle">
         <!-- <div class="div-2"></div> -->
         <div class="out_contain">
             <div class="in_contain">
@@ -115,7 +211,7 @@ export default {
                     <div class="in_article_area">
                         <div class="function_icon_area">
                             <i class="fa-solid fa-right-from-bracket img-2"></i>
-                            <i class="fa-solid fa-floppy-disk img-3"></i>
+                            <i class="fa-solid fa-floppy-disk img-3" @click="updateArticle"></i>
                         </div>
                         <div class="article">
                             <div class="poster_area">
@@ -124,7 +220,7 @@ export default {
                                         <div class="div-14">
                                             <div class="profileArea" v-if="foundUser">
                                                 <img v-if="this.foundUser.userPhoto" :src="this.foundUser.filePath" alt=""
-                                                        style="border-radius: 50%; border: 3px solid;" height="100px" width="100px">
+                                                    style="border-radius: 50%; border: 3px solid;" height="100px" width="100px">
                                                 <div class="poster_data">
                                                     <p class="poster_name">{{ foundUser.userName }}</p>
                                                     <div class="toMid">
@@ -140,16 +236,23 @@ export default {
                                 </div>
                             </div>
                             <div class="div-20"></div>
-                            <input class="article_title" type="text" placeholder="輸入標題" v-model="title"/>
-                            <input type="file" @change="handleFileChange">
+                            <input class="article_title" type="text"  v-bind:placeholder="this.myArticle[0].title" v-model="title"/>
+                            <input type="file" @change="handleFileChange" @click="showImgChange">
                     <div class="cropper-modal" v-if="showImageCropper">
                         <vue-cropper v-if="imageUrl" :src="imageUrl" :key="imageUrl" ref="cropper" class="cropper"></vue-cropper>
                         <button class="btm" @click="cancelImageCrop">取消</button>
                         <button class="btm" @click="saveCroppedImage">保存</button>
                     </div>
-                    <img :src="croppedImageUrl" alt="" class="cropper-img">
+                    <!-- 更新的圖 更新上去後出現 -->
+                    <div class="imgChA" id="imgChA" v-if="imgChA">
+                        <img :src="croppedImageUrl" alt="" class="cropper-img">
+                    </div>
+                    <!-- 原本的圖 更新上去後消失-->
+                    <div class="imgChB" id="imgChB" v-if="!imgChA && imgChB">
+                        <img class="article_img" :src="'data:image/jpeg;base64,' + this.myArticle[0].postPhoto" alt="">
+                    </div>
                             <div class="article_contain">
-                                <textarea class="article_text" v-model="postContent" type="text" placeholder="輸入內文"></textarea>
+                                <textarea class="article_text" v-model="postContent" type="text"  v-bind:placeholder="this.myArticle[0].postContent"></textarea>
                             </div>
                         </div>
                     </div>
@@ -163,6 +266,14 @@ export default {
 
 <style scoped>
 @import '../../assets/RStyle.scss';
+.fa-solid :hover{
+    width: 120%;
+    height: 120%;
+}
+.fa-solid :active{
+    width: 110%;
+    height: 110%;
+}
 .cropper{
     width: 360px;
     height: 600px;
@@ -481,7 +592,8 @@ export default {
     aspect-ratio: 0.91;
     object-fit: contain;
     object-position: center;
-    width: 369px;
+    width: 480px;
+    height: 600px;
     box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
     overflow: hidden;
     align-self: start;
