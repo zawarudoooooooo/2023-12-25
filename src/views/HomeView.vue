@@ -48,7 +48,7 @@ export default {
                 .then(data => {
                     this.newInfoList = data.newInfoList
                         // 過濾出 type 為 "科普" 的資料
-                        .filter(info => info.type === '新聞')
+                        .filter(info => info.type === '最新消息')
                         // 針對過濾出來的資料處理圖片，如果有圖片，則加上前綴，形成完整的 Base64 圖片數據
                         .map(info => {
                             if (info.image) {

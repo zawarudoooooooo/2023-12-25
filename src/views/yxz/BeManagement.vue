@@ -279,7 +279,7 @@ export default {
             <tr>
                 <td>類型:</td>
                 <td><select name="" id="" v-model="newInfo.type">
-                    <option value="新聞">新聞</option>
+                    <option value="最新消息">最新消息</option>
                     <option value="科普">科普</option>
                 </select></td>
             </tr>

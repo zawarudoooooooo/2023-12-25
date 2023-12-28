@@ -6,14 +6,22 @@ import ArticleDashBoard from '../../components/ArticleDashBoard.vue';
 export default {
     data() {
         return {
+            foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
             postSerialNo: JSON.parse(sessionStorage.getItem('postSerialNo')),
 
-            myArticle:null,
+            myArticle: null,
+            postCommentList: null,
+            userReply: null,
+            //最後某筆數留言
+            lastFiveComments: null,
+
+            showAllComments: false // 控制是否顯示所有留言的變數
         }
     },
 
     mounted() {
         this.groupAll()
+        this.searchPostCommentBySerialNo()
     },
 
     components: {
@@ -69,8 +77,98 @@ export default {
 
         goTo(x) {
             this.$router.push(x)
-        }
+        },
+        createNewComment() {
+            const postData = {
+                postComment: {
+                    postSerialNo: this.postSerialNo,
+                    userId: this.foundUserInfo.userId,
+                    userName: this.foundUserInfo.userName,
+                    commentContent: this.userReply
+                }
+            };
 
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
+            };
+
+            fetch('http://localhost:8080/api/adoption/createNewComment', requestOptions)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+
+                    this.userReply = null
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        },
+        searchPostCommentBySerialNo() {
+            const postSerialNoToSearch = this.postSerialNo;
+
+            const fetchData = () => {
+                // 發送 GET 請求至後端 API，搜尋評論
+                fetch(`http://localhost:8080/api/adoption/searchByPostSerialNo?postSerialNo=${postSerialNoToSearch}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const postCommentList = data.postCommentList;
+
+                        fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo')
+                            .then(response => response.json())
+                            .then(data => {
+                                const userInfoList = data.userInfoList;
+
+                                // 整合 userId 為 key 的使用者資訊
+                                const userInfoMap = userInfoList.reduce((acc, userInfo) => {
+                                    acc[userInfo.userId] = userInfo;
+                                    return acc;
+                                }, {});
+
+                                // 整合 postCommentList 和 userInfoList 中的資料
+                                const integratedData = postCommentList.map(comment => ({
+                                    commentContent: comment.commentContent,
+                                    commentId: comment.commentId,
+                                    userId: comment.userId,
+                                    account: userInfoMap[comment.userId].account,
+                                    userName: userInfoMap[comment.userId].userName,
+                                    userPhoto: userInfoMap[comment.userId].userPhoto
+                                }));
+
+                                this.postCommentList = integratedData;
+                                // 在這裡處理整合後的資料
+                                // 只顯示最後的5筆留言
+                                const lastFiveComments = integratedData.slice(-3);
+                                this.lastFiveComments = lastFiveComments
+                            });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            };
+
+            // 每隔一段時間自動執行 fetchData 函式
+            const interval = setInterval(fetchData, 500); // 這裡是每隔5秒更新一次，可以根據需要調整時間間隔
+
+            // 第一次執行
+            fetchData();
+
+            // 若需要停止自動更新，可以使用 clearInterval(interval);
+        }
     }
 }
 </script>
@@ -79,7 +177,6 @@ export default {
 <!-- 發文的人看自己發的文章 -->
 <template>
     <div class="all" v-if="myArticle">
-        <!-- <div class="div-2"></div> -->
         <div class="out_contain">
             <div class="in_contain">
                 <div class="dashboard">
@@ -88,13 +185,7 @@ export default {
                 <div class="out_article_area">
                     <div class="in_article_area">
                         <div class="function_icon_area">
-                            <!-- <img loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/0ff7096d667a444bfee3e58c74bcb7c887b73fbe23c5ab5d518081b07a882fcf?"
-                                class="img-2" /> -->
                             <i class="fa-solid fa-trash-can img-2"></i>
-                            <!-- <img loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/92ac77e2db42db1011e0d83c7bedd38c0d20f66a14115177c96e2b0a532073bf?"
-                                class="img-3" /> -->
                             <i class="fa-solid fa-pen img-3" @click="goTo('/ForumEntrance/edit_myArticle')"></i>
                         </div>
                         <div class="article">
@@ -102,13 +193,10 @@ export default {
                                 <div class="poster">
                                     <div class="div-13">
                                         <div class="div-14">
-                                            <img class="poster_icon" :src="'data:image/jpeg;base64,' + this.myArticle[0].userPhoto" alt="">
-                                            <!-- <img loading="lazy"
-                                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/1a90f93bf046cb34155d14545eaf092cbb5340f95d7851405d718068990aeece?"
-                                                class="poster_icon" /> -->
+                                            <img class="poster_icon"
+                                                :src="'data:image/jpeg;base64,' + this.myArticle[0].userPhoto" alt="">
                                             <div class="poster_data">
                                                 <p class="poster_name">{{ this.myArticle[0].userName }}</p>
-                                                <!-- 短腿貓的爸<br /> -->
                                                 <p class="poster_userId">{{ this.myArticle[0].account }}</p>
                                             </div>
                                         </div>
@@ -129,75 +217,59 @@ export default {
                             <div class="div-20"></div>
                             <div class="article_title">{{ this.myArticle[0].title }}</div>
                             <img class="article_img" :src="'data:image/jpeg;base64,' + this.myArticle[0].postPhoto" alt="">
-                            <!-- <img loading="lazy" srcSet="..." class="article_img" /> -->
                             <div class="article_contain">
                                 <p>{{ this.myArticle[0].postContent }}</p>
-                                <!-- 先上最愛的一張照片，<br />快樂迷因仔，<br />不知道是不是腿短又肥肥的，<br />每次覺得睡覺阿腿都很可愛<br />就是一隻小笨貓<br />哈哈 -->
                             </div>
                             <div class="div-23">Comment</div>
                             <div class="div-24"></div>
 
                             <div class="reply">
-                                <div class="replier">
-                                    <img loading="lazy"
-                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/cd14f0e97fc248c0848764be5bceb2595c5aaaa043bb11f500f16b3769856a4b?"
-                                        class="replier_img" />
+                                <button @click="showAllComments = !showAllComments">
+                                    {{ showAllComments ? '收起留言' : '查看更多' }}
+                                </button>
+                                <div class="replier"
+                                    v-for="(item, index) in showAllComments ? postCommentList : lastFiveComments">
+                                    <img class="replier_img" :src="'data:image/jpeg;base64,' + item.userPhoto" alt="">
                                     <div class="replier_data">
-                                        <p class="replier_name">短腿貓的爸</p>
-                                        <p class="replier_userId">@wei0113__</p>
-                                        <div class="replier_text">笑死，這隻貓也太可愛</div>
-                                        <p>回覆</p>
-                                    </div>
-                                </div>
-                                <div class="replier_replier">
-                                    <img loading="lazy"
-                                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/325bf2b6904cc722a9fe82991fb721b3d31e009fcdf5fd2018580e2ecd595986?"
-                                        class="replier_replier_img" />
-                                    <div class="replier_data">
-                                        <p class="replier_name">短腿貓的爸</p>
-                                        <p class="replier_userId">@wei0113__</p>
-                                        <div class="replier_text">笑死，這隻貓也太可愛</div>
+                                        <p class="replier_name">{{ item.userName }}</p>
+                                        <p class="replier_userId">{{ item.account }}</p>
+                                        <div class="replier_text">{{ item.commentContent }}</div>
+                                        <p>{{ showAllComments ? index + 1 : postCommentList.length - lastFiveComments.length
+                                            + index + 1 }}樓</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="div-33"></div>
-
-                            <!-- 
-                                <div class="div-34">
-                                <img loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/3f8cc4acf7419613095ee74541d1abf1dddcf182a6560d010288138c4f21a17f?"
-                                    class="img-11" />
-                                <div class="div-35">
-                                    <div class="div-36">短腿貓的爸<br />@wei0113__</div>
-                                    <div class="div-37">笑死，這隻貓也太可愛</div>
+                            <div class="newReply">
+                                <img class="replier_img" :src="'data:image/jpeg;base64,' + this.foundUserInfo.userPhoto"
+                                    alt="">
+                                <div class="nameAccount">
+                                    <span>{{ this.foundUserInfo.userName }}</span>
+                                    <span>{{ this.foundUserInfo.account }}</span>
                                 </div>
+                                <input type="text" v-model="userReply" @keyup.enter="createNewComment()">
+                                <button @click="createNewComment()">回覆</button>
                             </div>
-                            <div class="div-38"></div>
-                            <div class="div-39">
-                                <img loading="lazy"
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/27656a259e5bdeb35ab4aa638b3b6a86263452cfb1d13822e7ec2f55adc2dfec?"
-                                    class="img-12" />
-                                <div class="div-40">
-                                    <div class="div-41">短腿貓的爸<br />@wei0113__</div>
-                                    <div class="div-42">笑死，這隻貓也太可愛</div>
-                                </div>
-                            </div>
-                            -->
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- <create_Article></create_Article> -->
-    <!-- <view_Article></view_Article> -->
 </template>
 
 
 
 
 <style scoped>
+.newReply {
+    display: flex;
+
+    .nameAccount {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
 .all {
     width: 100vw;
     height: auto;
@@ -571,6 +643,7 @@ export default {
     width: 73px;
     overflow: hidden;
     max-width: 100%;
+    border-radius: 50%;
 }
 
 .replier {
@@ -775,4 +848,5 @@ export default {
     color: #978989;
     margin-top: 12px;
     font: 800 21px Lexend, sans-serif;
-}</style>
+}
+</style>
