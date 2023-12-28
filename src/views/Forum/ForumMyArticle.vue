@@ -142,6 +142,7 @@ export default {
 
             myArticle: null,
             userInfoList: null,
+            integratedData: null,
 
         }
     },
@@ -176,52 +177,110 @@ export default {
             this.$router.push('/ForumEntrance/pre_myArticle')
         },
         groupAll() {
-            fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
+            const fetchData = () => {
+                fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
+                    method: 'GET',
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const userInfoList = data.userInfoList;
+
+                        fetch('http://localhost:8080/api/adoption/searchAllPost', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                const forumEntranceList = data.forumEntranceList;
+
+                                const integratedData = forumEntranceList.map(forumEntry => {
+                                    const userInfo = userInfoList.find(user => user.userId === forumEntry.userId);
+                                    return {
+                                        postContent: forumEntry.postContent,
+                                        postPhoto: forumEntry.postPhoto,
+                                        serialNo: forumEntry.serialNo,
+                                        title: forumEntry.title,
+                                        userId: forumEntry.userId,
+                                        likesCount: forumEntry.likesCount,
+                                        userName: userInfo.userName,
+                                        userPhoto: userInfo.userPhoto,
+                                        account: userInfo.account,
+                                    };
+                                });
+                                this.integratedData = integratedData;
+
+                                fetch('http://localhost:8080/api/adoption/searchLikeByUserId?userId=' + this.foundUserInfo.userId, {
+                                    method: 'GET',
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const likesRecordList = data.likesRecordList;
+
+                                        // 將 obtainedLikesRecords 整合到 integratedData 中
+                                        this.integratedData.forEach(post => {
+                                            const found = likesRecordList.find(record => record.postId === post.serialNo);
+                                            post.liked = !!found; // 設置 liked 屬性為布爾值，表示是否按過讚
+                                        });
+                                        // 獲取只包含特定 userId 的貼文
+                                        this.myArticle = this.integratedData.filter(post => post.userId === this.foundUserInfo.userId);
+                                    });
+                            });
+                    });
+            };
+
+            fetchData();
+
+        },
+        createLike(serialNo) {
+            console.log(serialNo)
+            const requestBody = {
+                likesRecord: {
+                    postId: serialNo,
+                    userId: this.foundUserInfo.userId
+                }
+            };
+
+            fetch(`http://localhost:8080/api/adoption/createLike`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    const postToUpdate = this.integratedData.find(post => post.serialNo === serialNo);
+                    if (postToUpdate) {
+                        // 如果当前帖子已经被喜欢，执行取消喜欢操作
+                        if (postToUpdate.liked) {
+                            // 在这里实现取消喜欢的逻辑
+                            postToUpdate.liked = false; // 更新喜欢状态
+                            postToUpdate.likesCount--; // 减少喜欢数
+                        } else {
+                            // 否则，执行喜欢操作
+                            postToUpdate.liked = true; // 更新喜欢状态
+                            postToUpdate.likesCount++; // 增加喜欢数
+                        }
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        },
+        searchLikeByPostId(serialNo) {
+            fetch(`http://localhost:8080/api/adoption/searchLikeByPostId?postId=${serialNo}`, {
                 method: 'GET',
             })
                 .then(response => response.json())
                 .then(data => {
-                    const userInfoList = data.userInfoList;
-
-                    fetch('http://localhost:8080/api/adoption/searchAllPost', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            const forumEntranceList = data.forumEntranceList;
-
-                            // 使用 reduce 方法整合資訊
-                            const integratedData = forumEntranceList.map(forumEntry => {
-                                const userInfo = userInfoList.find(user => user.userId === forumEntry.userId);
-
-                                // 創建一個新的物件整合所需的資訊
-                                return {
-                                    postContent: forumEntry.postContent,
-                                    postPhoto: forumEntry.postPhoto,
-                                    serialNo: forumEntry.serialNo,
-                                    title: forumEntry.title,
-                                    userId: forumEntry.userId,
-                                    likesCount: forumEntry.likesCount,
-
-                                    userName: userInfo.userName,
-                                    userPhoto: userInfo.userPhoto,
-                                    account: userInfo.account,
-                                };
-                            });
-
-                            // 在這裡處理整合後的資料 integratedData
-                            console.log(integratedData);
-                            console.log(this.foundUserInfo.userId)
-                            const specificUserArticles = integratedData.filter(entry => entry.userId === this.foundUserInfo.userId);
-
-                            this.myArticle = specificUserArticles;
-                        });
+                    console.log(data)
                 });
         },
-
     }
 }
 </script>
@@ -240,7 +299,6 @@ export default {
             <div class="title">
                 <h1>My Article</h1>
             </div>
-
 
             <!-- v-for the card -->
             <div class="showCardArea">
@@ -266,10 +324,10 @@ export default {
                     </div>
                     <div class="cardLast">
                         <div class="likesCount">
-                            <i class="fa-regular fa-heart"></i>
-                            <span>{{ item.likesCount }}</span>
+                            <i :class="{ 'fa-solid fa-heart': item.liked, 'fa-regular fa-heart': !item.liked }"
+                                @click="createLike(item.serialNo)"></i>
+                            <span @click="searchLikeByPostId(item.serialNo)">{{ item.likesCount }}</span>
                         </div>
-
                         <p class="moreInfo" @click="goTo(item.serialNo)">...點我看更多</p>
                     </div>
                 </div>
