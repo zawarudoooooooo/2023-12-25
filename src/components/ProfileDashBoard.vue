@@ -80,28 +80,28 @@ export default {
                 <span class="count" v-if="this.noti_count != 0 && !isread" :class="{ 'isread_false': !isread }">{{
                     this.noti_count }}</span>
             </i>
-            <span @click="tap_noti()">Notification</span>
+            <p @click="tap_noti()">通知</p>
             <notification @isread="show_isread" @noti_count="get_noti_count" :noti_state="noti_state" />
         </div>
         <div class="setting line" @click="goTo('/ProfileSetting')">
             <i class="fa-solid fa-user-gear"></i>
-            <p>Settings</p>
+            <p>設定</p>
         </div>
         <div class="pet line" @click="goTo('/MyPet')">
             <i class="fa-solid fa-dog"></i>
-            <p>My Pet</p>
+            <p>我的毛小孩</p>
         </div>
         <div class="article line">
             <i class="fa-solid fa-pencil"></i>
-            <p @click="goTo('/MyArticle')">My Articles</p>
+            <p @click="goTo('/MyArticle')">我的文章</p>
         </div>
         <div class="adopt line" @click="goTo('/MyAdopt')">
             <i class="fa-solid fa-user-tie"></i>
-            <p>My Adopt</p>
+            <p>我的領養</p>
         </div>
-        <div class="chat line">
+        <div class="chat line" @click="goTo('/Chat')">
             <i class="fa-brands fa-rocketchat"></i>
-            <p>Chat</p>
+            <p>聊聊</p>
         </div>
         <div class="logout line" @click="logout()">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -136,6 +136,10 @@ export default {
     .line {
         margin-bottom: 10px;
         cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover{
+            color: rgb(132, 119, 119);
+        }
     }
 
     .notification {
