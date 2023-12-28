@@ -183,7 +183,7 @@ export default {
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/06062d6238a6691ea533dbc096994639c6e1407d07d6742eb34d44f9d98fe771?"
                             class="img-2" /> -->
 
-        <!-- 輪播 -->
+        <!-- 最新消息輪播 -->
         <div id="carouselNewInfo" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 <!-- 循環遍歷 newInfoList 並每次顯示三張卡片 -->
@@ -211,7 +211,7 @@ export default {
                 </div>
             </div>
 
-            <!-- 左右輪播控制按鈕 -->
+            <!-- 最新消息左右輪播控制按鈕 -->
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselNewInfo" data-bs-slide="prev">
                 <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
             </button>

@@ -10,17 +10,29 @@ export default {
                 date: '',
                 category: '',
                 image: null,
-                type:null,
+                type: null,
             },
             newInfoList: null,//多個最新消息的List
 
-            
+
         };
     },
     mounted() {  //頁面初始化時調用searchAllNewInfo方法
         this.searchAllNewInfo()
     },
-
+    computed: {
+        //計算屬性 filteredCities
+        // 根據選擇的類型動態生成分類選項
+        filteredCities() {
+            // 如果選擇了類型，根據不同的類型返回相應的分類選項
+            switch (this.newInfo.type) {
+                case "最新消息":
+                    return ["新聞", "活動", "教育"];
+                case "科普":
+                    return ["法規", "行為訓練", "醫學", "心理"];
+            }
+        },
+    },
 
     methods: {
 
@@ -44,7 +56,7 @@ export default {
                         content: this.newInfo.content,
                         date: this.newInfo.date,
                         category: this.newInfo.category,
-                        type:this.newInfo.type,
+                        type: this.newInfo.type,
                         image: Array.from(bytes), // Convert Uint8Array to a regular array for JSON serialization
                     }
                 };
@@ -273,16 +285,22 @@ export default {
                 <td><input type="date" v-model="newInfo.date" /></td>
             </tr>
             <tr>
-                <td>分類:</td>
-                <td><input type="text" v-model="newInfo.category" /></td>
-            </tr>
-            <tr>
                 <td>類型:</td>
                 <td><select name="" id="" v-model="newInfo.type">
-                    <option value="最新消息">最新消息</option>
-                    <option value="科普">科普</option>
-                </select></td>
+                        <option value="最新消息">最新消息</option>
+                        <option value="科普">科普</option>
+                    </select>
+                </td>
             </tr>
+            <tr>
+                <td>分類:</td>
+                <select v-model="this.newInfo.category">
+                    <option v-for="typeOption in filteredCities" :value="typeOption">
+                        {{ typeOption }}
+                    </option>
+                </select>
+            </tr>
+
             <tr>
                 <td>圖片:</td>
                 <td><input type="file" @change="handleFileUpload" /></td><!-- 這是用來上傳圖片的輸入框 -->
@@ -385,6 +403,20 @@ export default {
                 /* Adjust height for textarea */
             }
 
+            //下拉選單
+            select {
+                width: 15%;
+                height: 4.5vh;
+                font-size: 1.2vw;
+                margin-left: 4vw;
+                margin-right: 5vw;
+                border-radius: 2.5vw;
+                background-color: #DDDFEE;
+                border: none;
+                text-align: center; //字體居中
+
+            }
+
             button {
                 background-color: #4CAF50;
                 color: white;
@@ -477,4 +509,5 @@ export default {
     max-width: 100%;
     border-radius: 4px;
     margin-top: 10px;
-}</style>
+}
+</style>

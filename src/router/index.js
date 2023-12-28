@@ -103,6 +103,11 @@ const router = createRouter({
           alias:'',
         },
         {
+          path: 'ForumPopularScienceAll',
+          name: 'ForumPopularScienceAll',
+          component: () => import('../views/Forum/ForumPopularScienceAll.vue'),
+        },
+        {
           path: 'edit_myArticle',
           name: 'edit_myArticle',
           component: () => import('../views/negi/edit_myArticle.vue'),
@@ -189,6 +194,12 @@ const router = createRouter({
       name: 'NewInfoAll',
       component: () => import('../views/Mebice/NewInfoAll.vue'),
     },
+    // {
+    //   path: '/ForumPopularScienceAll',
+    //   name: 'ForumPopularScienceAll',
+    //   component: () => import('../views/Mebice/ForumPopularScienceAll.vue'),
+    // },
+    
 
 
 
