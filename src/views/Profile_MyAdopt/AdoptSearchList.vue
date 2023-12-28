@@ -126,10 +126,6 @@ export default {
             }
         },
         search(){
-            console.log("status", this.searchStatus)
-            console.log("type", this.inputType)
-            console.log("area", this.inputArea)
-            console.log("location", this.inputLocation)
             axios.get('http://localhost:8080/api/adoption/petInfo/getAdoptablePetList', {
                 params: {
                     "status": this.searchStatus,
@@ -149,32 +145,14 @@ export default {
             sessionStorage.setItem("adopt pet detail", JSON.stringify(item))
             this.$router.push('/AdoptionSearch/AdoptSearchDetail');
         },
-        adoptionApply(item){
+        confirmApply(item){
 
             const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
 
             if(user == null){
                 Swal.fire('請先登錄！');
                 return;
-            // } else {
-            //     Swal.fire({
-            //         title: "確定要申請領養嗎？",
-            //         icon: "question",
-            //         showCancelButton: true,
-            //         confirmButtonText: "確定",
-            //         cancelButtonText: "取消"
-            //     }).then((result) => {
-            //         if (result.isConfirmed) {
-            //             this.confirmApply(item, user)
-            //         }
-            //     });
-            //     return; 
             }
-
-        },
-        confirmApply(item){
-
-            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
 
             axios.post('http://localhost:8080/api/adoption/petInfo/adoptPet', {
                 petId: item.pet_id,
@@ -205,7 +183,6 @@ export default {
                 this.search();
         },
         getOwnerAndAdopterInfo(pet) {
-            console.log("x", pet)
 
             const ownerId = pet.user_id;
             const adopterId = pet.final_adopter_id;
@@ -227,8 +204,6 @@ export default {
                         this.adopter = resList[i];
                     }
                 }
-                console.log("owner", this.owner)
-                console.log("adopter", this.adopter)
             })
             .catch(error => {
                 console.error(error)
@@ -254,8 +229,37 @@ export default {
                 .catch(error => {
                     console.error(error);
                 })
-        }
+        },
 
+        openChat(item){
+            
+            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
+
+            if(user == null){
+                Swal.fire('請先登錄！');
+                return;
+            }
+
+            const subList = [];
+            subList.push(user.userId);
+            subList.push(item.user_id);
+
+            const subListStr = subList.join(',');
+
+
+            axios.post(`http://localhost:8080/api/adoption/chat/create_room`, {
+                creator: user.userId, 
+                subscriberList: subListStr, 
+                name: subListStr
+            })
+            .then(response => {
+                console.log(response.data)
+                this.$emit('callChat', response.data.chatRoom)
+            })
+            .catch(error => {
+                console.error(error);
+            })
+        }
     }
 }
 </script>
@@ -361,12 +365,12 @@ export default {
                             <p>{{ item.pet_status }}</p>
 
                             <div class="btnArea">
-                                <button class="btn btn-specialRed modal-btn" data-bs-toggle="modal" :data-bs-target="'#confirmModal'+index" @click="adoptionApply(item)">
+                                <button class="btn btn-specialRed modal-btn" data-bs-toggle="modal" :data-bs-target="'#confirmModal'+index">
                                     <i class="fa-solid fa-hand-holding-heart" style="color: white"></i>
                                     <p style="color: white;">申請領養</p>
                                 </button>
 
-                                <button class="btn btn-specialBlue modal-btn">
+                                <button class="btn btn-specialBlue modal-btn" @click.stop="openChat(item)">
                                     <i class="fa-solid fa-comments" style="color: white;"></i>
                                     <p style="color: white;">聊聊了解</p>
                                 </button>
