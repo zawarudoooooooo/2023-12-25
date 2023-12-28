@@ -59,6 +59,8 @@ export default {
                                     serialNo: forumEntry.serialNo,
                                     title: forumEntry.title,
                                     userId: forumEntry.userId,
+                                    likesCount: forumEntry.likesCount,
+
                                     userName: userInfo.userName,
                                     userPhoto: userInfo.userPhoto,
                                     account: userInfo.account,
@@ -144,6 +146,7 @@ export default {
                                     commentContent: comment.commentContent,
                                     commentId: comment.commentId,
                                     userId: comment.userId,
+
                                     account: userInfoMap[comment.userId].account,
                                     userName: userInfoMap[comment.userId].userName,
                                     userPhoto: userInfoMap[comment.userId].userPhoto
@@ -220,7 +223,13 @@ export default {
                             <div class="article_contain">
                                 <p>{{ this.myArticle[0].postContent }}</p>
                             </div>
-                            <div class="div-23">Comment</div>
+                            <div class="div-23">
+                                <span>Comment</span>
+                                <div class="likesCount">
+                                    <i class="fa-regular fa-heart"></i>
+                                    <span>{{ this.myArticle[0].likesCount }}</span>
+                                </div>
+                            </div>
                             <div class="div-24"></div>
 
                             <div class="reply">
@@ -594,11 +603,28 @@ export default {
 }
 
 .div-23 {
+    width:100%;
+    padding-right: 45px;
     color: #978989;
     align-self: start;
     white-space: nowrap;
     margin: 151px 0 0 23px;
     font: 800 28px Lexend, sans-serif;
+    display: flex;
+    justify-content: space-between;
+
+    .likesCount {
+        display: flex;
+
+        span {
+            color: red;
+        }
+
+        i {
+            color: red
+        }
+    }
+
 }
 
 @media (max-width: 991px) {

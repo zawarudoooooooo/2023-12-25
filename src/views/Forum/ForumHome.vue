@@ -137,7 +137,7 @@ export default {
                 user_photo: "",
             },
 
-            integratedData:null,
+            integratedData: null,
         }
     },
     components: {
@@ -164,6 +164,7 @@ export default {
                         .then(response => response.json())
                         .then(data => {
                             const forumEntranceList = data.forumEntranceList;
+                            // console.log(forumEntranceList)
 
                             // 使用 reduce 方法整合資訊
                             const integratedData = forumEntranceList.map(forumEntry => {
@@ -176,6 +177,8 @@ export default {
                                     serialNo: forumEntry.serialNo,
                                     title: forumEntry.title,
                                     userId: forumEntry.userId,
+                                    likesCount: forumEntry.likesCount,
+
                                     userName: userInfo.userName,
                                     userPhoto: userInfo.userPhoto,
                                     account: userInfo.account,
@@ -184,7 +187,7 @@ export default {
 
                             // 在這裡處理整合後的資料 integratedData
                             console.log(integratedData);
-                            this.integratedData=integratedData
+                            this.integratedData = integratedData
                         });
                 });
         },
@@ -247,14 +250,17 @@ export default {
                     </div>
                     <div class="cardMiddle">
                         <div class="article_title">{{ item.title }}</div>
-                            <img class="img" :src="'data:image/jpeg;base64,' + item.postPhoto" alt="">
+                        <img class="img" :src="'data:image/jpeg;base64,' + item.postPhoto" alt="">
                         <div class="cardInfo">
                             <p class="infoText">{{ item.postContent }}</p>
                         </div>
 
                     </div>
                     <div class="cardLast">
-
+                        <div class="likesCount">
+                            <i class="fa-regular fa-heart"></i>
+                            <span>{{ item.likesCount }}</span>
+                        </div>
                         <p class="moreInfo" @click="goTo(item.serialNo)">...點我看更多</p>
                     </div>
                 </div>
@@ -354,6 +360,8 @@ export default {
                     }
                 }
 
+
+
             }
 
             .cardLast {
@@ -362,6 +370,18 @@ export default {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+
+                .likesCount {
+                    display: flex;
+
+                    span {
+                        color: red;
+                    }
+
+                    i {
+                        color: red
+                    }
+                }
 
                 .moreInfo {
                     color: #6E75A8;

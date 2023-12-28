@@ -204,6 +204,8 @@ export default {
                                     serialNo: forumEntry.serialNo,
                                     title: forumEntry.title,
                                     userId: forumEntry.userId,
+                                    likesCount: forumEntry.likesCount,
+
                                     userName: userInfo.userName,
                                     userPhoto: userInfo.userPhoto,
                                     account: userInfo.account,
@@ -226,7 +228,7 @@ export default {
 
 
 <template>
-    <div class="content" >
+    <div class="content">
         <!-- 側邊功能區 -->
         <div class="dashBoardArea">
             <ArticleDashBoard />
@@ -249,7 +251,7 @@ export default {
                             <p class="poster_name">{{ item.userName }}</p>
                             <!-- 短腿貓的爸<br /> -->
                             <p class="poster_userId">{{ item.account }}</p>
-                            {{item.serialNo}}
+                            {{ item.serialNo }}
                         </div>
 
                     </div>
@@ -263,6 +265,11 @@ export default {
                         </div>
                     </div>
                     <div class="cardLast">
+                        <div class="likesCount">
+                            <i class="fa-regular fa-heart"></i>
+                            <span>{{ item.likesCount }}</span>
+                        </div>
+
                         <p class="moreInfo" @click="goTo(item.serialNo)">...點我看更多</p>
                     </div>
                 </div>
@@ -370,6 +377,18 @@ export default {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+
+                .likesCount {
+                    display: flex;
+
+                    span {
+                        color: red;
+                    }
+
+                    i {
+                        color: red
+                    }
+                }
 
                 .moreInfo {
                     color: #6E75A8;
