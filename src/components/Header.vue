@@ -83,6 +83,8 @@ export default {
         <div class="notification line" @click="goTo('/')">
             <i class="fa-solid fa-house" style="color: white;"></i>
         </div>
+        <RouterLink class="routerLink" to="/ForumEntrance" @click="goTo('/ChatTest')">ChatTest</RouterLink>
+
         <RouterLink class="routerLink" to="/ForumEntrance" @click="goTo('/ForumEntrance')">論壇</RouterLink>
         <RouterLink class="routerLink" to="/mapSearch" @click="goTo('/mapSearch')">其他地點</RouterLink>
         <RouterLink class="routerLink" to="AdoptionSearch" @click="goTo('/AdoptionSearch')">領養區</RouterLink>
