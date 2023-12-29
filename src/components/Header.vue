@@ -25,17 +25,17 @@ export default {
             // 根據不同的連結更新 headerColor
             switch (x) {
                 case '/ForumEntrance':
-                    this.updateHeaderColor('#6E75A8'); // 例如，設置為藍色
+                    this.updateHeaderColor('#ebc26f'); // 例如，設置為藍色
                     break;
                 case '/mapSearch':
                     console.log('Updating header color to: #df4a4a');
-                    this.updateHeaderColor('#E9D2A6'); // 設置黃色
+                    this.updateHeaderColor('#DCB770'); // 設置黃色
                     break;
                 case '/AdoptionSearch':
-                    this.updateHeaderColor('#C79CA4'); // 例如，設置為紅色
+                    this.updateHeaderColor('#A86D71'); // 例如，設置為紅色
                     break;
                 default:
-                    this.updateHeaderColor('#E9D2A6'); // 默認顏色
+                    this.updateHeaderColor('#DCB770'); // 默認顏色
             }
         },
 
@@ -61,11 +61,11 @@ export default {
             const currentPath = to.path;
 
             if (currentPath.includes('/AdoptionSearch')) {
-                this.updateHeaderColor('#C79CA4'); // 例如，設置為紅色
+                this.updateHeaderColor('#A86D71'); // 例如，設置為紅色
             } else if(currentPath.includes('/ForumEntrance')) {
                 this.updateHeaderColor('#6E75A8'); // 例如，設置為藍色
             }else{
-                this.updateHeaderColor('#E9D2A6'); // 默認顏色
+                this.updateHeaderColor('#DCB770'); // 默認顏色
             }
         }
     },
