@@ -77,7 +77,7 @@ export default {
     box-shadow: 0 0 3px 2px lightgray;
     padding: 20px;
     position: relative;
-    margin-top: 20px;
+    // margin-top: 20px;
 
     i {
         margin-bottom: 10px;
@@ -94,7 +94,7 @@ export default {
     }
 
     .showListArea{
-        width: 90%;
+        width: inherit;
         display: flex;
         flex-direction: column;
         align-items: start;
@@ -103,11 +103,12 @@ export default {
         .showList{
             display: flex;
             .showUser{
-                width: 100%;
+                width: 150px;
                 height: auto;
                 display: flex;
                 transition: all 0.3s ease;
                 margin-bottom: 10px;
+                overflow: hidden;
                 &:hover{
                     background-color: #f6f6f6;
                 }

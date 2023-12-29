@@ -17,9 +17,14 @@ export default defineStore("getInfoState", {
         recordMsg: [],
     }),
     actions: {
+
         // ChatList.vue
         // 獲取該user曾經發送訊息的全部chat room
         getChatRooms(user){
+            // reset the states
+            this.userInfo = {};
+            this.foundChattedUserList = [];
+
             this.userInfo = user;
 
             axios.get('http://localhost:8080/api/adoption/chat/get_chat_rooms', {
@@ -70,6 +75,9 @@ export default defineStore("getInfoState", {
         // ChatList.vue
         // 獲取該user全部私聊room的對方user info
         getUsersDetail(ids){
+            // reset the states
+            this.idsStr = "";
+
             this.idsStr = ids.join(',');
             console.log("ids string", this.idsStr)
 
@@ -89,6 +97,7 @@ export default defineStore("getInfoState", {
                     if(checkRoom.roomName == ""){
                         for(let y = 0; y < resArrIn.length; y++){
                             if(resArrIn[y].userInfo.userId == checkRoom.user.id){
+                                checkRoom.roomName = resArrIn[y].userInfo.userName;
                                 checkRoom.user = resArrIn[y].userInfo;
                             }
                         }
@@ -106,6 +115,11 @@ export default defineStore("getInfoState", {
         // Chat.vue
         // 獲取chat messages的紀錄
         getChatDetail(obj){
+            // reset the states
+            this.roomObj = {};
+            this.resMsg = [];
+            this.idsStr = "";
+
             this.roomObj = obj;
             console.log("emit obj", this.roomObj)
 
@@ -132,6 +146,9 @@ export default defineStore("getInfoState", {
         // Chat.vue
         // 獲取該chat room中全部訂閱者的user info
         getChatRoomUsersDetail(){
+            // reste the states
+            this.recordMsg = [];
+            
             console.log("ids string", this.idsStr)
 
             axios.get('http://localhost:8080/api/adoption/userInfo/findAdopters', {
