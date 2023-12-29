@@ -3,6 +3,9 @@
 @import "../../node_modules/bootstrap/scss/mixins";
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
 
+// 中文字體：圓體
+@import url(https://fonts.googleapis.com/earlyaccess/cwtexyen.css);
+
 
 // colors
 // 主色-黃色
@@ -24,7 +27,7 @@ $specialRed:  #A63A50;
 
 body{
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, 'cwTeXYen', sans-serif;
     color: #978989;
 }
 

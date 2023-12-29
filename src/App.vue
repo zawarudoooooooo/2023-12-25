@@ -97,7 +97,7 @@ export default {
 .fixedChat{
   width: 60px;
   height: 60px;
-  background-color: #efddbb;
+  background-color: #e7cfa3;
   border-radius: 50%;
   box-shadow: 5px 5px 5px lightgray;
   display: flex;
@@ -109,7 +109,7 @@ export default {
   transition: all 0.5s ease;
   font-size: 18pt;
   &:hover{
-    background-color: #e5c995;
+    background-color: #ebc26f;
   }
 }
 </style>
