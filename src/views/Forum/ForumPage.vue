@@ -4,13 +4,16 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 export default {
     data() {
         return {
-            article: [1, 2, 3],
+            article: [1, 2, 3, 4],
 
             newInfoList: null,
+            integratedData: null,
+            foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
         }
     },
     mounted() {  //頁面初始化時調用searchAllNewInfo方法
         this.searchAllNewInfo()
+        this.groupAll()
     },
     computed: {
         // 計算每次包含三個項目的 newInfoList 塊
@@ -22,6 +25,26 @@ export default {
             }
             return newInfoListMore;
         },
+
+        hotArticlesToShow() {
+            const articlesPerSlide = 3; // 每个轮播项目显示的文章数量
+            const hotArticlesChunks = [];
+
+            // 检查 integratedData 是否存在和非空
+            if (this.integratedData && Array.isArray(this.integratedData)) {
+                const sortedIntegratedData = [...this.integratedData]; // 获取 integratedData 的副本
+
+                // 根据 likesCount 降序排列
+                sortedIntegratedData.sort((a, b) => b.likesCount - a.likesCount);
+
+                for (let i = 0; i < sortedIntegratedData.length; i += articlesPerSlide) {
+                    hotArticlesChunks.push(sortedIntegratedData.slice(i, i + articlesPerSlide));
+                }
+            }
+            return hotArticlesChunks;
+        },
+
+
     },
     methods: {
         searchAllNewInfo() {
@@ -85,9 +108,74 @@ export default {
 
             });
         },
-        goTo(x) {
+        goToZ(x) {
             this.$router.push(x)
-        }
+        },
+        goTo(serialNo) {
+            sessionStorage.setItem('postSerialNo', serialNo);
+            this.$router.push('/ForumEntrance/pre_myArticle')
+        },
+        groupAll() {
+            const fetchData = () => {
+                fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
+                    method: 'GET',
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const userInfoList = data.userInfoList;
+
+                        fetch('http://localhost:8080/api/adoption/searchAllPost', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                const forumEntranceList = data.forumEntranceList;
+
+                                const integratedData = forumEntranceList.map(forumEntry => {
+                                    const userInfo = userInfoList.find(user => user.userId === forumEntry.userId);
+                                    return {
+                                        postContent: forumEntry.postContent,
+                                        postPhoto: forumEntry.postPhoto,
+                                        serialNo: forumEntry.serialNo,
+                                        title: forumEntry.title,
+                                        userId: forumEntry.userId,
+                                        likesCount: forumEntry.likesCount,
+                                        userName: userInfo.userName,
+                                        userPhoto: userInfo.userPhoto,
+                                        account: userInfo.account,
+                                    };
+                                });
+                                this.integratedData = integratedData;
+
+                                fetch('http://localhost:8080/api/adoption/searchLikeByUserId?userId=' + this.foundUserInfo.userId, {
+                                    method: 'GET',
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const likesRecordList = data.likesRecordList;
+
+                                        // 將 obtainedLikesRecords 整合到 integratedData 中
+                                        this.integratedData.forEach(post => {
+                                            const found = likesRecordList.find(record => record.postId === post.serialNo);
+                                            post.liked = !!found; // 設置 liked 屬性為布爾值，表示是否按過讚
+                                        });
+                                        console.log(this.integratedData)
+                                    });
+                            });
+                    });
+            };
+
+            // // 每隔一段時間自動執行 fetchData 函式
+            // const interval = setInterval(fetchData, 300); // 5000毫秒，即5秒
+
+            // 第一次立即执行
+            fetchData();
+
+            // 如果需要停止定時器，可以使用 clearInterval(interval);
+        },
     }
 }
 </script>
@@ -154,36 +242,60 @@ export default {
                 </button>
             </div>
             <div class="infoMoreBtnArea">
-                <button class="infoMoreBtn" @click="goTo('/ForumEntrance/ForumPopularScienceAll')">查看更多科普</button>
+                <button class="infoMoreBtn" @click="goToZ('/ForumEntrance/ForumPopularScienceAll')">查看更多科普</button>
             </div>
 
             <div class="div-14">
                 <h1>熱門文章</h1>
             </div>
-            <div class="div-15">
-                <div class="div-15-1">
-                    <div class="card" v-for="(item, index) in this.article">
-                        <div class="cardTop">
-                            <img loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/4dd07b98d595a732cb0cffc7e6ccd73b574e5a739e5e9479177f7b13c7f7fcc2?"
-                                class="img-3" />
-                            <div class="div-18">短腿貓的爸<br />@wei0113__</div>
-                        </div>
-                        <div class="div-19">好像養了一隻迷因貓</div>
-                        <img loading="lazy" srcSet="..." class="img-4" />
-                        <div class="div-20">
-                            <span
-                                style="color: rgba(151, 137, 137, 1)">先上最愛的一張照片，<br />快樂迷因仔，<br />不知道是不是腿短又肥肥的，<br />每次覺得睡覺阿腿都很可愛<br /><br /></span><span
-                                style="color: rgba(166, 58, 80, 1)"> </span><span
-                                style="color: rgba(110, 117, 168, 1)">...點我看更多</span>
+            <div id="carouselHotArticles" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div v-for="(articlesChunk, index) in hotArticlesToShow" :key="index"
+                        :class="['carousel-item', index === 0 ? 'active' : '']">
+                        <div class="d-flex justify-content-around">
+                            <!-- 使用原始卡片模板 -->
+                            <div v-for="item in articlesChunk" :key="item.serialNo" class="showCard" @click="goTo(item.serialNo)">
+                                <div class="cardTop">
+                                    <img loading="lazy" class="poster_icon"
+                                        :src="'data:image/jpeg;base64,' + item.userPhoto" />
+                                    <div class="poster_data">
+                                        <p class="poster_name">{{ item.userName }}</p>
+                                        <p class="poster_userId">{{ item.account }}</p>
+                                    </div>
+                                </div>
+                                <div class="cardMiddle">
+                                    <div class="article_title">{{ item.title }}</div>
+                                    <img class="img" :src="'data:image/jpeg;base64,' + item.postPhoto" alt="">
+                                    <div class="cardInfo">
+                                        <p class="infoText">{{ item.postContent }}</p>
+                                    </div>
+                                </div>
+                                <div class="cardLast">
+                                    <div class="likesCount">
+                                        <i class="fa-solid fa-fire"></i>
+                                        <span @click="searchLikeByPostId(item.serialNo)">{{ item.likesCount }}</span>
+                                    </div>
+                                    <p class="moreInfo" @click="goTo(item.serialNo)">...點我看更多</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- 輪播控制按鈕 -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselHotArticles"
+                    data-bs-slide="prev">
+                    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselHotArticles"
+                    data-bs-slide="next">
+                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </button>
             </div>
+
             <div class="div-36">
                 <button class="btn btn-big btn-specialBlue" style="color: white;"
-                    @click="goTo('/ForumEntrance/ForumHome')">閒聊版看更多</button>
+                    @click="goToZ('/ForumEntrance/ForumHome')">閒聊版看更多</button>
             </div>
         </div>
     </div>
@@ -294,6 +406,108 @@ export default {
 
     }
 }
+
+.showCard {
+    width: 300px;
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 30px;
+    padding: 20px 20px 20px 20px;
+    margin: 20px 15px 25px 15px;
+    background-color: white;
+    color: #978989;
+    font-size: 14pt;
+    box-shadow: 0 0 3px 2px lightgray;
+    color: white;
+
+    &:hover {
+        box-shadow: 3px 3px 5px gray;
+        transition: 0.8s;
+    }
+
+    .cardTop {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        position: relative;
+
+        .poster_icon {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            right: 105px;
+            border-radius: 50%;
+        }
+
+        .poster_data {
+            color: #978989;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+    }
+
+    .cardMiddle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+
+        .article_title {
+            color: #978989;
+            font-weight: 700;
+        }
+
+        .img {
+            width: 230px;
+            height: 90px;
+            border: 1px solid #978989;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .cardInfo {
+
+            .infoText {
+                color: #978989;
+                font-size: 16px;
+                font-weight: 700;
+            }
+        }
+
+
+
+    }
+
+    .cardLast {
+        width: 90%;
+        height: 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .likesCount {
+            display: flex;
+
+            span {
+                color: red;
+            }
+
+            i {
+                color: red
+            }
+        }
+
+        .moreInfo {
+            color: #6E75A8;
+            margin-left: 125px;
+            font-weight: 700;
+        }
+    }
+}
+
 
 .fa-arrow-left {
     margin-right: 300px;
