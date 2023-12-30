@@ -247,18 +247,18 @@ export default {
             const subListStr = subList.join(',');
 
 
-            axios.post(`http://localhost:8080/api/adoption/chat/create_room`, {
-                creator: user.userId, 
-                subscriberList: subListStr, 
-                name: subListStr
-            })
-            .then(response => {
-                console.log(response.data)
-                this.$emit('callChat', response.data.chatRoom)
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            // axios.post(`http://localhost:8080/api/adoption/chat/create_room`, {
+            //     creator: user.userId, 
+            //     subscriberList: subListStr, 
+            //     name: subListStr
+            // })
+            // .then(response => {
+            //     console.log(response.data)
+            //     this.$emit('callChat', response.data.chatRoom)
+            // })
+            // .catch(error => {
+            //     console.error(error);
+            // })
         }
     }
 }

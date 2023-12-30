@@ -1,5 +1,8 @@
 <script>
 import axios from 'axios';
+import { mapState, mapGetters, mapActions } from "pinia";
+import getInfoState from '../stores/getInfoState';
+
 export default{
     data(){
         return{
@@ -55,6 +58,12 @@ export default{
         } else {
             this.showRoomName = this.chatRoom.name;
         }
+
+        console.log("date time", this.currentDateTime)
+    },
+
+    computed: {
+        ...mapGetters(getInfoState, ['currentDateTime']),
     },
 
     methods: {
@@ -73,19 +82,20 @@ export default{
         // Listen for msg from Server
         sendMessage(){
             // send msg to Server
-            this.socket.send(JSON.stringify(this.msg))
+            this.socket.send(JSON.stringify({chatRoomId: this.chatRoom.chatRoomId, ent: this.chatRoom.ent, msg: this.msg, dateTime: this.currentDateTime, subscribers: this.chatRoom.subscriberList}));
 
-            axios.post('http://localhost:8080/api/adoption/chat/create_message', {
-                sender: this.userInfo.userId,
-                text: JSON.stringify(this.msg),
-                chatRoomId: this.chatRoom.chatRoomId
-            })
-            .then(response => {
-                console.log("response", response.data)
-            })
-            .catch(error => {
-                console.error(error)
-            })
+            // axios.post('http://localhost:8080/api/adoption/chat/create_message', {
+            //     sender: this.userInfo.userId,
+            //     text: JSON.stringify(this.msg),
+            //     chatRoomId: this.chatRoom.chatRoomId,
+            //     timeStamp: this.currentDateTime
+            // })
+            // .then(response => {
+            //     console.log("response", response.data)
+            // })
+            // .catch(error => {
+            //     console.error(error)
+            // })
         },
 
         disconnect() {
