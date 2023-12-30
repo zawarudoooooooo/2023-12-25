@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
 import axios from 'axios';
+import { response } from "express";
 
 export default defineStore("getInfoState", {
+
     state: () => ({
         // getChatRooms res
         foundChattedRoomList: [],
@@ -17,7 +19,13 @@ export default defineStore("getInfoState", {
         resMsg: [],
         // return full msg & sender info
         recordMsg: [],
+        // in readMessage
+        // receiver: 0,
+        // in readMessage
+        // chatRoomId: "",
     }),
+
+
     getters: {
         currentDateTime(state){
             const date = new Date();
@@ -31,6 +39,8 @@ export default defineStore("getInfoState", {
             return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }
     },
+
+
     actions: {
         // ChatList.vue
         // 獲取該user曾經發送訊息的全部chat room
@@ -226,5 +236,22 @@ export default defineStore("getInfoState", {
                 console.error(error)
             })
         },
+
+        // 設置 ChatUser 為已讀
+        // readMessage(userId, roomId){
+        //     this.receiver = userId;
+        //     this.chatRoomId = roomId;
+
+        //     axios.post('http://localhost:8080/api/adoption/chat/read_message', {
+        //         receiver: this.receiver,
+        //         chatRoomId: this.chatRoomId
+        //     })
+        //     .then( response => {
+        //         console.log("read msg res", response.data)
+        //     })
+        //     .catch( error => {
+        //         console.error(error)
+        //     })
+        // }
     },
 });
