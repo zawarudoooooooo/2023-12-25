@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
+import { Transition } from "vue";
 
 export default defineStore("headerState", {
     state: () => ({
-        headerColor: "#E9D2A6",
+        headerColor: Transition,
     }),
     actions: {
         updateHeaderColor(color) {
