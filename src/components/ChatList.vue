@@ -33,9 +33,9 @@ export default {
         showList(){
             const roomArr = [];
 
-            this.foundChattedRoomList.forEach( room => {
-                for(let i = 0; i < this.foundChattedUserList.length; i++){
-                    let checkUser = this.foundChattedUserList[i];
+            this.chattedRoomList.forEach( room => {
+                for(let i = 0; i < this.chattedRoomList.length; i++){
+                    let checkUser = this.chattedRoomList[i];
                     if(room.chatRoomId == checkUser.chatRoomId){
                         const newRoomObj = Object.assign({}, room, { isRead: checkUser});
                         roomArr.push(newRoomObj);

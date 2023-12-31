@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axios from 'axios';
-import { response } from "express";
+// import { response } from "express";
 
 export default defineStore("getInfoState", {
 
@@ -20,9 +20,9 @@ export default defineStore("getInfoState", {
         // return full msg & sender info
         recordMsg: [],
         // in readMessage
-        // receiver: 0,
+        receiver: 0,
         // in readMessage
-        // chatRoomId: "",
+        chatRoomId: "",
     }),
 
 
