@@ -6,26 +6,22 @@ import getInfoState from '../stores/getInfoState';
 export default{
     data(){
         return{
-            isOpen: false,
-            connected: false,
             socket: null,
             userInfo: {},
             msg: "",
             messages: [],
             chatRoom: null,
-            showRoomName: "",
+            showRoomName: "聊天室",
         }
     },
 
     props: [
-        "isShowChat",
         "room"
     ],
 
     mounted(){
         this.chatRoom = this.room;
         console.log("chat room", this.chatRoom)
-        this.isOpen = this.isShowChat;
 
         // 連接WebSocket
         this.socket = new WebSocket('ws://localhost:8081') 
@@ -34,7 +30,6 @@ export default{
 
         this.socket.addEventListener('open', event => {
             console.log('[WebSocket connected] ', event);
-            this.connected = true;
 
             // 在连接打开时执行
             console.log('[open connection]');
@@ -84,18 +79,20 @@ export default{
             // send msg to Server
             this.socket.send(JSON.stringify({chatRoomId: this.chatRoom.chatRoomId, ent: this.chatRoom.ent, msg: this.msg, dateTime: this.currentDateTime, subscribers: this.chatRoom.subscriberList}));
 
-            // axios.post('http://localhost:8080/api/adoption/chat/create_message', {
-            //     sender: this.userInfo.userId,
-            //     text: JSON.stringify(this.msg),
-            //     chatRoomId: this.chatRoom.chatRoomId,
-            //     timeStamp: this.currentDateTime
-            // })
-            // .then(response => {
-            //     console.log("response", response.data)
-            // })
-            // .catch(error => {
-            //     console.error(error)
-            // })
+            const dateTime =  new Date(this.currentDateTime);
+
+            axios.post('http://localhost:8080/api/adoption/chat/create_message', {
+                sender: this.userInfo.userId,
+                text: this.msg,
+                chatRoomId: this.chatRoom.chatRoomId,
+                timeStamp: dateTime.toISOString()
+            })
+            .then(response => {
+                console.log("response", response.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
         },
 
         disconnect() {
@@ -103,10 +100,11 @@ export default{
             // 在關閉連線時執行
             this.socket.onclose = () => console.log('[close connection]')
         },
+
         closeChat(){
-            this.isOpen = false;
             this.$emit('chatIsClose', false)
         },
+
         getPetUser(id) {
             axios.get('http://localhost:8080/api/adoption/userInfo/finduser', {
                 params: {
@@ -131,7 +129,7 @@ export default{
     <!-- 主顯示頁面 -->
     <div class="showChat">
         <!-- test chat -->
-        <div v-if="this.connected" class="chatArea">
+        <div class="chatArea">
             <div class="chatTop">
                 <h3>{{ this.showRoomName }}</h3>
                 <button type="button" class="btn-close closeBtn" @click="closeChat"></button>

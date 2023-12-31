@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import axios from 'axios';
-// import { response } from "express";
 
 export default defineStore("getInfoState", {
 
@@ -161,7 +160,7 @@ export default defineStore("getInfoState", {
                 }
             })
             .then(response => {
-                console.log(response.data)
+                console.log("get chat users list response", response.data)
                 this.foundChattedUserList = response.data.chatUserList;
             })
             .catch(error => {
@@ -238,20 +237,20 @@ export default defineStore("getInfoState", {
         },
 
         // 設置 ChatUser 為已讀
-        // readMessage(userId, roomId){
-        //     this.receiver = userId;
-        //     this.chatRoomId = roomId;
+        readMessage(userId, roomId){
+            this.receiver = userId;
+            this.chatRoomId = roomId;
 
-        //     axios.post('http://localhost:8080/api/adoption/chat/read_message', {
-        //         receiver: this.receiver,
-        //         chatRoomId: this.chatRoomId
-        //     })
-        //     .then( response => {
-        //         console.log("read msg res", response.data)
-        //     })
-        //     .catch( error => {
-        //         console.error(error)
-        //     })
-        // }
+            axios.post('http://localhost:8080/api/adoption/chat/read_message', {
+                receiver: this.receiver,
+                chatRoomId: this.chatRoomId
+            })
+            .then( response => {
+                console.log("read msg res", response.data)
+            })
+            .catch( error => {
+                console.error(error)
+            })
+        }
     },
 });

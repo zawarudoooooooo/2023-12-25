@@ -4,12 +4,12 @@ import ChatList from '../../components/ChatList.vue';
 import axios from 'axios';
 import { mapState, mapGetters, mapActions } from "pinia";
 import getInfoState from '../../stores/getInfoState';
+import socketState from '../../stores/socketState';
 
 export default{
     data(){
         return{
             connected: false,
-            socket: null,
             chatRoom: {},
             userInfo: {},
             messages: [],
@@ -27,58 +27,56 @@ export default{
     },
 
     mounted(){
-        // 連接WebSocket
-        this.socket = new WebSocket('ws://localhost:8081') 
-
         this.userInfo = JSON.parse(sessionStorage.getItem('foundUserInfo'));
-        console.log("user", this.userInfo)
+        // console.log("user", this.userInfo)
 
-        this.socket.addEventListener('open', event => {
-            console.log('[WebSocket connected] ', event);
-            this.connected = true;
+        // 連接WebSocket
+        this.connectWebSocket()
 
-            console.log('[open connection]');
-            // Listen for messages from Server
-            this.socket.onmessage = event => {
-                console.log(`[Message from Server]:\n %c${event.data}`, 'color: blue');
-                // 將新訊息添加到dateCount
-                this.dateCountAdd(event.data)
-            };
-            this.connect()
-        })
-
-        console.log("date time", this.currentDateTime)
-
-        // 使scroll保持在底部
-        this.$refs.scrollContainer.scrollTop = this.$refs.scrollContainer.scrollHeight;
+        console.log("now", this.currentDateTime)
     },
 
     watch: {
         dateCount: {
             handler(newDateCount, oldDateCount) {
-                console.log('dateCount changed', newDateCount);
+                // console.log('dateCount changed', newDateCount);
                 this.dateCount == newDateCount;
-                // 使scroll保持在底部
-                this.$refs.scrollContainer.scrollTop = this.$refs.scrollContainer.scrollHeight;
+
+                // 聊天紀錄載入完成後，使scroll保持在底部
+                this.$nextTick( event => {
+                    this.$refs.scrollContainer.scrollTop = this.$refs.scrollContainer.scrollHeight;
+                });
             },
-            // deep: true, // 深度監視對象的變化
         },
+
+        messages: {
+            handler(newMessages, oldMessages){
+                // console.log('msg added', newMessages);
+                this.messages == newMessages;
+
+                // 聊天紀錄更新後，使scroll保持在底部
+                this.$nextTick( event => {
+                    this.$refs.scrollContainer.scrollTop = this.$refs.scrollContainer.scrollHeight;
+                });
+            }
+        }
     },
 
     computed: {
         ...mapState(getInfoState, ['recordMsg']),
         ...mapGetters(getInfoState, ['currentDateTime']),
+        ...mapState(socketState, ['socket']),
 
         dateCount(){
             // 使用 reduce 进行分组
             // acc：key的日期
             // item：原本的recordMsg for each
             const groupedData = this.recordMsg.reduce((acc, item) => {
-                // 提取日期和时间
+                // 分開日期和時間
                 const [date, time] = item.timeStamp.split('T');
-                const sendTime = time.slice(0, 5); // 提取小时和分钟，格式为 HH:mm
+                const sendTime = time.slice(0, 5); // 轉換小時和分鐘的格式為 HH:mm
 
-                // 检查是否已存在以该日期为键的数组
+                // 檢查是否已存在該日期的key值
                 if (!acc[date]) {
                     acc[date] = [];
                 }
@@ -86,7 +84,7 @@ export default{
                 // 添加 sendTime 字段
                 const newItem = { ...item, sendTime };
 
-                // 将新的项推入数组
+                // 加入新的訊息到 acc[date]
                 acc[date].push(newItem);
 
                 return acc;
@@ -100,60 +98,57 @@ export default{
 
     methods: {
         ...mapActions(getInfoState, ['getChatDetail']),
+        ...mapActions(socketState, ['connectServer', 'disconnectServer', 'sendMessage']),
 
-        // connect to WebSocket server
-        connect() { 
-            this.socket.send(JSON.stringify({ type: 'user', data: this.userInfo }));
-            // 在開啟連線時執行
-            this.socket.onopen = () => {
-                console.log('[open connection]')
-                // Listen fro messages from Server
-                this.socket.onmessage = event => {
-                    console.log(`[Message from Server]:\n %c${event.data}`, 'color: blue')
-                }
+        // connect to the WebSocket
+        connectWebSocket(){
+            try {
+                this.socket.addEventListener('open', event => {
+                    console.log('[WebSocket connected] ', event);
+                    this.connected = true;
+
+                    console.log('[open connection]');
+                    // Listen for messages from Server
+                    this.socket.onmessage = event => {
+                        console.log(`[Message from Server]:\n %c${event.data}`, 'color: blue');
+                        // 將新訊息添加到dateCount
+                        this.dateCountAdd(event.data)
+                    };
+
+                    // pinia socket: connect
+                    this.connectServer(this.userInfo)
+                });
+            } catch (error) {
+                console.error(error)
             }
         },
 
-        // Listen for msg from Server
-        sendMessage(){
-            // send msg to Server
-            this.socket.send(JSON.stringify({chatRoomId: this.chatRoom.room.chatRoomId, ent: this.chatRoom.room.ent, msg: this.sendMsg, dateTime: this.currentDateTime, subscribers: this.chatRoom.room.subscriberList}));
-
-            const dateTime =  new Date(this.currentDateTime);
-
-            axios.post('http://localhost:8080/api/adoption/chat/create_message', {
-                sender: this.userInfo.userId,
-                text: JSON.stringify(this.sendMsg),
+        // pinia socket: sendMessage()
+        sendMessageByPinia(){
+            const sendData = {
                 chatRoomId: this.chatRoom.room.chatRoomId,
-                timeStamp: dateTime.toISOString(),
-            })
-            .then(response => {
-                console.log("response", response.data);
-                this.sendMsg = "";
-            })
-            .catch(error => {
-                console.error(error)
-            })
-        },
-
-        disconnect() {
-            this.socket.close()
-            // 在關閉連線時執行
-            this.socket.onclose = () => console.log('[close connection]')
+                ent: this.chatRoom.room.ent,
+                msg: this.sendMsg,
+                dateTime: this.currentDateTime,
+                subscribers: this.chatRoom.room.subscriberList
+            }
+            this.sendMessage(sendData, this.userInfo)
         },
 
         getChatDetailFromPinia(obj){
             this.chatRoom = obj;
             console.log("get chat room from pinia", this.chatRoom)
+
             // pinia: get the records of the chat
             this.getChatDetail(obj);
+
             this.isShowChat = true;
         },
 
         dateCountAdd(data){
             // 設置server.js返回的data為item
             const item = JSON.parse(data);
-            console.log(item)
+
             // 提取日期和时间
             const [date, time] = item.time.split(' ');
             const sendTime = time.slice(0, 5); // 提取小时和分钟，格式为 HH:mm
@@ -169,6 +164,11 @@ export default{
             // 将新的项推入数组
             this.messages[date].push(newItem);
             console.log("new dateCount", this.messages)
+
+            // 新訊息送出後，使scroll保持在底部
+            this.$nextTick( event => {
+                this.$refs.scrollContainer.scrollTop = this.$refs.scrollContainer.scrollHeight;
+            });
         }
     }
 }
@@ -247,8 +247,8 @@ export default{
 
             <!-- send mssage -->
             <div v-show="isShowChat" class="sendMsgArea">
-                <input class="msgInput" type="text" id="sendMsg" placeholder="請輸入訊息" v-model="sendMsg" @keyup.enter="sendMessage">
-                <button class="noStyleBtn" id="sendBtn" @click="sendMessage">
+                <input class="msgInput" type="text" id="sendMsg" placeholder="請輸入訊息" v-model="sendMsg" @keyup.enter="sendMessageByPinia">
+                <button class="noStyleBtn" id="sendBtn" @click="sendMessageByPinia">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>

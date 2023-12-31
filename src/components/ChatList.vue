@@ -2,13 +2,12 @@
 import Swal from 'sweetalert2'
 import { mapState, mapActions } from "pinia";
 import getInfoState from '../stores/getInfoState';
+import socketState from '../stores/socketState';
 
 export default {
     data() {
         return {
             userInfo: {},
-            chattedRoomList: [],
-            chattedUserList: [],
         }
     },
 
@@ -18,45 +17,56 @@ export default {
         // pinia: getInfoState
         this.getChatRooms(this.userInfo);
 
-        // pinia: getInfoState res
-        this.chattedRoomList = this.foundChattedRoomList;
-        console.log("chat rooms from pinia", this.chattedRoomList)
-
-        // pinia: getInfoState res
-        this.chattedUserList = this.foundChattedUserList;
-        console.log("chat users from pinia", this.chattedUserList)
+        // pinia socket: connect to socket
+        // this.connectServer(this.userInfo);
     },
 
     computed: {
         ...mapState(getInfoState, ['foundChattedRoomList', 'foundChattedUserList']),
+        ...mapState(socketState, ['socket']),
 
         showList(){
             const roomArr = [];
 
-            this.chattedRoomList.forEach( room => {
-                for(let i = 0; i < this.chattedRoomList.length; i++){
-                    let checkUser = this.chattedRoomList[i];
-                    if(room.chatRoomId == checkUser.chatRoomId){
+            this.foundChattedRoomList.forEach( room => {
+                for(let i = 0; i < this.foundChattedUserList.length; i++){
+                    let checkUser = this.foundChattedUserList[i];
+                    if(checkUser.chatRoomId == room.chatRoomId && checkUser.receiver == this.userInfo.userId){
                         const newRoomObj = Object.assign({}, room, { isRead: checkUser});
                         roomArr.push(newRoomObj);
                     }
                 }
             })
 
-            console.log(roomArr);
             return roomArr;
         }
     },
 
     methods: {
-        ...mapActions(getInfoState, ['getChatRooms']),
+        ...mapActions(getInfoState, ['getChatRooms', 'readMessage']),
+        ...mapActions(socketState, ['connectServer', 'connectChannel']),
 
         emitGo(roomInfo){
+            // ponia WebSocket: 建立 channel
+            const data = {
+                    chatRoomId: roomInfo.chatRoomId,
+                    ent: roomInfo.ent,
+                    subscribers: roomInfo.subscriberList,
+                }
+            this.connectChannel(data)
+
+            // 叫出聊天視窗和記錄到 Chat.vue
             const sendChatReq = {
                 room: roomInfo,
                 user: this.userInfo
             }
             this.$emit('chatReq', sendChatReq)
+
+            // pinia: 標示為已讀
+            this.readMessage(this.userInfo.userId, roomInfo.chatRoomId)
+
+            // pinia: 刷新列表
+            this.getChatRooms(this.userInfo);
         }
     },
 }

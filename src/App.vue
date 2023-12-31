@@ -23,18 +23,28 @@ export default {
     getUserInfo(obj) {
       this.userInfo = obj;
     },
+
     getPetInfo(obj) {
       this.petInfo = obj;
     },
+
     getPetId(x) {
       this.petId = x;
     },
+
     getUserPetInfo(obj) {
       this.userPetInfo = obj;
     },
+
     showChatArea(data){
       this.isShowChat = !this.isShowChat;
+      console.log("is show", this.isShowChat)
       this.room = data;
+    },
+
+    closeChatArea(close){
+      this.isShowChat = close;
+      console.log("is show", this.isShowChat)
     }
   }
 }
@@ -55,16 +65,17 @@ export default {
       @callChat="showChatArea"/>
     </div>
 
-    <div :class="{'chatArea':isShowChat,'chatArea_off':!isShowChat}">
-      <ChatFlow v-if="isShowChat" :isShowChat="isShowChat" @chatIsClose="showChatArea" :room="room"/>
+    <div v-if="isShowChat" class="chatArea">
+      <ChatFlow @chatIsClose="closeChatArea" :room="room"/>
     </div>
+    
     <div class="fixedChat" @click="showChatArea">
       <i class="fa-solid fa-comments" style="color: white;"></i>
     </div>
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .header {
   width: 100vw;
   height: 13vh;
@@ -85,14 +96,8 @@ export default {
   top: 10vh;
   left: 27vw;
   z-index: 10;
-  transition: all 0.3s ease;
 }
-.chatArea_off{
-    width: 0;
-    height: 0;
-    opacity: 0;
-    transition: all 0.3s ease;    
-}
+
 
 .fixedChat{
   width: 60px;
