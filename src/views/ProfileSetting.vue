@@ -170,6 +170,17 @@ export default {
 
                         this.$emit("userInfo", foundUser);
                         this.foundUser = foundUser; // 將整理後的 foundUser 存入 this.foundUser
+                        this.userName=foundUser.userName
+                        this.profile=foundUser.profile
+                        this.userRealName=foundUser.userRealName
+                        this.gender=foundUser.gender
+                        this.jobOccupation=foundUser.jobOccupation
+                        this.address=foundUser.address
+                        this.phone=foundUser.phone
+                        this.familyStatus=foundUser.familyStatus
+                        this.sentenceToAdopter=foundUser.sentenceToAdopter
+                        
+
                     } else {
                         console.log('找不到對應的使用者');
                     }
@@ -269,7 +280,7 @@ export default {
             <!-- 使用者名稱和ID 圖片處理區域 -->
             <div class="usernameAndid">
                 <!-- Input field for username -->
-                <input class="block" type="text" v-model="userName" :placeholder=foundUser.userName>
+                <input style="width: 120px;" class="block" type="text" v-model="userName" :placeholder=foundUser.userName>
 
                 <!-- Cropper popup -->
                 <div v-if="showCropper" class="cropper-popup">
@@ -330,7 +341,6 @@ export default {
                             </div>
                             <div class="gender">
                                 <span>性別 : </span>
-                                {{ foundUser.gender }}
                                 <select class="blockSmall blockData" :placeholder=foundUser.gender v-model="this.gender">
                                     <option value="男性">男性</option>
                                     <option value="女性">女性</option>
