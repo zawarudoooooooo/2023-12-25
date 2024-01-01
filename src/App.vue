@@ -43,7 +43,7 @@ export default {
     },
 
     closeChatArea(close){
-      this.isShowChat = close;
+      this.isShowChat = false;
       console.log("is show", this.isShowChat)
     }
   }
@@ -66,7 +66,9 @@ export default {
     </div>
 
     <div v-if="isShowChat" class="chatArea">
-      <ChatFlow @chatIsClose="closeChatArea" :room="room"/>
+      <ChatFlow 
+      @chatIsClose="closeChatArea" 
+      :room="room"/>
     </div>
     
     <div class="fixedChat" @click="showChatArea">

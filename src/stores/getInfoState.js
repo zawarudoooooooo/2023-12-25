@@ -216,7 +216,7 @@ export default defineStore("getInfoState", {
             // reste the states
             this.recordMsg = [];
 
-            console.log("ids string", this.idsStr)
+            // console.log("ids string", this.idsStr)
 
             axios.get('http://localhost:8080/api/adoption/userInfo/findAdopters', {
                 params: {
@@ -236,7 +236,7 @@ export default defineStore("getInfoState", {
                         }
                     }
                 })
-                console.log("record msg", this.recordMsg)
+                // console.log("record msg", this.recordMsg)
             })
             .catch(error => {
                 console.error(error)

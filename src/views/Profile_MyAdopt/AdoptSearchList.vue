@@ -1,6 +1,8 @@
 <script>
 import axios from 'axios';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { mapState, mapGetters, mapActions } from "pinia";
+import socketState from '../../stores/socketState';
 
 
 export default {
@@ -87,9 +89,29 @@ export default {
 
     mounted() {
         this.search()
+
+        // pinia WebSocket: 連接WebSocket
+        try {
+            // pinia WebSocket: connect & get the message from server
+            this.socket.addEventListener('open', event => {
+                console.log('[WebSocket connected] ', event);
+
+                console.log('[open connection]');
+                // Listen for messages from Server
+                this.socket.onmessage = event => {
+                    console.log(`[Message from Server]:\n %c${event.data}`, 'color: blue');
+                };
+            });
+
+            
+        } catch (error) {
+            console.error(error)
+        }
     },
 
     computed: {
+        ...mapState(socketState, ['socket']),
+
         filteredCities() {
             if (this.inputArea) {
                 switch (this.inputArea) {
@@ -117,6 +139,8 @@ export default {
 
 
     methods: {
+        ...mapActions(socketState, ['connectServer', 'connectChannel']),
+
         getPath(type) {
             if (type == "狗") {
                 return this.dog;
@@ -236,7 +260,6 @@ export default {
         },
 
         openChat(item){
-            
             const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
 
             if(user == null){
@@ -250,7 +273,6 @@ export default {
 
             const subListStr = subList.join(',');
 
-
             axios.post(`http://localhost:8080/api/adoption/chat/create_room`, {
                 creator: user.userId, 
                 subscriberList: subListStr, 
@@ -258,12 +280,19 @@ export default {
             })
             .then(response => {
                 console.log(response.data)
-                this.$emit('callChat', response.data.chatRoom)
+                const chatRoom = response.data.chatRoom;
+                this.$emit('callChat', chatRoom)
+
+                // pinia WebSocket: connectServer()
+                this.connectServer(user)
+
+                // pinia WebSocket: 連接頻道
+                this.connectChannel(chatRoom);
             })
             .catch(error => {
                 console.error(error);
             })
-        }
+        },
     }
 }
 </script>

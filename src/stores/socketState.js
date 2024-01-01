@@ -68,6 +68,7 @@ export default defineStore("socketState", {
         // WebSocket：建立 channel
         connectChannel(data){
             this.connectChannelData = data;
+            console.log(this.connectChannelData)
 
             const connectServerData = {
                 type: 'connect',
@@ -77,7 +78,7 @@ export default defineStore("socketState", {
                     subscribers: this.connectChannelData.subscriberList,
                 }
             }
-            
+            console.log(connectServerData)
             this.socket.send(JSON.stringify(connectServerData));
         },
 

@@ -28,7 +28,7 @@ export default{
         this.userInfo = JSON.parse(sessionStorage.getItem('foundUserInfo'));
         // console.log("user", this.userInfo)
 
-        // pinia WebSocket: 連接WebSocket
+        // 連接WebSocket
         this.connectWebSocket()
 
         console.log("now", this.currentDateTime)
@@ -218,6 +218,7 @@ export default{
             <h2 v-if="!isShowChat">未選擇聊天室</h2>
             <h4 v-else>{{ chatRoom.room.roomName }}</h4>
 
+            <!-- 聊天紀錄 -->
             <div v-show="isShowChat" class="chatShowArea" ref="scrollContainer">
                 <div class="chatDate" v-for="(msgArr, date) in messages">
                     <p class="date">{{ date }}</p>
