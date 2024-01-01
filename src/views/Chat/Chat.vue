@@ -30,7 +30,7 @@ export default{
         this.userInfo = JSON.parse(sessionStorage.getItem('foundUserInfo'));
         // console.log("user", this.userInfo)
 
-        // 連接WebSocket
+        // pinia WebSocket: 連接WebSocket
         this.connectWebSocket()
 
         console.log("now", this.currentDateTime)
@@ -40,7 +40,7 @@ export default{
         dateCount: {
             handler(newDateCount, oldDateCount) {
                 // console.log('dateCount changed', newDateCount);
-                this.dateCount == newDateCount;
+                this.dateCount = newDateCount;
 
                 // 聊天紀錄載入完成後，使scroll保持在底部
                 this.$nextTick( event => {
@@ -103,6 +103,7 @@ export default{
         // connect to the WebSocket
         connectWebSocket(){
             try {
+                // pinia WebSocket: connect & get the message from server
                 this.socket.addEventListener('open', event => {
                     console.log('[WebSocket connected] ', event);
                     this.connected = true;
@@ -115,7 +116,7 @@ export default{
                         this.dateCountAdd(event.data)
                     };
 
-                    // pinia socket: connect
+                    // pinia WebSocket: connectServer()
                     this.connectServer(this.userInfo)
                 });
             } catch (error) {
@@ -123,7 +124,7 @@ export default{
             }
         },
 
-        // pinia socket: sendMessage()
+        // pinia WebSocket: sendMessage()
         sendMessageByPinia(){
             const sendData = {
                 chatRoomId: this.chatRoom.room.chatRoomId,
@@ -133,6 +134,12 @@ export default{
                 subscribers: this.chatRoom.room.subscriberList
             }
             this.sendMessage(sendData, this.userInfo)
+
+            // pinia WebSocket: 標示為已讀
+            this.readMessage(this.userInfo.userId, this.chatRoom.room.chatRoomId)
+
+            // 清空input
+            this.sendMsg = "";
         },
 
         getChatDetailFromPinia(obj){
@@ -155,7 +162,8 @@ export default{
 
             // 检查是否已存在以该日期为键的数组
             if (!this.messages[date]) {
-                this.$set(this.messages[date] = []);
+                // this.$set(this.messages[date] = []);
+                this.messages[date] = [];
             }
 
             // 設置新訊息

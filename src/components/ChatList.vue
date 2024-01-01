@@ -16,9 +16,6 @@ export default {
 
         // pinia: getInfoState
         this.getChatRooms(this.userInfo);
-
-        // pinia socket: connect to socket
-        // this.connectServer(this.userInfo);
     },
 
     computed: {
@@ -62,11 +59,8 @@ export default {
             }
             this.$emit('chatReq', sendChatReq)
 
-            // pinia: 標示為已讀
+            // pinia WebSocket: 標示為已讀
             this.readMessage(this.userInfo.userId, roomInfo.chatRoomId)
-
-            // pinia: 刷新列表
-            this.getChatRooms(this.userInfo);
         }
     },
 }

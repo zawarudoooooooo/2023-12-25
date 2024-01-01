@@ -54,7 +54,7 @@ wss.on('connection', (ws, req) => {
         }
         
         if( dataObj.type == 'sendMsg' ){
-            broadcastToChannel(dataObj.data.chatRoomId, dataObj.data.ent, ws.user.userId, dataObj.data.msg, dataObj.data.dateTime);
+            broadcastToChannel(dataObj.data.chatRoomId, dataObj.data.ent, ws.user.userId, ws.user, dataObj.data.msg, dataObj.data.dateTime);
         }
     })
 
@@ -87,7 +87,7 @@ function userLeaveChannel(ws, channelId){
 }
 
 // broadcast to subscribers
-function broadcastToChannel(channelId, entNum, sender, message, timestamp) {
+function broadcastToChannel(channelId, entNum, sender, user, message, timestamp) {
     const channelSet = channelMap.get(channelId);
 
     console.log(channelSet)
@@ -95,7 +95,7 @@ function broadcastToChannel(channelId, entNum, sender, message, timestamp) {
     if(channelSet){
         channelSet.forEach(userSocket => {
             if (sender) {
-                let sendObj = { sender: sender, ent: entNum, text: message, time: timestamp};
+                let sendObj = { sender: sender, ent: entNum, text: message, time: timestamp, user: user};
                 console.log('[send] ', sendObj)
                 userSocket.send(JSON.stringify(sendObj));
             } else {
