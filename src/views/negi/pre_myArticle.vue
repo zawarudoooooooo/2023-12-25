@@ -272,7 +272,7 @@ export default {
                                         </div>
                                     </div>
                                     <div class="column-4">
-                                        <div class="div-16">
+                                        <!-- <div class="div-16">
                                             <div class="pet_state">with</div>
                                             <div class="pet">
                                                 <div class="pet_name">Kiwi</div>
@@ -280,7 +280,7 @@ export default {
                                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/5229e6b9f8129729e04753274f9898cd171972f078ea719bd686b4bf738bc61a?"
                                                     class="pet_type" />
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -300,13 +300,13 @@ export default {
                             </div>
                             <div class="div-24"></div>
 
-                            <div class="reply">
-                                <button @click="showAllComments = !showAllComments">
+                            <div class="reply" >
+                                <button style="margin-left: 950px; background-color:#6E75A8;color: white;border-radius: 15px;" @click="showAllComments = !showAllComments">
                                     {{ showAllComments ? '收起留言' : '查看更多' }}
                                 </button>
                                 <div class="replier"
                                     v-for="(item, index) in showAllComments ? postCommentList : lastFiveComments">
-                                    <img class="replier_img" :src="'data:image/jpeg;base64,' + item.userPhoto" alt="">
+                                    <img style="width: 70px;height: 70px;border-radius: 50px; " :src="'data:image/jpeg;base64,' + item.userPhoto" alt="">
                                     <div class="replier_data">
                                         <p class="replier_name">{{ item.userName }}</p>
                                         <p class="replier_userId">{{ item.account }}</p>
@@ -316,15 +316,15 @@ export default {
                                     </div>
                                 </div>
                             </div>
-                            <div class="newReply">
+                            <div class="newReply" style="margin-left: 25px;">
                                 <img class="replier_img" :src="'data:image/jpeg;base64,' + this.foundUserInfo.userPhoto"
                                     alt="">
                                 <div class="nameAccount">
                                     <span>{{ this.foundUserInfo.userName }}</span>
                                     <span>{{ this.foundUserInfo.account }}</span>
                                 </div>
-                                <input type="text" v-model="userReply" @keyup.enter="createNewComment()">
-                                <button @click="createNewComment()">回覆</button>
+                                <input style="margin-left: 15px;" type="text" v-model="userReply" @keyup.enter="createNewComment()">
+                                <button style="margin-left: 15px; background-color:#6E75A8;color: white;border-radius: 15px;" @click="createNewComment()">回覆</button>
                             </div>
                         </div>
                     </div>

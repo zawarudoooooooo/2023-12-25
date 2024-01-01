@@ -254,7 +254,8 @@ export default {
                         :class="['carousel-item', index === 0 ? 'active' : '']">
                         <div class="d-flex justify-content-around">
                             <!-- 使用原始卡片模板 -->
-                            <div v-for="item in articlesChunk" :key="item.serialNo" class="showCard" @click="goTo(item.serialNo)">
+                            <div v-for="item in articlesChunk" :key="item.serialNo" class="showCard"
+                                @click="goTo(item.serialNo)">
                                 <div class="cardTop">
                                     <img loading="lazy" class="poster_icon"
                                         :src="'data:image/jpeg;base64,' + item.userPhoto" />
@@ -265,7 +266,9 @@ export default {
                                 </div>
                                 <div class="cardMiddle">
                                     <div class="article_title">{{ item.title }}</div>
-                                    <img class="img" :src="'data:image/jpeg;base64,' + item.postPhoto" alt="">
+                                    <div class="img">
+                                        <img :src="'data:image/jpeg;base64,' + item.postPhoto" alt="">
+                                    </div>
                                     <div class="cardInfo">
                                         <p class="infoText">{{ item.postContent }}</p>
                                     </div>
@@ -466,6 +469,12 @@ export default {
             border: 1px solid #978989;
             border-radius: 20px;
             margin-bottom: 10px;
+
+            img {
+                width: 230px;
+                height: 90px;
+                border-radius: 20px;
+            }
         }
 
         .cardInfo {
