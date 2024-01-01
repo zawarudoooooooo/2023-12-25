@@ -16,8 +16,6 @@ export default{
             sendMsg: "",
             chatUserList: null,
             isShowChat: false,
-            // connect
-            isRead: false,
         }
     },
 
@@ -40,7 +38,6 @@ export default{
         dateCount: {
             handler(newDateCount, oldDateCount) {
                 // console.log('dateCount changed', newDateCount);
-                this.dateCount = newDateCount;
 
                 // 聊天紀錄載入完成後，使scroll保持在底部
                 this.$nextTick( event => {
@@ -52,7 +49,7 @@ export default{
         messages: {
             handler(newMessages, oldMessages){
                 // console.log('msg added', newMessages);
-                this.messages == newMessages;
+                this.messages = newMessages;
 
                 // 聊天紀錄更新後，使scroll保持在底部
                 this.$nextTick( event => {
@@ -63,11 +60,20 @@ export default{
     },
 
     computed: {
-        ...mapState(getInfoState, ['recordMsg']),
+        ...mapState(getInfoState, ['recordMsg', 'readRecord']),
         ...mapGetters(getInfoState, ['currentDateTime']),
         ...mapState(socketState, ['socket']),
 
         dateCount(){
+            // 尚未捕捉到pinia變數readRecord的值時，不執行
+            if(!this.readRecord.readTime){
+                return;
+            }
+
+            const readTime = new Date(this.readRecord.readTime);
+            const formattedReadTime = readTime.toISOString();
+            console.log("formatted Read Time", formattedReadTime)
+
             // 使用 reduce 进行分组
             // acc：key的日期
             // item：原本的recordMsg for each
@@ -81,8 +87,17 @@ export default{
                     acc[date] = [];
                 }
 
-                // 添加 sendTime 字段
-                const newItem = { ...item, sendTime };
+                // 設置已讀或未讀
+                let isRead = false;
+                const timeStamp = new Date(item.timeStamp);
+                const formattedTimeStamp = timeStamp.toISOString();
+
+                if(formattedTimeStamp < formattedReadTime){
+                    isRead = true;
+                }
+
+                // 添加 sendTime & 已讀未讀
+                const newItem = { ...item, sendTime, isRead: isRead};
 
                 // 加入新的訊息到 acc[date]
                 acc[date].push(newItem);
@@ -97,7 +112,7 @@ export default{
     },
 
     methods: {
-        ...mapActions(getInfoState, ['getChatDetail']),
+        ...mapActions(getInfoState, ['getChatDetail', 'readMessage']),
         ...mapActions(socketState, ['connectServer', 'disconnectServer', 'sendMessage']),
 
         // connect to the WebSocket
@@ -137,6 +152,9 @@ export default{
 
             // pinia WebSocket: 標示為已讀
             this.readMessage(this.userInfo.userId, this.chatRoom.room.chatRoomId)
+
+            // 觸發 ChatList.vue 的方法
+            this.$refs.chatList.getNew();
 
             // 清空input
             this.sendMsg = "";
@@ -188,7 +206,7 @@ export default{
     <!-- 側邊功能區 -->
     <div class="dashBoardArea">
         <!-- <ProfileDashBoard /> -->
-        <ChatList @chatReq="getChatDetailFromPinia"/>
+        <ChatList ref="chatList" @chatReq="getChatDetailFromPinia"/>
     </div>
 
     <!-- 主顯示頁面 -->
@@ -211,7 +229,7 @@ export default{
                             <!-- 自己的 -->
                             <div v-if="msg.sender == userInfo.userId" class="showMe" :key="index">
                                 <div class="check">
-                                    <span class="msgRead" v-if="isRead">已讀</span>
+                                    <span class="msgRead" v-if="msg.isRead">已讀</span>
                                     <span class="msgTime">{{ msg.sendTime }}</span>
                                 </div>
                                 <span class="msgMe">{{ msg.text.replace(/^"|"$/g, '') }}</span>
@@ -232,7 +250,7 @@ export default{
                             <!-- 自己的 -->
                             <div v-if="msg.sender == userInfo.userId" class="showMe" :key="index">
                                 <div class="check">
-                                    <span class="msgRead" v-if="isRead">已讀</span>
+                                    <span class="msgRead" v-if="msg.isRead">已讀</span>
                                     <span class="msgTime">{{ msg.sendTime }}</span>
                                 </div>
                                 <span class="msgMe">{{ msg.text.replace(/^"|"$/g, '') }}</span>

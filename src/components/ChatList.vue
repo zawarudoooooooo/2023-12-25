@@ -19,8 +19,8 @@ export default {
     },
 
     computed: {
-        ...mapState(getInfoState, ['foundChattedRoomList', 'foundChattedUserList']),
-        ...mapState(socketState, ['socket']),
+        ...mapState(getInfoState, ['foundChattedRoomList', 'foundChattedUserList', 'newChatUser', 'newChatRoom']),
+        ...mapState(socketState, ['socket', 'serverSendText']),
 
         showList(){
             const roomArr = [];
@@ -37,6 +37,14 @@ export default {
 
             return roomArr;
         }
+    },
+
+    watch: {
+        showList: {
+            handler(newShowList, oldShowList) {
+                // console.log('show list changed', newDateCount);
+            },
+        },
     },
 
     methods: {
@@ -61,6 +69,19 @@ export default {
 
             // pinia WebSocket: 標示為已讀
             this.readMessage(this.userInfo.userId, roomInfo.chatRoomId)
+        },
+
+        getNew(){
+            for(let i = 0; i < this.showList.length; i++){
+                const check = this.showList[i]
+                console.log("check", check)
+                console.log("new chat room", this.newChatRoom)
+                if(check.chatRoomId == this.newChatRoom.chatRoomId){
+                    check.lastMsg = this.serverSendText;
+                    this.showList[i] = Object.assign({}, check, { isRead: this.newChatUser});
+                    console.log(this.showList[i])
+                }
+            }
         }
     },
 }

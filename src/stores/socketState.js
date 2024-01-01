@@ -7,6 +7,8 @@ export default defineStore("socketState", {
         sendData: {},
         userInfo: {},
         connectChannelData: {},
+        // update the last msg
+        serverSendText: "",
     }),
 
     getters: {
@@ -51,7 +53,7 @@ export default defineStore("socketState", {
                 console.log('[open connection]')
                 // Listen for messages from Server
                 this.socket.onmessage = event => {
-                    console.log(`[Message from Server]:\n %c${event.data}`, 'color: blue')
+                    console.log(`[Message from Server]\n %c${event.data}`, 'color: blue')
                 }
             }
         },
@@ -84,6 +86,8 @@ export default defineStore("socketState", {
             this.sendData = data;
             this.userInfo = user;
 
+            this.serverSendText = this.sendData.msg;
+
             // WebSocket：送出訊息
             const connectServerData = {
                 type: 'sendMsg',
@@ -107,7 +111,6 @@ export default defineStore("socketState", {
             })
             .then(response => {
                 console.log("response", response.data);
-                this.sendMsg = "";
             })
             .catch(error => {
                 console.error(error)

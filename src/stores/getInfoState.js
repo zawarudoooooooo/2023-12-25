@@ -18,10 +18,16 @@ export default defineStore("getInfoState", {
         resMsg: [],
         // return full msg & sender info
         recordMsg: [],
+        // return read record
+        readRecord: {},
         // in readMessage
         receiver: 0,
         // in readMessage
         chatRoomId: "",
+        // return readMessage()
+        newChatUser: {},
+        // return getNewChatRoom()
+        newChatRoom: {},
     }),
 
 
@@ -171,7 +177,7 @@ export default defineStore("getInfoState", {
 
 
         // Chat.vue
-        // 獲取chat messages的紀錄
+        // 獲取chat messages的全部紀錄
         getChatDetail(obj){
             // reset the states
             this.roomObj = {};
@@ -189,8 +195,9 @@ export default defineStore("getInfoState", {
             })
             .then(response => {
                 console.log(response.data)
-                // 暫存值
                 this.resMsg = response.data.chatMsgList;
+                // 取得已讀紀錄
+                this.getReadRecord(this.roomObj.user.userId, this.roomObj.room.chatRoomId)
             })
             .catch(error => {
                 console.error(error)
@@ -236,6 +243,29 @@ export default defineStore("getInfoState", {
             })
         },
 
+
+
+        // 獲取已讀紀錄
+        getReadRecord(userId, roomId){
+            this.receiver = userId;
+            this.chatRoomId = roomId;
+
+            axios.get('http://localhost:8080/api/adoption/chat/get_chat_user', {
+                params: {
+                    chatRoomId: this.chatRoomId,
+                    receiver: this.receiver
+                }
+            })
+            .then( response => {
+                console.log("read record res", response.data);
+                this.readRecord = response.data.chatUser;
+            })
+            .catch( error => {
+                console.error(error)
+            })
+        },
+
+        // ChatList.vue
         // 設置 ChatUser 為已讀
         readMessage(userId, roomId){
             this.receiver = userId;
@@ -246,7 +276,31 @@ export default defineStore("getInfoState", {
                 chatRoomId: this.chatRoomId
             })
             .then( response => {
-                console.log("read msg res", response.data)
+                console.log("read msg res", response.data);
+                this.newChatUser = response.data.chatUser;
+                this.getNewChatRoom(this.chatRoomId);
+            })
+            .catch( error => {
+                console.error(error)
+            })
+        },
+
+
+
+        // Chat.vue
+        // ChatList.vue
+        // 以 chat room id 獲取最新的 message 紀錄
+        getNewChatRoom(chatRoomId){
+            this.chatRoomId = chatRoomId;
+
+            axios.get('http://localhost:8080/api/adoption/chat/get_new_chat_room', {
+                params: {
+                    chatRoomId: chatRoomId
+                }
+            })
+            .then( response => {
+                console.log("new chat room res", response.data);
+                this.newChatRoom = response.data.chatRoom;
             })
             .catch( error => {
                 console.error(error)
