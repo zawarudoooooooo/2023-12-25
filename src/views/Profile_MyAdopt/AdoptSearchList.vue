@@ -1,6 +1,8 @@
 <script>
 import axios from 'axios';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { mapState, mapGetters, mapActions } from "pinia";
+import socketState from '../../stores/socketState';
 
 
 export default {
@@ -87,9 +89,29 @@ export default {
 
     mounted() {
         this.search()
+
+        // pinia WebSocket: 連接WebSocket
+        try {
+            // pinia WebSocket: connect & get the message from server
+            this.socket.addEventListener('open', event => {
+                console.log('[WebSocket connected] ', event);
+
+                console.log('[open connection]');
+                // Listen for messages from Server
+                this.socket.onmessage = event => {
+                    console.log(`[Message from Server]:\n %c${event.data}`, 'color: blue');
+                };
+            });
+
+            
+        } catch (error) {
+            console.error(error)
+        }
     },
 
     computed: {
+        ...mapState(socketState, ['socket']),
+
         filteredCities() {
             if (this.inputArea) {
                 switch (this.inputArea) {
@@ -117,6 +139,8 @@ export default {
 
 
     methods: {
+        ...mapActions(socketState, ['connectServer', 'connectChannel']),
+
         getPath(type) {
             if (type == "狗") {
                 return this.dog;
@@ -125,6 +149,7 @@ export default {
                 return this.cat;
             }
         },
+
         search(){
             axios.get('http://localhost:8080/api/adoption/petInfo/getAdoptablePetList', {
                 params: {
@@ -139,12 +164,14 @@ export default {
                 this.pets = response.data.petInfoList;
             })
         },
+
         emitGo(item) {
             console.log(item)
             this.$emit("petId", item.pet_id);
             sessionStorage.setItem("adopt pet detail", JSON.stringify(item))
             this.$router.push('/AdoptionSearch/AdoptSearchDetail');
         },
+
         confirmApply(item){
 
             const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
@@ -182,6 +209,7 @@ export default {
                 this.searchStatus = status;
                 this.search();
         },
+
         getOwnerAndAdopterInfo(pet) {
 
             const ownerId = pet.user_id;
@@ -232,7 +260,6 @@ export default {
         },
 
         openChat(item){
-            
             const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
 
             if(user == null){
@@ -246,7 +273,6 @@ export default {
 
             const subListStr = subList.join(',');
 
-
             axios.post(`http://localhost:8080/api/adoption/chat/create_room`, {
                 creator: user.userId, 
                 subscriberList: subListStr, 
@@ -254,12 +280,19 @@ export default {
             })
             .then(response => {
                 console.log(response.data)
-                this.$emit('callChat', response.data.chatRoom)
+                const chatRoom = response.data.chatRoom;
+                this.$emit('callChat', chatRoom)
+
+                // pinia WebSocket: connectServer()
+                this.connectServer(user)
+
+                // pinia WebSocket: 連接頻道
+                this.connectChannel(chatRoom);
             })
             .catch(error => {
                 console.error(error);
             })
-        }
+        },
     }
 }
 </script>
@@ -314,40 +347,6 @@ export default {
 
 
         <div class="cardArea">
-
-            <!-- <div class="showCard" v-for="(item, index) in pets">
-                <div class="cardTop">
-                    <div :class="{'yellowCard' : item.adoption_status == '正常'}, {'redCard' : item.adoption_status == '送養中'}, {'greenCard' : item.adoption_status == '已送養'}" class="circle">
-                        <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path :d="getPath(item.type)" fill="white"/>
-                        </svg>
-                    </div>
-                    <h4 class="petNameClick" style="color: #978989;" @click="emitGo(item)">{{ item.pet_name }}</h4>
-                </div>
-
-                <div class="cardMiddle">
-                    <div class="cardMiddlePhoto"></div>
-                    <div class="cardMiddleDescription">
-                        <p>{{ item.pet_status }}</p>
-                    </div>
-                </div>
-
-                <div class="cardLast">
-                    <button class="btn btn-specialRed modal-btn" data-bs-toggle="modal" data-bs-target="#confirmModal">
-                        <i class="fa-solid fa-hand-holding-heart" style="color: white"></i>
-                        <p style="color: white;">申請領養</p>
-                    </button>
-                    <button class="btn btn-specialBlue modal-btn">
-                        <i class="fa-solid fa-comments" style="color: white;"></i>
-                        <p style="color: white;">聊聊了解</p>
-                    </button>
-                </div>
-
-                
-
-            </div> -->
-
-
             <!-- new card for 送養中 -->
             <div v-show="searchStatus == '送養中'" class="testCardArea" v-for="(item, index) in pets">
                 <div class="testCard" @click="emitGo(item)">

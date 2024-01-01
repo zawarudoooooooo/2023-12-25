@@ -103,6 +103,7 @@ export default {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    font-size: 25pt;
 
 
 
@@ -115,7 +116,7 @@ export default {
 
 
     .routerLink {
-        font-size: 25pt;
+        // font-size: 25pt;
         color: white;
         font-weight: 700;
         margin-right: 10px;
@@ -135,7 +136,6 @@ export default {
     }
 
     .line {
-        font-size: 1.7vw;
         color: white;
         font-weight: 700;
         margin-right: 10px;
