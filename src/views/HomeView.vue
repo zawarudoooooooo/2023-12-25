@@ -358,6 +358,7 @@ export default {
 }
 
 .info-card h2 {
+    height: 8vh;
     font-size: 1.5rem;
     margin-bottom: 10px;
     font-weight: 700;
@@ -368,6 +369,7 @@ export default {
     vertical-align: middle;
     border-radius: 0px 0px 30px 30px;
     width: 100%;
+    height: 30vh;
     padding: 0;
 }
 
@@ -414,28 +416,28 @@ export default {
 }
 
 .fa-arrow-left {
-    margin-right: 150px;
-    margin-bottom: 220px;
+    position: absolute;
+    top: 30vh;
+    left: 2vw;
 }
 
 .fa-arrow-right {
-    margin-left: 150px;
-    margin-bottom: 220px;
-
+    position: absolute;
+    top: 30vh;
+    right: 2vw;
 }
 
-.infoMoreBtnArea {
-    position: absolute;
-    left: 45vw;
-    bottom: 6vh;
+
 
     .infoMoreBtn {
+        position: absolute;
+        bottom: 8vh;
+        left: 46vw;
         padding: 15px 20px;
         font-size: 1vw;
         border-radius: 1vw;
         background-color: #c29f5d;
         color: #ffffff;
-
         box-shadow: 0 0 3px 2px lightgray;
         font-weight: 600;
 
@@ -447,7 +449,7 @@ export default {
         }
 
     }
-}
+
 
 .footer {
     width: 100%;

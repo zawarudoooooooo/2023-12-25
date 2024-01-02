@@ -82,7 +82,7 @@ export default {
 
 <template>
     <div class="bgArea">
-        <h1 class="bgAreaTitle">所有相關消息</h1>
+        <h1 class="bgAreaTitle">所有最新消息</h1>
         <div class="searchAllNewInfo">
             <!-- 每個 newInfo 對象都被用來生成一個消息卡片。v-for 根據 newInfoList 的內容動態生成消息卡片。 -->
             <div v-for="newInfo in newInfoList" :key="newInfo.serialNo" class="info-card" @click="expandCard(newInfo)">
@@ -119,7 +119,7 @@ export default {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
-        margin: 20px 0;
+        margin: 0 8vw 10vh 8vw;
         padding: 0 30px;
     }
 
@@ -151,6 +151,7 @@ export default {
     }
 
     .info-card h2 {
+        height: 8vh;
         font-size: 1.5rem;
         margin-bottom: 10px;
         font-weight: 700;
@@ -161,6 +162,7 @@ export default {
         vertical-align: middle;
         border-radius: 0px 0px 30px 30px;
         width: 100%;
+        height: 30vh;
         padding: 0;
     }
 
