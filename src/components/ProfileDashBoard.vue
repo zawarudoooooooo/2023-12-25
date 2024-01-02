@@ -93,7 +93,7 @@ export default {
         </div>
         <div class="article line">
             <i class="fa-solid fa-pencil"></i>
-            <p @click="goTo('/MyArticle')">我的文章</p>
+            <p @click="goTo('/ForumEntrance/ForumMyArticle')">我的文章</p>
         </div>
         <div class="adopt line" @click="goTo('/MyAdopt')">
             <i class="fa-solid fa-user-tie"></i>

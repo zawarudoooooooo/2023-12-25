@@ -300,7 +300,7 @@ export default {
         <div class="showBoard">
             <!-- title -->
             <div class="title">
-                <h1>Forum Home</h1>
+                <h1>論壇首頁</h1>
             </div>
 
 

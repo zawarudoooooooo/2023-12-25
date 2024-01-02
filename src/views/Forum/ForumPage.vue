@@ -188,23 +188,7 @@ export default {
             <div class="div-7">
                 <h1>你知道嗎?</h1>
             </div>
-            <!-- <div class="div-8" v-for="item in this.newInfoList">
-                <div class="div-9">
-                    <div class="column-3">
-                        <img :src="item.base64Image" alt="">
-                    </div>
-                    <div class="div-10">
-                        <div class="div-11">
-                            <h2>{{ item.title }}</h2>
-                        </div>
-                        <div class="div-12">
-                            <span>{{ item.content }}</span>
-                        </div>
-                    </div>
-
-                </div>
-            </div> -->
-
+            
             <!-- 最新消息輪播 -->
             <div id="carouselNewInfo" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
@@ -368,7 +352,7 @@ export default {
 .info-card img {
     vertical-align: middle;
     width: 100%;
-    height: 100%;
+    height: 150px;
     border-radius: 0px 0px 30px 30px;
     /* 设置圆角 上右下左 */
     padding: 0;
@@ -521,18 +505,20 @@ export default {
 .fa-arrow-left {
     margin-right: 300px;
     margin-bottom: 220px;
+    margin-top: 200px;
 }
 
 .fa-arrow-right {
     margin-left: 300px;
     margin-bottom: 220px;
+    margin-top: 200px;
 
 }
 
 .infoMoreBtnArea {
     position: absolute;
     left: 45vw;
-    bottom: 3vh;
+    bottom: -10vh;
 
     .infoMoreBtn {
         padding: 15px 20px;
@@ -575,7 +561,7 @@ export default {
 .div-7 {
     color: #978989;
     align-self: stretch;
-    margin-top: 34px;
+    margin-top: 10px;
     white-space: nowrap;
 
 }

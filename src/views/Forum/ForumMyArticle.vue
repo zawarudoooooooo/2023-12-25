@@ -297,7 +297,7 @@ export default {
         <div class="showBoard">
             <!-- title -->
             <div class="title">
-                <h1>My Article</h1>
+                <h1>我的文章</h1>
             </div>
 
             <!-- v-for the card -->
