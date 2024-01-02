@@ -270,7 +270,7 @@ export default {
                                         <img :src="'data:image/jpeg;base64,' + item.postPhoto" alt="">
                                     </div>
                                     <div class="cardInfo">
-                                        <p class="infoText">{{ item.postContent }}</p>
+                                        <!-- <p class="infoText">{{ item.postContent }}</p> -->
                                     </div>
                                 </div>
                                 <div class="cardLast">
@@ -440,7 +440,7 @@ export default {
             width: 60px;
             height: 60px;
             position: absolute;
-            right: 105px;
+            right: 25px;
             border-radius: 50%;
         }
 
@@ -465,14 +465,14 @@ export default {
 
         .img {
             width: 230px;
-            height: 90px;
+            height: 180px;
             border: 1px solid #978989;
             border-radius: 20px;
             margin-bottom: 10px;
 
             img {
                 width: 230px;
-                height: 90px;
+                height: 180px;
                 border-radius: 20px;
             }
         }
@@ -511,7 +511,7 @@ export default {
 
         .moreInfo {
             color: #6E75A8;
-            margin-left: 125px;
+            margin-left: 25px;
             font-weight: 700;
         }
     }
@@ -555,77 +555,11 @@ export default {
 }
 
 
-.div-2 {
-    box-shadow: 0px 4px 49px 0px rgba(0, 0, 0, 0.28);
-    background-color: #fff;
-    display: flex;
-    min-height: 138px;
-    width: 100%;
-    flex-direction: column;
-}
-
-@media (max-width: 991px) {
-    .div-2 {
-        max-width: 100%;
-    }
-}
-
 .div-3 {
     display: flex;
     width: 85%;
     flex-direction: column;
-    margin: 69px 0 12px;
-}
-
-@media (max-width: 991px) {
-    .div-3 {
-        max-width: 100%;
-        padding-left: 20px;
-        margin-top: 40px;
-    }
-}
-
-.div-4 {
-    border-radius: 35px;
-    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
-    background-color: #fff;
-    align-self: center;
-    width: 1304px;
-    max-width: 100%;
-    padding: 46px 80px 46px 58px;
-}
-
-@media (max-width: 991px) {
-    .div-4 {
-        padding: 0 20px;
-    }
-}
-
-.div-5 {
-    gap: 20px;
-    display: flex;
-}
-
-@media (max-width: 991px) {
-    .div-5 {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0px;
-    }
-}
-
-.column {
-    display: flex;
-    flex-direction: column;
-    line-height: normal;
-    width: 24%;
-    margin-left: 0px;
-}
-
-@media (max-width: 991px) {
-    .column {
-        width: 100%;
-    }
+    // margin: 69px 0 12px;
 }
 
 .img {
@@ -637,39 +571,6 @@ export default {
     max-width: 100%;
 }
 
-@media (max-width: 991px) {
-    .img {
-        margin-top: 40px;
-    }
-}
-
-.column-2 {
-    display: flex;
-    flex-direction: column;
-    line-height: normal;
-    width: 76%;
-    margin-left: 20px;
-}
-
-@media (max-width: 991px) {
-    .column-2 {
-        width: 100%;
-    }
-}
-
-.div-6 {
-    color: #978989;
-    margin-top: 12px;
-    white-space: nowrap;
-
-}
-
-@media (max-width: 991px) {
-    .div-6 {
-        margin-top: 40px;
-        white-space: initial;
-    }
-}
 
 .div-7 {
     color: #978989;
@@ -677,68 +578,6 @@ export default {
     margin-top: 34px;
     white-space: nowrap;
 
-}
-
-@media (max-width: 991px) {
-    .div-7 {
-        max-width: 100%;
-        white-space: initial;
-    }
-}
-
-.div-8 {
-    border-radius: 35px;
-    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
-    background-color: #fff;
-    align-self: center;
-    margin-top: 15px;
-    width: 95%;
-    padding: 15px 50px 15px 32px;
-    display: flex;
-    align-items: center;
-}
-
-
-.div-9 {
-    gap: 20px;
-    display: flex;
-    align-items: center;
-}
-
-
-.column-3 {
-    display: flex;
-    flex-direction: column;
-    line-height: normal;
-    width: 26%;
-    margin-left: 0px;
-}
-
-
-.div-10 {
-    width: 650px;
-    height: 90%;
-    display: flex;
-    margin-top: 6px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: end;
-}
-
-
-.div-11 {
-    color: #978989;
-    align-self: stretch;
-    white-space: nowrap;
-
-}
-
-
-.div-12 {
-    color: #978989;
-    text-decoration-line: underline;
-    margin-top: 32px;
-    // max-width: 100%; /* 新增此行 */
 }
 
 
@@ -750,89 +589,12 @@ export default {
 
 }
 
-@media (max-width: 991px) {
-    .div-14 {
-
-        white-space: initial;
-    }
-}
-
-.div-15 {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 31px;
-}
-
-.div-15-1 {
-    width: 90%;
-    height: 570px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-
-.card {
-    width: 450px;
-    height: 550px;
-    border-radius: 35px;
-    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    padding: 22px 26px 41px;
-}
-
-
-
 .cardTop {
     width: 90%;
     display: flex;
     justify-content: space-between;
     gap: 11px;
 }
-
-.img-3 {
-    aspect-ratio: 1.05;
-    object-fit: contain;
-    object-position: center;
-    width: 60px;
-    overflow: hidden;
-    max-width: 100%;
-}
-
-.div-18 {
-    color: #978989;
-    margin: auto 0;
-
-}
-
-.div-19 {
-    color: #978989;
-    margin-top: 18px;
-    white-space: nowrap;
-
-}
-
-
-
-.img-4 {
-    aspect-ratio: 2.29;
-    object-fit: contain;
-    object-position: center;
-    width: 100%;
-    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
-    overflow: hidden;
-}
-
-.div-20 {
-    color: #6e75a8;
-    margin-top: 22px;
-
-}
-
-
 
 .div-36 {
     width: 100%;

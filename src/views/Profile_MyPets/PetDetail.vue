@@ -836,7 +836,7 @@ export default {
                     height: 280px;
                     padding: 0px 10px 0px 10px;
                     display: flex;
-                    overflow: scroll;
+                    overflow-x: scroll;
                     align-items: center;
 
                     .adopterFile {

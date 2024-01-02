@@ -130,7 +130,9 @@ export default {
 
     i {
         margin-bottom: 10px;
-        margin-right: 1vmin
+        margin-right: 1vmin;
+        width: 24px;
+        height: 24px;
     }
 
     .line {
@@ -149,6 +151,7 @@ export default {
         align-items: center;
         margin-top: 2vmin;
         // position: relative;
+
 
         .isread_false {
             color: red;

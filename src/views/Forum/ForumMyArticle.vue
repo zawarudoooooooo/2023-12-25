@@ -309,7 +309,6 @@ export default {
                             <p class="poster_name">{{ item.userName }}</p>
                             <!-- 短腿貓的爸<br /> -->
                             <p class="poster_userId">{{ item.account }}</p>
-                            {{ item.serialNo }}
                         </div>
 
                     </div>
@@ -319,7 +318,7 @@ export default {
                             <img class="img" :src="'data:image/jpeg;base64,' + item.postPhoto" alt="">
                         </div>
                         <div class="cardInfo">
-                            <p class="infoText">{{ item.postContent }}</p>
+                            <!-- <p class="infoText">{{ item.postContent }}</p> -->
                         </div>
                     </div>
                     <div class="cardLast">
@@ -412,7 +411,7 @@ export default {
 
                 .img {
                     width: 230px;
-                    height: 90px;
+                    height: 180px;
                     border: 1px solid #978989;
                     border-radius: 20px;
                     margin-bottom: 10px;
@@ -450,7 +449,7 @@ export default {
 
                 .moreInfo {
                     color: #6E75A8;
-                    margin-left: 125px;
+                    margin-left: 25px;
                     font-weight: 700;
                 }
             }
