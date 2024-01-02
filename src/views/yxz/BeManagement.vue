@@ -306,7 +306,7 @@ export default {
                 <td><input type="file" @change="handleFileUpload" /></td><!-- 這是用來上傳圖片的輸入框 -->
             </tr>
         </table>
-        <button @click="createNewInfo">Create New Info</button><!-- 觸發新增的按鈕 -->
+        <button @click="createNewInfo">新增</button><!-- 觸發新增的按鈕 -->
     </div>
 
     <div class="searchAllNewInfo">
@@ -404,18 +404,18 @@ export default {
             }
 
             //下拉選單
-            select {
-                width: 15%;
-                height: 4.5vh;
-                font-size: 1.2vw;
-                margin-left: 4vw;
-                margin-right: 5vw;
-                border-radius: 2.5vw;
-                background-color: #DDDFEE;
-                border: none;
-                text-align: center; //字體居中
+            // select {
+            //     width: 15%;
+            //     height: 4.5vh;
+            //     font-size: 1.2vw;
+            //     margin-left: 4vw;
+            //     margin-right: 5vw;
+            //     border-radius: 2.5vw;
+            //     background-color: #DDDFEE;
+            //     border: none;
+            //     text-align: center; //字體居中
 
-            }
+            // }
 
             button {
                 background-color: #4CAF50;
