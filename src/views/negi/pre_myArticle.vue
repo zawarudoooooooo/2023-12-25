@@ -2,6 +2,7 @@
 import view_Article from './view_Article.vue';
 import create_Article from './create_Article.vue';
 import ArticleDashBoard from '../../components/ArticleDashBoard.vue';
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -86,17 +87,19 @@ export default {
                                     });
                                 });
                             console.log(integratedData);
-                            this.integratedData=integratedData
+                            this.integratedData = integratedData
                             console.log(this.postSerialNo)
                             const specificUserArticles = integratedData.filter(entry => entry.serialNo === this.postSerialNo);
                             this.myArticle = specificUserArticles
                             console.log(this.myArticle)
+                            console.log(this.myArticle[0].userId)
+                            console.log(this.foundUserInfo.userId)
                         });
                 });
         },
 
         createLike() {
-            
+
             const requestBody = {
                 likesRecord: {
                     postId: this.postSerialNo,
@@ -238,6 +241,33 @@ export default {
             fetchData();
 
             // 若需要停止自動更新，可以使用 clearInterval(interval);
+        },
+
+        deletePost() {
+            const serialNumber = this.myArticle[0].serialNo;
+
+            fetch(`http://localhost:8080/api/adoption/deletePost?serialNo=${serialNumber}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    Swal.fire({
+                        title: "成功刪除貼文",
+                        icon: "success"
+                    }).then((result) => {
+                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                            this.$router.push('/ForumEntrance/ForumHome')
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('刪除失敗:', error.message);
+
+                });
         }
     }
 }
@@ -255,8 +285,10 @@ export default {
                 <div class="out_article_area">
                     <div class="in_article_area">
                         <div class="function_icon_area">
-                            <i class="fa-solid fa-trash-can img-2"></i>
-                            <i class="fa-solid fa-pen img-3" @click="goTo('/ForumEntrance/edit_myArticle')"></i>
+                            <i v-if="this.foundUserInfo.userId == this.myArticle[0].userId"
+                                class="fa-solid fa-trash-can img-2" @click="deletePost()"></i>
+                            <i v-if="this.foundUserInfo.userId == this.myArticle[0].userId" class="fa-solid fa-pen img-3"
+                                @click="goTo('/ForumEntrance/edit_myArticle')"></i>
                         </div>
                         <div class="article">
                             <div class="poster_area">
@@ -291,13 +323,16 @@ export default {
                             </div>
                             <div class="div-24"></div>
 
-                            <div class="reply" >
-                                <button style="margin-left: 950px; background-color:#6E75A8;color: white;border-radius: 15px;" @click="showAllComments = !showAllComments">
+                            <div class="reply">
+                                <button
+                                    style="margin-left: 950px; background-color:#6E75A8;color: white;border-radius: 15px;"
+                                    @click="showAllComments = !showAllComments">
                                     {{ showAllComments ? '收起留言' : '查看更多' }}
                                 </button>
                                 <div class="replier"
                                     v-for="(item, index) in showAllComments ? postCommentList : lastFiveComments">
-                                    <img style="width: 70px;height: 70px;border-radius: 50px; " :src="'data:image/jpeg;base64,' + item.userPhoto" alt="">
+                                    <img style="width: 70px;height: 70px;border-radius: 50px; "
+                                        :src="'data:image/jpeg;base64,' + item.userPhoto" alt="">
                                     <div class="replier_data">
                                         <p class="replier_name">{{ item.userName }}</p>
                                         <p class="replier_userId">{{ item.account }}</p>
@@ -314,8 +349,11 @@ export default {
                                     <span>{{ this.foundUserInfo.userName }}</span>
                                     <span>{{ this.foundUserInfo.account }}</span>
                                 </div>
-                                <input style="margin-left: 15px;" type="text" v-model="userReply" @keyup.enter="createNewComment()">
-                                <button style="margin-left: 15px; background-color:#6E75A8;color: white;border-radius: 15px;" @click="createNewComment()">回覆</button>
+                                <input style="margin-left: 15px;" type="text" v-model="userReply"
+                                    @keyup.enter="createNewComment()">
+                                <button
+                                    style="margin-left: 15px; background-color:#6E75A8;color: white;border-radius: 15px;"
+                                    @click="createNewComment()">回覆</button>
                             </div>
                         </div>
                     </div>

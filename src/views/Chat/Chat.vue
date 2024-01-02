@@ -301,7 +301,7 @@ export default{
     .chatShowArea{
         width: 70%;
         height: 80vh;
-        overflow: scroll;
+        overflow-y: scroll;
         display: flex;
         flex-direction: column;
         align-items: center;

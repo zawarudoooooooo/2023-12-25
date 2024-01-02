@@ -319,7 +319,7 @@ export default {
                         <div class="article_title">{{ item.title }}</div>
                         <img class="img" :src="'data:image/jpeg;base64,' + item.postPhoto" alt="">
                         <div class="cardInfo">
-                            <p class="infoText">{{ item.postContent }}</p>
+                            <!-- <p class="infoText">{{ item.postContent }}</p> -->
                         </div>
 
                     </div>
@@ -413,7 +413,7 @@ export default {
 
                 .img {
                     width: 230px;
-                    height: 90px;
+                    height: 180px;
                     border: 1px solid #978989;
                     border-radius: 20px;
                     margin-bottom: 10px;
@@ -427,9 +427,6 @@ export default {
                         font-weight: 700;
                     }
                 }
-
-
-
             }
 
             .cardLast {
@@ -453,7 +450,7 @@ export default {
 
                 .moreInfo {
                     color: #6E75A8;
-                    margin-left: 125px;
+                    margin-left: 25px;
                     font-weight: 700;
                 }
             }
