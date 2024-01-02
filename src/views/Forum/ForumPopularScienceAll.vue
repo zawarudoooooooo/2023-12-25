@@ -81,23 +81,21 @@ export default {
 <template>
     <div class="bgArea">
         <h1 class="bgAreaTitle">所有的科普</h1>
-        <div class="waterfall">
-            <div class="searchAllNewInfo">
-                <!-- 每個 newInfo 對象都被用來生成一個消息卡片。v-for 根據 newInfoList 的內容動態生成消息卡片。 -->
-                <div v-for="newInfo in newInfoList" :key="newInfo.serialNo" class="info-card" @click="expandCard(newInfo)">
-                    <div>
-                        <div class="info-card2">
-                            <h2>{{ newInfo.title }}</h2>
-                            <p>Category: {{ newInfo.category }}</p>
-                            <p>Date: {{ newInfo.date }}</p>
-                            <!-- 使用截斷內容的方法 -->
-                            <p>{{ truncateContent(newInfo.content, 46) }}</p>
-                        </div>
+        <div class="searchAllNewInfo">
+            <!-- 每個 newInfo 對象都被用來生成一個消息卡片。v-for 根據 newInfoList 的內容動態生成消息卡片。 -->
+            <div v-for="newInfo in newInfoList" :key="newInfo.serialNo" class="info-card" @click="expandCard(newInfo)">
+                <div>
+                    <div class="info-card2">
+                        <h2>{{ newInfo.title }}</h2>
+                        <p>Category: {{ newInfo.category }}</p>
+                        <p>Date: {{ newInfo.date }}</p>
+                        <!-- 使用截斷內容的方法 -->
+                        <p>{{ truncateContent(newInfo.content, 46) }}</p>
                     </div>
-                    <div class="imgArea">
-                        <!-- 如果 newInfo.base64Image 存在，則顯示一個圖片。 -->
-                        <img v-if="newInfo.base64Image" :src="newInfo.base64Image" alt="New Info Image" />
-                    </div>
+                </div>
+                <div class="imgArea">
+                    <!-- 如果 newInfo.base64Image 存在，則顯示一個圖片。 -->
+                    <img v-if="newInfo.base64Image" :src="newInfo.base64Image" alt="New Info Image" />
                 </div>
             </div>
         </div>
@@ -105,94 +103,86 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-
 .bgArea {
     background-color: #d8dae9;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 6px 0 50px;
+    width: 100vw;
 
     .bgAreaTitle {
-        margin-top: 4vh;
+        margin-left: 45vw;
         font-weight: 700;
+        padding: 4vh 0 1vh 0;
     }
 
-    .waterfall {
+
+
+    .searchAllNewInfo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin: 0 8vw;
+        padding: 0 30px 10vh 30px;
+    }
+
+    .info-card {
+        height: 65%;
+        border: 1px solid #ddd;
+        border-radius: 30px;
+        margin: 20px 1px 0px 1px;
+        background-color: white;
+        color: #978989;
+        font-size: 14pt;
+        box-shadow: 0 0 3px 5px rgb(202, 202, 202);
+        width: calc(33.33% - 20px);
+        /* 調整每個消息卡片的寬度，這裡假設每行三個 */
+        box-sizing: border-box;
+        transition: all 0.4s; //過渡效果，持續時間為 0.4 秒
+
+        &:hover {
+            transform: scale(1.03);
+            border: 5px solid#978989;
+
+        }
+    }
+
+    //消息卡片內容的區塊
+    .info-card2 {
+        padding: 20px 20px 0px 20px;
+
+    }
+
+    .info-card h2 {
+        height: 8vh;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+        color: #867e7e;
+    }
+
+    .imgArea {
+        vertical-align: middle;
+        border-radius: 0px 0px 30px 30px;
         width: 100%;
-        column-count: 3;
-        // /*欄數*/
-        // column-gap: -25px;
-        // /*每欄間隔*/
-        margin: 0 20px;
+        height: 30vh;
+        padding: 0;
+    }
 
+    .info-card img {
+        vertical-align: middle;
+        width: 100%;
+        height: 100%;
+        border-radius: 0px 0px 30px 30px;
+        /* 设置圆角 上右下左 */
+        padding: 0;
+        background-size: cover;
+    }
 
-        .searchAllNewInfo {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 0 30px;
-        }
+    .info-card {
+        transition: box-shadow 0.8s; // 添加過渡效果
+        cursor: pointer;
+    }
 
-        .info-card {
-            height: 65%;
-            border: 1px solid #ddd;
-            border-radius: 30px;
-            margin: 20px 0px;
-            background-color: white;
-            color: #978989;
-            font-size: 14pt;
-            box-shadow: 0 0 3px 5px rgb(202, 202, 202);
-            // width: calc(33.33% - 20px);
-            /* 調整每個消息卡片的寬度，這裡假設每行三個 */
-            box-sizing: border-box;
-            transition: all 0.4s; //過渡效果，持續時間為 0.4 秒
-
-            &:hover {
-                transform: scale(1.03);
-                border: 5px solid#978989;
-
-            }
-        }
-
-        //消息卡片內容的區塊
-        .info-card2 {
-            padding: 20px 20px 0px 20px;
-
-        }
-
-        .info-card h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-            color: #867e7e;
-        }
-
-        .imgArea {
-            vertical-align: middle;
-            border-radius: 0px 0px 30px 30px;
-            width: 100%;
-            padding: 0;
-        }
-
-        .info-card img {
-            vertical-align: middle;
-            width: 100%;
-            height: 100%;
-            border-radius: 0px 0px 30px 30px;
-            /* 设置圆角 上右下左 */
-            padding: 0;
-            background-size: cover;
-        }
-
-        .info-card {
-            transition: box-shadow 0.8s; // 添加過渡效果
-            cursor: pointer;
-        }
-
-        .info-card:hover {
-            box-shadow: 3px 3px 5px gray; // 放大效果
-        }
+    .info-card:hover {
+        box-shadow: 3px 3px 5px gray; // 放大效果
     }
 }
 </style>

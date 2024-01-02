@@ -81,7 +81,8 @@ export default {
     <div class="header " id="transColor" :style="{ backgroundColor: headerColor }" style="transition: all 0.5s;">
 
         <div class="notification line" @click="goTo('/')">
-            <i class="fa-solid fa-house" style="color: white;"></i>
+            <img src="../../public/logo只有圖案.png" alt="">
+            <!-- <i class="fa-solid fa-house" style="color: white;"></i> -->
         </div>
         <RouterLink class="routerLink" to="/ForumEntrance" @click="goTo('/ChatTest')">ChatTest</RouterLink>
 
@@ -133,6 +134,10 @@ export default {
             background-size: 100% 3px;
 
         }
+    }
+
+    img{
+        width: 5vw;
     }
 
     .line {
