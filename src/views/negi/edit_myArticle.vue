@@ -51,15 +51,12 @@ export default {
         this.userInfo = JSON.parse(sessionStorage.getItem('foundUserInfo'));
     },
     methods: {
-        // A是更新後的圖片 B是更新前的圖片
-        // A預設是不顯示而B是顯示的
         showImgChange() {
             if (!this.imgChA) {
                 this.imgChA = true;
                 this.imgChB = true;
             }
         },
-        //抓使用者+文章資料
         groupAll() {
             fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
                 method: 'GET',
@@ -78,11 +75,9 @@ export default {
                         .then(data => {
                             const forumEntranceList = data.forumEntranceList;
 
-                            // 使用 reduce 方法整合資訊
                             const integratedData = forumEntranceList.map(forumEntry => {
                                 const userInfo = userInfoList.find(user => user.userId === forumEntry.userId);
 
-                                // 創建一個新的物件整合所需的資訊
                                 return {
                                     postContent: forumEntry.postContent,
                                     postPhoto: forumEntry.postPhoto,
@@ -95,25 +90,29 @@ export default {
                                 };
                             });
 
-                            // 在這裡處理整合後的資料 integratedData
-                            console.log(integratedData);
-                            console.log(this.postSerialNo)
                             const specificUserArticles = integratedData.filter(entry => entry.serialNo === this.postSerialNo);
                             this.myArticle = specificUserArticles
-                            this.title=specificUserArticles[0].title
-                            this.postContent=specificUserArticles[0].postContent
-                            console.log(this.myArticle)
+                            this.title = specificUserArticles[0].title
+                            this.postContent = specificUserArticles[0].postContent
                         });
                 });
         },
-        //更新文章
         updateArticle() {
-            const updateData = {
-                serialNo: this.postSerialNo,
-                title: this.title,
-                postContent: this.postContent,
-                postPhoto: this.imageUrl.split(',')[1],
-            };
+            let updateData;
+            if (this.imageUrl) {
+                updateData = {
+                    serialNo: this.postSerialNo,
+                    title: this.title,
+                    postContent: this.postContent,
+                    postPhoto: this.imageUrl.split(',')[1],
+                };
+            } else {
+                updateData = {
+                    serialNo: this.postSerialNo,
+                    title: this.title,
+                    postContent: this.postContent,
+                };
+            }
             const requestData = {
                 forumEntrance: updateData
             };
@@ -147,7 +146,6 @@ export default {
                 });
         },
 
-        //拿user資料
         searchAllUserInfo() {
             fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
                 method: 'GET',
@@ -156,24 +154,17 @@ export default {
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data);
                     this.userInfoList = data.userInfoList;
-                    console.log(this.userInfoList);
-
-                    // 根據 foundUserId 找到對應的 foundUser
                     const foundUser = this.userInfoList.find(user => user.userId === this.foundUserInfo.userId);
 
-                    // 如果找到了對應的 foundUser，你可以做一些操作
                     if (foundUser) {
-                        console.log('找到了對應的使用者:', foundUser);
 
-                        // 在這裡加入 base64 前綴
                         const base64Prefix = 'data:image/jpeg;base64,';
-                        const filePath = base64Prefix + foundUser.userPhoto; // 在這裡將路徑轉換為 base64 圖片前綴
-                        foundUser.filePath = filePath; // 將處理後的圖片路徑存儲在 foundUser 中的 filePath 屬性
+                        const filePath = base64Prefix + foundUser.userPhoto;
+                        foundUser.filePath = filePath;
 
                         this.$emit("userInfo", foundUser);
-                        this.foundUser = foundUser; // 將整理後的 foundUser 存入 this.foundUser
+                        this.foundUser = foundUser;
                     } else {
                         console.log('找不到對應的使用者');
                     }
@@ -186,22 +177,17 @@ export default {
             const reader = new FileReader();
             reader.onload = (event) => {
                 this.imageUrl = event.target.result;
-                this.croppedImageUrl = event.target.result; // 將 croppedImageUrl 設置為更新後的圖片
+                this.croppedImageUrl = event.target.result;
             };
             reader.readAsDataURL(file);
         },
-
-
     }
-
 }
 </script>
 
 
-<!-- 發文的人編輯自己發的文章 -->
 <template>
     <div class="all" v-if="this.myArticle">
-        <!-- <div class="div-2"></div> -->
         <div class="out_contain">
             <div class="in_contain">
                 <div class="dashboard">
@@ -234,11 +220,9 @@ export default {
                             <input class="article_title" type="text" v-bind:placeholder="this.myArticle[0].title"
                                 v-model="title" />
                             <input type="file" @change="handleFileChange" @click="showImgChange">
-                            <!-- 更新的圖 更新上去後出現 -->
                             <div class="imgChA" id="imgChA" v-if="imgChA">
                                 <img :src="croppedImageUrl" alt="" class="cropper-img">
                             </div>
-                            <!-- 原本的圖 更新上去後消失-->
                             <div class="imgChB" id="imgChB" v-if="!imgChA && imgChB">
                                 <img class="article_img" :src="'data:image/jpeg;base64,' + this.myArticle[0].postPhoto"
                                     alt="">
@@ -473,4 +457,5 @@ export default {
     width: 550px;
     height: 400px;
     border-radius: 15px;
-}</style>
+}
+</style>
