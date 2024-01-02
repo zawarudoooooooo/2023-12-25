@@ -266,21 +266,12 @@ export default {
                                             <img class="poster_icon"
                                                 :src="'data:image/jpeg;base64,' + this.myArticle[0].userPhoto" alt="">
                                             <div class="poster_data">
-                                                <p class="poster_name">{{ this.myArticle[0].userName }}</p>
-                                                <p class="poster_userId">{{ this.myArticle[0].account }}</p>
+                                                <span class="poster_name">{{ this.myArticle[0].userName }}</span>
+                                                <span class="poster_userId">@{{ this.myArticle[0].account }}</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="column-4">
-                                        <!-- <div class="div-16">
-                                            <div class="pet_state">with</div>
-                                            <div class="pet">
-                                                <div class="pet_name">Kiwi</div>
-                                                <img loading="lazy"
-                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/5229e6b9f8129729e04753274f9898cd171972f078ea719bd686b4bf738bc61a?"
-                                                    class="pet_type" />
-                                            </div>
-                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -485,7 +476,7 @@ export default {
     display: flex;
     flex-direction: column;
     line-height: normal;
-    width: 57%;
+    /* width: 57%; */
     margin-left: 0px;
 }
 
@@ -515,9 +506,14 @@ export default {
     overflow: hidden;
     max-width: 100%;
     border-radius: 50%;
+    margin-right: 30px;
 }
 
 .poster_data {
+    align-items: center;
+    justify-content: space-between;
+    width: 1000px;
+    display: flex;
     color: #978989;
     margin: auto 0;
     font: 800 32px Lexend, sans-serif;

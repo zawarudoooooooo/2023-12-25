@@ -116,6 +116,7 @@ export default {
                                                 <img v-if="this.foundUser.userPhoto" :src="this.foundUser.filePath" alt=""
                                                     style="border-radius: 50%; border: 3px solid;" height="100px"
                                                     width="100px">
+
                                                 <div class="poster_data">
                                                     <span class="poster_name">{{ foundUser.userName }}</span>
                                                     <p>@{{ foundUser.account }}</p>
@@ -125,6 +126,7 @@ export default {
                                     </div>
                                 </div>
                             </div>
+                            <div class="div-20"></div>
                             <input class="article_title" type="text" placeholder="輸入標題" v-model="title" />
 
 
@@ -331,6 +333,8 @@ export default {
     align-self: stretch;
 }
 
+.poster_name{
+}
 
 
 .poster {
@@ -343,7 +347,7 @@ export default {
     display: flex;
     flex-direction: column;
     line-height: normal;
-    width: 57%;
+    // width: 57%;
     margin-left: 0px;
 }
 
@@ -353,6 +357,21 @@ export default {
     display: flex;
     margin-top: 16px;
     gap: 18px;
+
+    .profileArea {
+        width: 100%;
+        display: flex;
+        color: #978989;
+        margin: auto 0;
+        font: 800 32px Lexend, sans-serif;
+        align-items: center;
+
+        img {
+            margin-right: 50px;
+        }
+
+        
+    }
 }
 
 
@@ -360,8 +379,10 @@ export default {
 
 
 .poster_data {
+    width: 900px;
+    display: flex;
+    justify-content:space-between;
     color: #978989;
-    margin: auto 0;
     font: 800 32px Lexend, sans-serif;
 }
 
@@ -375,6 +396,7 @@ export default {
 
 
 .article_title {
+    width: 550px;
     color: #978989;
     align-self: start;
     white-space: nowrap;
@@ -397,14 +419,14 @@ export default {
 
 
 .article_text {
-    width: 580px;
+    width: 550px;
     height: 400px;
     border-radius: 15px;
 }
 
 
 .cropper-img {
-    width: 580px;
+    width: 550px;
     height: 300px;
     border: 3px solid;
     border-radius: 15px;
