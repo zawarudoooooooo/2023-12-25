@@ -58,7 +58,7 @@ export default {
                                 return info;
                             }
                         });
-                        console.log(this.newInfoList)
+                    console.log(this.newInfoList)
 
                     // 將 newInfoList 按日期由最新到最舊排序
                     this.newInfoList.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -140,7 +140,7 @@ export default {
 
 <template>
     <!-- 跑馬燈 -->
-    <div class="marquee">
+    <div class="marquee" aria-hidden="true">
         <!-- 喇叭圖示 -->
         <img loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/06062d6238a6691ea533dbc096994639c6e1407d07d6742eb34d44f9d98fe771?"
@@ -229,13 +229,15 @@ export default {
 
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+
 .marquee {
-    overflow: hidden; //溢出隱藏
     white-space: nowrap; //避免換行，單行顯示
-    animation: marquee-scroll 20s linear infinite; //動畫時間為 20 秒，動畫效果為線性，且無限循環
+    animation: marquee-scroll 20s linear infinite ; //動畫時間為 20 秒，動畫效果為線性，且無限循環
     height: 5vh;
     display: flex;
     align-items: center;
+    overflow: hidden;
 }
 
 .trumpet {
@@ -254,7 +256,7 @@ export default {
 @keyframes marquee-scroll {
     from {
         //起始
-        transform: translateX(100%);
+        transform: translateX(0%);
     }
 
     to {
@@ -262,6 +264,7 @@ export default {
         transform: translateX(-100%);
     }
 }
+
 
 
 //輪播圖片大小
@@ -300,21 +303,22 @@ export default {
 
 }
 
-.TitleArea{
+.TitleArea {
     width: 20vw;
 
-.strokeText {
-    font-family: 'Pacifico', cursive;
-    font-weight: 700;
-    font-size: 7vw;
-    color: #ffffff;
-    z-index: 100;
-    position: absolute;
-    top: 10vh;
-    left: 5vw;
+    .strokeText {
+        font-family: 'Pacifico', cursive;
+        font-weight: 700;
+        font-size: 7vw;
+        color: #ffffff;
+        z-index: 100;
+        position: absolute;
+        top: 10vh;
+        left: 5vw;
 
+    }
 }
-}
+
 .contentArea {
     position: relative;
     background-color: #F8F5EE;
@@ -323,15 +327,18 @@ export default {
 
 
 .searchAllNewInfo {
+    width: 100vw;
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 20px;
-    padding: 0 30px;
+    gap: 1vw;
+    margin-top: 5vh;
+    padding: 0 10%;
 }
 
 .info-card {
-    height: 65%;
+    width: 30%;
+    height: 65%; /* 為所有卡片設定固定高度 */
     border: 1px solid #ddd;
     border-radius: 30px;
     margin: 20px 1px 0px 1px;
@@ -339,8 +346,7 @@ export default {
     color: #978989;
     font-size: 14pt;
     box-shadow: 0 0 3px 5px rgb(202, 202, 202);
-    width: calc(33.33% - 20px);
-    /* 調整每個消息卡片的寬度，這裡假設每行三個 */
+
     box-sizing: border-box;
     transition: all 0.4s; //過渡效果，持續時間為 0.4 秒
 
@@ -354,32 +360,32 @@ export default {
 //消息卡片內容的區塊
 .info-card2 {
     padding: 20px 20px 0px 20px;
+    height: 300px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
 }
 
 .info-card h2 {
-    height: 8vh;
     font-size: 1.5rem;
     margin-bottom: 10px;
     font-weight: 700;
     color: #867e7e;
 }
 
+
+
 .imgArea {
-    vertical-align: middle;
     border-radius: 0px 0px 30px 30px;
     width: 100%;
-    height: 30vh;
-    padding: 0;
+    height: 300px;
 }
 
 .info-card img {
-    vertical-align: middle;
     width: 100%;
-    height: 100%;
+    height: 100%; /* 確保所有圖片具有相同的高度 */
     border-radius: 0px 0px 30px 30px;
-    /* 设置圆角 上右下左 */
-    padding: 0;
     background-size: cover;
 }
 
@@ -398,15 +404,13 @@ export default {
 .fa-arrow-right {
     background-color: #E9D2A6;
     border-radius: 50%;
-    padding: 2vh 1vw;
+    padding: 8% 5%;
     font-size: 40pt;
     box-shadow: 0px 5px 10px #000000;
     transition: all 0.3s;
     color: #ffffff;
 
     &:hover {
-        // background-color: #E9D2A6;
-        // box-shadow: 0px 15px 25px -5px #0057ab;
         background-color: #ffffff;
         color: #E9D2A6;
         box-shadow: 0px 2px 10px 5px #E9D2A6;
@@ -417,43 +421,38 @@ export default {
 
 .fa-arrow-left {
     position: absolute;
-    top: 30vh;
-    left: 2vw;
+    top: 30%;
+    left: 20%;
 }
 
 .fa-arrow-right {
     position: absolute;
-    top: 30vh;
-    right: 2vw;
+    top: 30%;
+    right: 20%;
 }
 
 
 
-    .infoMoreBtn {
-        position: absolute;
-        bottom: 8vh;
-        left: 46vw;
-        padding: 15px 20px;
-        font-size: 1vw;
-        border-radius: 1vw;
-        background-color: #c29f5d;
-        color: #ffffff;
-        box-shadow: 0 0 3px 2px lightgray;
-        font-weight: 600;
+.infoMoreBtn {
+    position: absolute;
+    bottom: 3%;
+    left: 46%;
+    padding: 15px 20px;
+    font-size: 15pt;
+    border-radius: 1vw;
+    background-color: #c29f5d;
+    color: #ffffff;
+    box-shadow: 0 0 3px 2px lightgray;
+    font-weight: 600;
 
-        &:hover {
-            box-shadow: 0px 10px 5px -5px #0e0e0e;
-            transform: scale(1.03);
-            background-color: #E9D2A6;
-            font-weight: 700;
-        }
-
+    &:hover {
+        box-shadow: 0px 10px 5px -5px #0e0e0e;
+        transform: scale(1.03);
+        background-color: #E9D2A6;
+        font-weight: 700;
     }
 
-
-.footer {
-    width: 100%;
-    height: 100px;
-
 }
+
+
 </style>
