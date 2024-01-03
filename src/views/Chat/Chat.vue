@@ -32,6 +32,8 @@ export default{
         this.connectWebSocket()
 
         console.log("now", this.currentDateTime)
+
+        setInterval(() => this.getReadRecord(this.userInfo.userId, this.chatRoom.chatRoomId), 1500);
     },
 
     watch: {
@@ -112,7 +114,7 @@ export default{
     },
 
     methods: {
-        ...mapActions(getInfoState, ['getChatDetail', 'readMessage']),
+        ...mapActions(getInfoState, ['getChatDetail', 'readMessage', 'getChatRooms', 'getReadRecord']),
         ...mapActions(socketState, ['connectServer', 'disconnectServer', 'sendMessage']),
 
         // connect to the WebSocket
@@ -129,6 +131,7 @@ export default{
                         console.log(`[Message from Server]:\n %c${event.data}`, 'color: blue');
                         // 將新訊息添加到dateCount
                         this.dateCountAdd(event.data)
+                        this.getChatRooms(this.userInfo)
                     };
 
                     // pinia WebSocket: connectServer()
@@ -153,14 +156,12 @@ export default{
             // pinia WebSocket: 標示為已讀
             this.readMessage(this.userInfo.userId, this.chatRoom.room.chatRoomId)
 
-            // 觸發 ChatList.vue 的方法
-            this.$refs.chatList.getNew();
-
             // 清空input
             this.sendMsg = "";
         },
 
         getChatDetailFromPinia(obj){
+
             this.chatRoom = obj;
             console.log("get chat room from pinia", this.chatRoom)
 
@@ -174,6 +175,9 @@ export default{
             // 設置server.js返回的data為item
             const item = JSON.parse(data);
 
+            console.log("user id", this.userInfo.userId)
+            console.log("room id", item)
+
             // 提取日期和时间
             const [date, time] = item.time.split(' ');
             const sendTime = time.slice(0, 5); // 提取小时和分钟，格式为 HH:mm
@@ -184,8 +188,19 @@ export default{
                 this.messages[date] = [];
             }
 
-            // 設置新訊息
-            const newItem = { ...item, sendTime };
+            // 設置已讀或未讀
+            let isRead = false;
+            const timeStamp = new Date(item.time);
+            const formattedTimeStamp = timeStamp.toISOString();
+            const readTime = new Date(this.readRecord.readTime);
+            const formattedReadTime = readTime.toISOString();
+
+            if(formattedTimeStamp < formattedReadTime){
+                isRead = true;
+            }
+
+            // 添加 sendTime & 已讀未讀
+            const newItem = { ...item, sendTime, isRead: isRead};
 
             // 将新的项推入数组
             this.messages[date].push(newItem);

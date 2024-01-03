@@ -95,7 +95,7 @@ function broadcastToChannel(channelId, entNum, sender, user, message, timestamp)
     if(channelSet){
         channelSet.forEach(userSocket => {
             if (sender) {
-                let sendObj = { sender: sender, ent: entNum, text: message, time: timestamp, user: user};
+                let sendObj = {chatRoomId: channelId, sender: sender, ent: entNum, text: message, time: timestamp, user: user};
                 console.log('[send] ', sendObj)
                 userSocket.send(JSON.stringify(sendObj));
             } else {
