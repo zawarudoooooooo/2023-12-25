@@ -137,7 +137,7 @@ export default {
   font-size: 18pt;
 
   &:hover {
-    background-color: lightgray;
+    background-color: gray;
   }
 }
 

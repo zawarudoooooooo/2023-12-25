@@ -594,8 +594,6 @@ export default {
                 </div>
             </div>
 
-            <!-- 寵物照片 -->
-
 
             <!-- btn -->
             <div class="btnArea">
@@ -684,6 +682,8 @@ export default {
                     background-color: #fff;
                     border-radius: 20px;
                     box-shadow: 0 0 2px 2px lightgray;
+                    object-fit: cover;
+                    object-position: center;
 
                     img {
                         width: 100%;
@@ -824,7 +824,7 @@ export default {
 
                 .adopterContent {
                     width: 90%;
-                    height: 280px;
+                    height: 290px;
                     padding: 0px 10px 0px 10px;
                     display: flex;
                     overflow-x: scroll;

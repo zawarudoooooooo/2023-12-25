@@ -226,7 +226,7 @@ export default {
                 </button>
             </div>
             <div class="infoMoreBtnArea">
-                <button class="infoMoreBtn" @click="goToZ('/ForumEntrance/ForumPopularScienceAll')">查看更多科普</button>
+                <button class="btn btn-big btn-specialBlue" style="color: white; border: none;" @click="goToZ('/ForumEntrance/ForumPopularScienceAll')">查看更多科普</button>
             </div>
 
             <div class="div-14">
@@ -245,7 +245,7 @@ export default {
                                         :src="'data:image/jpeg;base64,' + item.userPhoto" />
                                     <div class="poster_data">
                                         <p class="poster_name">{{ item.userName }}</p>
-                                        <p class="poster_userId">{{ item.account }}</p>
+                                        <p class="poster_userId">@{{ item.account }}</p>
                                     </div>
                                 </div>
                                 <div class="cardMiddle">
@@ -282,7 +282,7 @@ export default {
 
             <div class="div-36">
                 <button class="btn btn-big btn-specialBlue" style="color: white; border: none;"
-                    @click="goToZ('/ForumEntrance/ForumHome')">閒聊版看更多</button>
+                    @click="goToZ('/ForumEntrance/ForumHome')">看更多</button>
             </div>
         </div>
     </div>
@@ -395,8 +395,8 @@ export default {
 }
 
 .showCard {
-    width: 300px;
-    height: 380px;
+    width: 480px;
+    height: 450px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -415,6 +415,8 @@ export default {
     }
 
     .cardTop {
+        width: 100%;
+        height: 65px;
         display: flex;
         align-items: center;
         margin-bottom: 10px;
@@ -424,14 +426,19 @@ export default {
             width: 60px;
             height: 60px;
             position: absolute;
-            right: 25px;
+            left: 20px;
             border-radius: 50%;
         }
 
         .poster_data {
+            position: absolute;
+            left: 85px;
             color: #978989;
             font-size: 17px;
             font-weight: 700;
+            p{
+                margin: 0px;
+            }
         }
 
     }
@@ -445,18 +452,22 @@ export default {
         .article_title {
             color: #978989;
             font-weight: 700;
+            font-size: 18pt;
+            margin-bottom: 10px;
         }
 
         .img {
-            width: 230px;
+            width: 280px;
             height: 180px;
             border: 1px solid #978989;
             border-radius: 20px;
             margin-bottom: 10px;
+            object-fit: cover;
+            object-position: center;
 
             img {
-                width: 230px;
-                height: 180px;
+                width: inherit;
+                height: inherit;
                 border-radius: 20px;
             }
         }
@@ -516,29 +527,31 @@ export default {
 }
 
 .infoMoreBtnArea {
-    position: absolute;
-    left: 45vw;
-    bottom: -10vh;
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    .infoMoreBtn {
-        padding: 15px 20px;
-        font-size: 1vw;
-        border-radius: 1vw;
-        background-color: #6E75A8;
-        color: #ffffff;
-        border: none;
+    // .infoMoreBtn {
+    //     padding: 15px 20px;
+    //     font-size: 1vw;
+    //     border-radius: 1vw;
+    //     background-color: #6E75A8;
+    //     color: #ffffff;
+    //     border: none;
 
-        box-shadow: 0 0 3px 2px lightgray;
-        font-weight: 600;
+    //     box-shadow: 0 0 3px 2px lightgray;
+    //     font-weight: 600;
 
-        &:hover {
-            box-shadow: 0px 10px 5px -5px #0e0e0e;
-            transform: scale(1.03);
-            background-color: #9399c3;
-            font-weight: 700;
-        }
+    //     &:hover {
+    //         box-shadow: 0px 10px 5px -5px #0e0e0e;
+    //         transform: scale(1.03);
+    //         background-color: #9399c3;
+    //         font-weight: 700;
+    //     }
 
-    }
+    // }
 }
 
 
@@ -589,11 +602,11 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+}
 
-    .btn {
-        width: 240px;
-        height: 65px;
-        font-size: 20pt;
-    }
+.btn {
+    width: 240px;
+    height: 65px;
+    font-size: 20pt;
 }
 </style>

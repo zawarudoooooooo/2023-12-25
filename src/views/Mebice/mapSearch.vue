@@ -230,7 +230,7 @@ export default {
 <style lang="scss" scoped>
 .bgArea {
     width: 100vw;
-    height: 100vh;
+    height: auto;
     background-color: #F8F5EE;
     display: flex;
     flex-direction: column;
