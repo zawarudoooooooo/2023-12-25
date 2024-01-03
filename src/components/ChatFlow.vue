@@ -55,7 +55,7 @@ export default{
         
         dateCount(){
             // 尚未捕捉到pinia變數readRecord的值時，不執行
-            if(!this.readRecord.readTime){
+            if(!this.readRecord || !this.readRecord.readTime){
                 return;
             }
 
@@ -127,7 +127,7 @@ export default{
 
     methods: {
         ...mapActions(socketState, ['connectServer','connectChannel', 'sendMessage']),
-        ...mapActions(getInfoState, ['getChatDetail', 'readMessage']),
+        ...mapActions(getInfoState, ['getChatDetail', 'getReadRecord', 'readMessage']),
 
         sendMessageByPinia(){
             // pinia WebSocket: send message
@@ -319,7 +319,7 @@ export default{
         .chatShowArea{
             width: 100%;
             height: 75%;
-            overflow: scroll;
+            overflow-y: scroll;
             display: flex;
             flex-direction: column;
             align-items: center;
