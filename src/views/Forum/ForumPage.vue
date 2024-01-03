@@ -281,7 +281,7 @@ export default {
             </div>
 
             <div class="div-36">
-                <button class="btn btn-big btn-specialBlue" style="color: white;"
+                <button class="btn btn-big btn-specialBlue" style="color: white; border: none;"
                     @click="goToZ('/ForumEntrance/ForumHome')">閒聊版看更多</button>
             </div>
         </div>
@@ -526,6 +526,7 @@ export default {
         border-radius: 1vw;
         background-color: #6E75A8;
         color: #ffffff;
+        border: none;
 
         box-shadow: 0 0 3px 2px lightgray;
         font-weight: 600;

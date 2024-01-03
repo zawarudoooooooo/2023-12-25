@@ -22,40 +22,11 @@ export default {
                 family_status: "",
                 user_photo: "",
             },
-            petInfo: {
-                user_id: 0,
-                pet_name: "",
-                pet_breed: "",
-                pet_status: "",
-                adoption_status: "正常",
-                adoption_conditions: "",
-                age: "",
-                vaccine: "",
-                pet_profile: "",
-                ligation: false,
-                type: "狗",
-                pet_photo: "",
-                location: "",
-            },
+            petInfo: {},
             isAdopted: false,
             isGived: false,
             // 待接到資料之後，由字串轉為陣列
-            adopterList: [
-                "a",
-                "b",
-                "c",
-                "d",
-                "e"
-            ],
-            // 待接到資料後，由字串轉成陣列
-            petWaterfall: [
-                "1",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6",
-            ],
+            adopterList: [],
             isShowModal: false,
         }
     },
@@ -65,6 +36,7 @@ export default {
     mounted() {
         console.log("pet id", this.petId);
         this.getPetUser();
+        
     },
     computed: {
         checkAdopted() {
@@ -87,6 +59,8 @@ export default {
                     // console.log(this.petInfo)
                     this.userInfo = response.data.vo.userInfo;
                     // console.log(this.userInfo)
+
+                    this.getAdopterInfo()
                 })
                 .catch(error => {
                     console.error(error)
@@ -133,34 +107,34 @@ export default {
             sessionStorage.removeItem('adopt pet detail');
             this.$router.back();
         },
-        sendApply(){
+        sendApply() {
             const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
 
             axios.post('http://localhost:8080/api/adoption/petInfo/adoptPet', {
                 petId: this.petInfo.pet_id,
                 userId: user.userId
             })
-            .then(response => {
-                console.log(response.data);
-                if (response.data.rtnCode == 'SUCCESSFUL') {
-                    Swal.fire({
-                        title: "申請領養成功！!",
-                        icon: "success"
-                    })
-                    let adopterId = JSON.parse(sessionStorage.getItem("foundUserInfo")).userId
-                    console.log(adopterId);
-                    this.send_noti_type1(response.data.petInfo.user_id,adopterId,response.data.petInfo.pet_id)
-                } else if (response.data.rtnCode == 'THE_USER_HAS_ALREADY_ADOPTED_THE_PET'){
-                    Swal.fire('您已認養過此寵物！');
-                } else {
-                    Swal.fire('出了些錯誤，請再次檢查');
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            })
+                .then(response => {
+                    console.log(response.data);
+                    if (response.data.rtnCode == 'SUCCESSFUL') {
+                        Swal.fire({
+                            title: "申請領養成功！!",
+                            icon: "success"
+                        })
+                        let adopterId = JSON.parse(sessionStorage.getItem("foundUserInfo")).userId
+                        console.log(adopterId);
+                        this.send_noti_type1(response.data.petInfo.user_id, adopterId, response.data.petInfo.pet_id)
+                    } else if (response.data.rtnCode == 'THE_USER_HAS_ALREADY_ADOPTED_THE_PET') {
+                        Swal.fire('您已認養過此寵物！');
+                    } else {
+                        Swal.fire('出了些錯誤，請再次檢查');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                })
         },
-        send_noti_type1(userId,sendId,petId){
+        send_noti_type1(userId, sendId, petId) {
             console.log(userId);
             console.log(sendId);
             console.log(petId);
@@ -179,7 +153,24 @@ export default {
                 .catch(error => {
                     console.error(error);
                 })
-        }
+        },
+        getAdopterInfo() {
+            console.log(this.petInfo)
+            axios.get('http://localhost:8080/api/adoption/userInfo/findAdopters', {
+                params: {
+                    idList: this.petInfo.adopter_id_list
+                }
+            })
+                .then(response => {
+                    console.log(response.data)
+                    this.adopterList = response.data.voList;
+                    console.log(this.adopterList)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+
+        },
     }
 }
 </script>
@@ -264,8 +255,8 @@ export default {
                                 <p>基本資料</p>
                                 <div class="block blockDataContent">
                                     <p>地點：{{ this.petInfo.location }}</p>
-                                    <p>年齡：</p>
-                                    <p> {{ this.petInfo.age }}</p>
+                                    <span>年齡：</span>
+                                    <span> {{ this.petInfo.age }}</span>
                                     <p>品種：{{ this.petInfo.pet_breed }}</p>
                                 </div>
                             </div>
@@ -340,17 +331,58 @@ export default {
             </div>
 
             <!-- 寵物照片 -->
-            <div class="last">
-                <div class="picArea">
-                    <!-- 接到資料後改為陣列 -->
-                    <ul v-for="item in petWaterfall">
-                        <li>
-                            <img class="img" :src="item" alt="">
-                        </li>
-                    </ul>
+
+            <!-- 送養資訊 -->
+            <div class="middleAdoption">
+                <div class="condition">
+                    <div class="conditionTop blockTitle">
+                        <div :class="{ 'yellowCard': this.petInfo.adoption_status == '正常' }, { 'redCard': this.petInfo.adoption_status == '送養中' }, { 'greenCard': this.petInfo.adoption_status == '已送養' }"
+                            class="circle">
+                            <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path :d="getPath(this.petInfo.type)" fill="white" />
+                            </svg>
+                        </div>
+                        <h5>認養條件</h5>
+                    </div>
+                    <div class="conditionContent">
+                        <p>{{ this.petInfo.adoption_conditions }}</p>
+                    </div>
+                </div>
+                <div class="adopter">
+                    <div class="adopterTop blockTitle">
+                        <div :class="{ 'yellowCard': this.petInfo.adoption_status == '正常' }, { 'redCard': this.petInfo.adoption_status == '送養中' }, { 'greenCard': this.petInfo.adoption_status == '已送養' }"
+                            class="circle">
+                            <svg viewBox="45 -10 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path :d="getPath(this.petInfo.type)" fill="white" />
+                            </svg>
+                        </div>
+                        <h5>申請認養</h5>
+                    </div>
+                    <!-- v-for -->
+                    <div class="adopterContent">
+                        <div class="adopterFile" v-for="(item, index) in this.adopterList" :key="index"
+                            :style="{ backgroundColor: petInfo.final_adopter_id == item.userInfo.userId ? '#fdf6e6' : 'white' }">
+                            <div class="adopterFileTop">
+                                <div class="adopterPhoto">
+                                    <div class="circle">
+                                        <img style="width: 50px; height: 50px; border-radius: 50%;" :src="'data:image/jpeg;base64,' + item.userInfo.userPhoto" alt="">
+                                    </div>
+                                </div>
+                                <div class="adopterText">
+                                    <p>{{ item.userInfo.userName }}</p>
+                                    <p>@{{ item.userInfo.account }}</p>
+                                </div>
+                            </div>
+
+                            <div class="adopterFileMiddle"
+                                :style="{ backgroundColor: petInfo.final_adopter_id == item.userInfo.userId ? '#fefaf2' : 'white' }">
+                                <p>{{ item.userInfo.profile ? item.userInfo.profile : "未填寫" }}</p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-
             <!-- btn -->
             <div class="btnArea">
                 <button class="btn btn-big btn-specialBlue" @click="goTo('/MyAdopt')">
@@ -451,6 +483,7 @@ export default {
                     background-color: #fff;
                     border-radius: 20px;
                     box-shadow: 0 0 2px 2px lightgray;
+                    margin-bottom: 83px;
 
                     img {
                         width: 100%;
@@ -490,7 +523,7 @@ export default {
                     .middleRightContentTop {
                         display: flex;
                         justify-content: space-between;
-                        align-items: center;
+                        // align-items: center;
 
                         .blockData {
                             width: 25%;
@@ -498,6 +531,7 @@ export default {
 
                             .blockDataContent {
                                 width: 100%;
+                                height: 200px;
                             }
                         }
 
@@ -507,7 +541,7 @@ export default {
 
                             .blockVaccineContent {
                                 width: 100%;
-                                height: auto;
+                                height: 200px;
 
                                 .vaccine {
                                     display: flex;
@@ -529,6 +563,10 @@ export default {
                         .blockStatus {
                             width: 40%;
                             font-size: 12pt;
+
+                            .blockStatusContent {
+                                height: 200px;
+                            }
                         }
                     }
 
@@ -550,6 +588,7 @@ export default {
             align-items: center;
 
             .condition {
+                margin-top: 40px;
                 width: 100%;
                 height: 280px;
                 display: flex;
@@ -585,10 +624,10 @@ export default {
 
                 .adopterContent {
                     width: 90%;
-                    height: 280px;
+                    height: 290px;
                     padding: 0px 10px 0px 10px;
                     display: flex;
-                    overflow: scroll;
+                    overflow-x: scroll;
                     align-items: center;
 
                     .adopterFile {
@@ -655,6 +694,8 @@ export default {
             }
         }
 
+            
+
         .last {
             width: 90%;
             min-height: 400px;
@@ -693,6 +734,7 @@ export default {
         }
 
         .btnArea {
+            margin-top: 40px;
             width: 100%;
             height: 50px;
             display: flex;

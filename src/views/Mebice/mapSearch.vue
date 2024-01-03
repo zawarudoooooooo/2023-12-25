@@ -111,7 +111,7 @@ export default {
                 <!-- 四個下拉式選單 -->
                 <!-- v-model 雙向綁定全部 -->
 
-                <span>區域</span>
+                <span>區域　　</span>
                 <select v-model="this.area">
                     <option value=""></option>
                     <option value="北部">北部</option>
@@ -120,7 +120,7 @@ export default {
                     <option value="東部">東部</option>
                 </select>
 
-                <span>縣市</span>
+                <span>縣市　　</span>
                 <select v-model="this.city">
 
                     <option value=""></option>
@@ -162,7 +162,7 @@ export default {
 
             <div class="searchArea">
 
-                <span>性質</span>
+                <span>性質　　</span>
                 <select v-model="this.nature">
                     <option value=""></option>
                     <option value="私人">私人</option>

@@ -440,6 +440,7 @@ export default {
         color: #ffffff;
         box-shadow: 0 0 3px 2px lightgray;
         font-weight: 600;
+        border: none;
 
         &:hover {
             box-shadow: 0px 10px 5px -5px #0e0e0e;

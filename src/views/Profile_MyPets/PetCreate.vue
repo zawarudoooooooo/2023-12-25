@@ -11,9 +11,9 @@ export default {
             cat: "M83.3225 39.3704C77.5361 39.3704 52.6931 39.847 36.7016 60.0611V39.3704C36.7016 26.6261 24.3546 16.2603 9.17467 16.2603C4.108 16.2603 -0.000976562 19.7099 -0.000976562 23.9636C-0.000976562 28.2173 4.108 31.667 9.17467 31.667C14.2328 31.667 18.3503 35.1239 18.3503 39.3704V100.997C18.3503 109.495 26.5797 116.404 36.7016 116.404H87.1677C89.7025 116.404 91.7555 114.68 91.7555 112.552V108.701C91.7555 104.447 87.6466 100.997 82.5799 100.997H73.4042L110.107 77.8872V112.552C110.107 114.68 112.16 116.404 114.695 116.404H123.87C126.405 116.404 128.458 114.68 128.458 112.552V62.9282C125.508 63.571 122.468 64.0211 119.282 64.0211C101.559 64.0211 86.7319 53.417 83.3225 39.3704ZM128.458 16.2603H110.107L91.7555 0.853516V33.2077C91.7555 45.9712 104.08 56.3178 119.282 56.3178C134.485 56.3178 146.809 45.9712 146.809 33.2077V0.853516L128.458 16.2603ZM107.813 35.5187C105.278 35.5187 103.225 33.795 103.225 31.667C103.225 29.5389 105.278 27.8153 107.813 27.8153C110.348 27.8153 112.401 29.5389 112.401 31.667C112.401 33.795 110.348 35.5187 107.813 35.5187ZM130.752 35.5187C128.217 35.5187 126.164 33.795 126.164 31.667C126.164 29.5389 128.217 27.8153 130.752 27.8153C133.287 27.8153 135.34 29.5389 135.34 31.667C135.34 33.795 133.287 35.5187 130.752 35.5187Z",
             isAdopted: false,
             cities: ["台北市", "新北市", "基隆市", "新竹市", "桃園市", "新竹縣", "宜蘭縣",
-                    "台中市", "苗栗縣", "彰化縣", "南投縣", "雲林縣",
-                    "高雄市", "台南市", "嘉義市", "嘉義縣", "屏東縣", "澎湖縣",
-                    "花蓮縣", "台東縣"],
+                "台中市", "苗栗縣", "彰化縣", "南投縣", "雲林縣",
+                "高雄市", "台南市", "嘉義市", "嘉義縣", "屏東縣", "澎湖縣",
+                "花蓮縣", "台東縣"],
             userInfo: {
                 user_name: "短腿貓的爸",
                 account: "@wei0113__",
@@ -95,138 +95,145 @@ export default {
             if (fileInput.files && fileInput.files[0]) {
                 reader.onload = (e) => {
                     this.imageUrl = e.target.result; // 设置预览图片的值
-                    this.$refs.preview.src = this.imageUrl;
-                    this.showCropper = true;
 
-                    const imageDataWithoutPrefix = e.target.result.split(',')[1];
-                    this.petInfo.pet_photo = imageDataWithoutPrefix;
-                };
-            }
-            reader.readAsDataURL(fileInput.files[0]);
-            console.log("file changed!!");
-        },
-        saveCroppedImage() {
-            this.cropper = this.$refs.cropper;
-            const croppedCanvas = this.cropper && this.cropper.getCroppedCanvas();
-            this.croppedImageUrl = croppedCanvas ? croppedCanvas.toDataURL('image/jpeg') : null;
-            console.log('Cropped image saved:', this.croppedImageUrl);
-        },
-        saveAndCloseCropper() {
-            // 在这里执行保存裁切图片的操作
-            this.saveCroppedImage();
-
-            // 新增一个变量，不含 Base64 前缀
-            this.croppedImageUrlwithoutPrefix = this.croppedImageUrl.replace(/^data:image\/[a-z]+;base64,/, '');
-
-            // 打印新变量
-            console.log('Cropped image without prefix:', this.croppedImageUrlwithoutPrefix);
-
-            // 将裁切后的值赋予到 Uploaded Image
-            this.$nextTick(() => {
-                // 如果裁切后的值存在，将其赋值给 imageUrl 以显示
-                if (this.croppedImageUrl) {
-                    this.imageUrl = this.croppedImageUrl;
+                    // 在使用 $refs.preview 之前進行檢查
+                    if (this.$refs.preview) {
+                        this.$refs.preview.src = this.imageUrl;
+                        this.showCropper = true;
+ }
+                        const imageDataWithoutPrefix = e.target.result.split(',')[1];
+                        this.petInfo.pet_photo = imageDataWithoutPrefix;
+                    };
                 }
+                reader.readAsDataURL(fileInput.files[0]);
+                console.log("file changed!!");
+            },
+            saveCroppedImage() {
+                this.cropper = this.$refs.cropper;
+                const croppedCanvas = this.cropper && this.cropper.getCroppedCanvas();
+                this.croppedImageUrl = croppedCanvas ? croppedCanvas.toDataURL('image/jpeg') : null;
+                console.log('Cropped image saved:', this.croppedImageUrl);
+            },
+            saveAndCloseCropper() {
+                // 在这里执行保存裁切图片的操作
+                this.saveCroppedImage();
 
-                // 隐藏裁切范围并重置图片变量
-                this.showCropper = false;
-                this.imageUrl = null;
-            });
-        },
+                // 新增一个变量，不含 Base64 前缀
+                this.croppedImageUrlwithoutPrefix = this.croppedImageUrl.replace(/^data:image\/[a-z]+;base64,/, '');
 
+                // 打印新变量
+                console.log('Cropped image without prefix:', this.croppedImageUrlwithoutPrefix);
 
+                // 将裁切后的值赋予到 Uploaded Image
+                this.$nextTick(() => {
+                    // 如果裁切后的值存在，将其赋值给 imageUrl 以显示
+                    if (this.croppedImageUrl) {
+                        this.imageUrl = this.croppedImageUrl;
+                    }
+                    // 隐藏裁切范围并重置图片变量
+                    this.showCropper = false;
+                    this.imageUrl = null;
 
-
-        getPath(type) {
-            if (type == "狗") {
-                return this.dog;
-            }
-            if (type == "貓") {
-                return this.cat;
-            }
-        },
-        checkStatus() {
-            let bgc = "";
-            if (this.petInfo.adoption_status == '正常') {
-                bgc = '#F8F5EE';
-            }
-            if (this.petInfo.adoption_status == '送養中') {
-                this.isAdopted = true;
-                bgc = '#F7E1E5';
-            }
-            return bgc;
-        },
-        isChecked(checkVaccine) {
-            if (this.vaccineArr == []) {
-                return false;
-            }
-            return this.vaccineArr.includes(checkVaccine);
-        },
-        changeType() {
-            if (this.petInfo.type == "狗") {
-                this.petInfo.type = "貓";
-            } else if (this.petInfo.type == "貓") {
-                this.petInfo.type = "狗";
-            }
-        },
-        changeVaccine(vaccine) {
-            const index = this.vaccineArr.indexOf(vaccine);
-
-            if (index !== -1) {
-                this.vaccineArr.splice(index, 1);
-            } else {
-                this.vaccineArr.push(vaccine);
-            }
-        },
-        changeLigation() {
-            this.petInfo.ligation = !this.petInfo.ligation;
-        },
-
-        previewImg() {
-            this.handleFileChange();
-        },
-
-
-        //12.20 圖片邏輯更新
-        createData() {
-            if (this.petInfo.pet_name == null || this.petInfo.pet_name.trim() == "") {
-                alert("請輸入該寵物的名字！");
-                return;
-            }
-
-            this.petInfo.vaccine = this.vaccineArr.join(',');
-            console.log("create pet", this.petInfo);
-
-            // 檢查是否有裁切後的圖片資料，若有則賦值給 pet_photo
-            if (this.croppedImageUrlwithoutPrefix) {
-                this.petInfo.pet_photo = this.croppedImageUrlwithoutPrefix;
-            }
-
-            axios.post('http://localhost:8080/api/adoption/petInfo/createPetInfo', {
-                petInfo: this.petInfo
-            })
-                .then(response => {
-                    console.log(response.data);
-                    this.$router.push('/MyPet');
-                })
-                .catch(error => {
-                    console.error(error);
+                    // 重置 FileReader 物件
+                    const fileInput = this.$refs.fileInput;
+                    fileInput.value = ''; // 清空 input，以便觸發新的 change 事件
+                    this.showCropper = false; // 隱藏裁切器
                 });
+            },
 
-            Swal.fire({
-                title: "成功新增寵物資料",
-                icon: "success"
-            }).then((result) => {
-                if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
-                    this.$router.push('/MyPet');
+
+
+
+            getPath(type) {
+                if (type == "狗") {
+                    return this.dog;
                 }
-            });
+                if (type == "貓") {
+                    return this.cat;
+                }
+            },
+            checkStatus() {
+                let bgc = "";
+                if (this.petInfo.adoption_status == '正常') {
+                    bgc = '#F8F5EE';
+                }
+                if (this.petInfo.adoption_status == '送養中') {
+                    this.isAdopted = true;
+                    bgc = '#F7E1E5';
+                }
+                return bgc;
+            },
+            isChecked(checkVaccine) {
+                if (this.vaccineArr == []) {
+                    return false;
+                }
+                return this.vaccineArr.includes(checkVaccine);
+            },
+            changeType() {
+                if (this.petInfo.type == "狗") {
+                    this.petInfo.type = "貓";
+                } else if (this.petInfo.type == "貓") {
+                    this.petInfo.type = "狗";
+                }
+            },
+            changeVaccine(vaccine) {
+                const index = this.vaccineArr.indexOf(vaccine);
+
+                if (index !== -1) {
+                    this.vaccineArr.splice(index, 1);
+                } else {
+                    this.vaccineArr.push(vaccine);
+                }
+            },
+            changeLigation() {
+                this.petInfo.ligation = !this.petInfo.ligation;
+            },
+
+            previewImg() {
+                this.handleFileChange();
+            },
+
+
+            //12.20 圖片邏輯更新
+            createData() {
+                if (this.petInfo.pet_name == null || this.petInfo.pet_name.trim() == "") {
+                    alert("請輸入該寵物的名字！");
+                    return;
+                }
+
+                this.petInfo.vaccine = this.vaccineArr.join(',');
+                console.log("create pet", this.petInfo);
+
+                // 檢查是否有裁切後的圖片資料，若有則賦值給 pet_photo
+                if (this.croppedImageUrlwithoutPrefix) {
+                    this.petInfo.pet_photo = this.croppedImageUrlwithoutPrefix;
+                }
+
+                axios.post('http://localhost:8080/api/adoption/petInfo/createPetInfo', {
+                    petInfo: this.petInfo
+                })
+                    .then(response => {
+                        console.log(response.data);
+                        this.$router.push('/MyPet');
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+
+                Swal.fire({
+                    title: "成功新增寵物資料",
+                    icon: "success"
+                }).then((result) => {
+                    if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                        this.$router.push('/MyPet');
+                    }
+                });
+            },
+            goTo(x) {
+                this.$router.push(x)
+            }
         },
-        goTo(x) {
-            this.$router.push(x)
-        }
-    },
-}
+    }
 </script>
 
 
@@ -275,12 +282,13 @@ export default {
                     </div>
                 </div>
             </div>
-            
+
             <!-- Cropper popup -->
             <div v-if="showCropper" class="cropper-popup">
                 <h3 style="text-align: center;">裁切大頭貼</h3>
                 <!-- VueCropper component -->
-                <vue-cropper v-if="imageUrl" :src="imageUrl" :key="imageUrl" ref="cropper"></vue-cropper>
+                <vue-cropper class="vue-cropper" v-if="imageUrl" :src="imageUrl" :key="imageUrl"
+                    ref="cropper"></vue-cropper>
                 <!-- Button to save and close cropper -->
                 <button @click="saveAndCloseCropper">儲存並關閉</button>
             </div>
@@ -532,7 +540,7 @@ export default {
                 height: 500px;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
+                // justify-content: center;
                 align-items: center;
 
                 .middleLeftPic {
@@ -731,6 +739,7 @@ export default {
                     margin-bottom: 10px;
                 }
             }
+
             .blockTitle {
                 width: 90%;
                 height: 80px;
@@ -981,6 +990,11 @@ export default {
     border-radius: 15px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     /* 添加陰影效果 */
+
+    .vue-cropper {
+        width: 400px;
+        height: 400px;
+    }
 
     h3 {
         text-align: center;
