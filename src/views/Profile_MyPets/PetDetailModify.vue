@@ -584,7 +584,7 @@ $inputBorder: #e2dbca;
                 height: 500px;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
+                // justify-content: center;
                 align-items: center;
 
                 .middleLeftPic {

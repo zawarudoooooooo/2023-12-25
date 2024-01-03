@@ -229,7 +229,7 @@ export default{
     <div class="showBoard">
         <!-- title -->
         <div class="title">
-            <h1>My Adopt</h1>
+            <h1>我的領養</h1>
         </div>
 
         <!-- v-for the card -->

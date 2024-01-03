@@ -677,7 +677,7 @@ export default {
             height: auto;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            // align-items: center;
             margin-bottom: 30px;
 
             .middleLeft {

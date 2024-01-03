@@ -216,7 +216,7 @@ export default{
 
             <!-- 標題 -->
             <div class="title">
-                <h1>My Pets</h1>
+                <h1>我的毛小孩</h1>
             </div>
 
             <!-- btn -->
