@@ -14,6 +14,8 @@ export default {
             },
             newInfoList: null,//多個最新消息的List
 
+            filteredNewInfoList: null,
+
 
         };
     },
@@ -84,6 +86,9 @@ export default {
                         this.newInfo.category = '';
                         this.newInfo.type = null;
                         fileInput.value = null;
+
+                        // 最初，將 filteredNewInfoList 設置為與 newInfoList 相同
+                        this.filteredNewInfoList = [...this.newInfoList];
 
                     })
                     .catch(error => {  //如果請求失敗
@@ -262,6 +267,7 @@ export default {
                     // 處理錯誤情況
                 });
         },
+
     },
 
 
@@ -308,6 +314,20 @@ export default {
         </table>
         <button @click="createNewInfo">新增</button>
     </div>
+
+    <!-- <select class="selectSearch" name="" id="">
+        <option value="最新消息">最新消息</option>
+        <option value="新聞">新聞</option>
+        <option value="活動">活動</option>
+        <option value="教育">教育</option>
+    </select>
+    <select class="selectSearch" name="" id="">
+        <option value="科普">科普</option>
+        <option value="法規">法規</option>
+        <option value="行為訓練">行為訓練</option>
+        <option value="醫學">醫學</option>
+        <option value="心理">心理</option>
+    </select> -->
 
     <div class="searchAllNewInfo">
         <!-- v-for迭代 newInfoList 中的每一則資訊。:key="newInfo.serialNo" 用於確保每個循環元素都有唯一的 key -->
@@ -365,10 +385,10 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-
-body{
+body {
     background-color: #F8F5EE;
 }
+
 //新增的欄位
 .createNewInfo {
     margin: 20px;
@@ -378,7 +398,7 @@ body{
     flex-direction: column;
 
     table {
-        
+
         border: 3px #cccccc solid;
         background-color: #fff;
         font-family: 微軟正黑體;
@@ -392,12 +412,12 @@ body{
 
     th {
         padding: 10px;
-        border:3px #cccccc solid;
+        border: 3px #cccccc solid;
         color: #766a6a;
     }
 
     td {
-        border:3px #cccccc solid;
+        border: 3px #cccccc solid;
     }
 
     .tdName {
@@ -424,23 +444,12 @@ body{
         text-align: center; //字體居中
     }
 
-    //下拉選單
-    // select {
-    //     width: 15%;
-    //     height: 4.5vh;
-    //     font-size: 1.2vw;
-    //     margin-left: 4vw;
-    //     margin-right: 5vw;
-    //     border-radius: 2.5vw;
-    //     background-color: #DDDFEE;
-    //     border: none;
-    //     text-align: center; //字體居中
 
-    // }
+
 
     button {
         margin: 1%;
-        background-color:  #DDDFEE;
+        background-color: #DDDFEE;
         color: #7c6969;
         font-weight: 700;
         font-size: 15pt;
@@ -450,13 +459,25 @@ body{
         cursor: pointer; //設定鼠標懸停時顯示為手型
 
         &:hover {
-            background-color: #7c6969;
+            background-color: #9e8d8d;
             color: #ffffff;
         }
     }
 
-    // }
-    // }
+}
+
+//下拉選單
+.selectSearch {
+    width: 15%;
+    height: 4.5vh;
+    font-size: 1.2vw;
+    margin-left: 4vw;
+    margin-right: 5vw;
+    border-radius: 2.5vw;
+    background-color: #DDDFEE;
+    border: none;
+    text-align: center; //字體居中
+
 }
 
 
@@ -535,4 +556,5 @@ body{
     max-width: 100%;
     border-radius: 4px;
     margin-top: 10px;
-}</style>
+}
+</style>
