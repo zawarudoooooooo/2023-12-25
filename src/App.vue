@@ -114,7 +114,6 @@ export default {
   height: 50px;
   background-color: rgba(211, 211, 211, 0.804);
   border-radius: 50%;
-  box-shadow: 5px 5px 5px lightgray;
   display: flex;
   justify-content: center;
   align-items: center;
