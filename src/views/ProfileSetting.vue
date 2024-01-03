@@ -170,16 +170,16 @@ export default {
 
                         this.$emit("userInfo", foundUser);
                         this.foundUser = foundUser; // 將整理後的 foundUser 存入 this.foundUser
-                        this.userName=foundUser.userName
-                        this.profile=foundUser.profile
-                        this.userRealName=foundUser.userRealName
-                        this.gender=foundUser.gender
-                        this.jobOccupation=foundUser.jobOccupation
-                        this.address=foundUser.address
-                        this.phone=foundUser.phone
-                        this.familyStatus=foundUser.familyStatus
-                        this.sentenceToAdopter=foundUser.sentenceToAdopter
-                        
+                        this.userName = foundUser.userName
+                        this.profile = foundUser.profile
+                        this.userRealName = foundUser.userRealName
+                        this.gender = foundUser.gender
+                        this.jobOccupation = foundUser.jobOccupation
+                        this.address = foundUser.address
+                        this.phone = foundUser.phone
+                        this.familyStatus = foundUser.familyStatus
+                        this.sentenceToAdopter = foundUser.sentenceToAdopter
+
 
                     } else {
                         console.log('找不到對應的使用者');
@@ -286,7 +286,8 @@ export default {
                 <div v-if="showCropper" class="cropper-popup">
                     <h3 style="text-align: center;">裁切大頭貼</h3>
                     <!-- VueCropper component -->
-                    <vue-cropper v-if="imageUrl" :src="imageUrl" :key="imageUrl" ref="cropper"></vue-cropper>
+                    <vue-cropper class="vue-cropper" v-if="imageUrl" :src="imageUrl" :key="imageUrl"
+                        ref="cropper"></vue-cropper>
                     <!-- Button to save and close cropper -->
                     <button @click="saveAndCloseCropper">儲存並關閉</button>
                 </div>
@@ -663,6 +664,11 @@ $inputBorder: #e2dbca;
     border-radius: 15px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     /* 添加陰影效果 */
+
+    .vue-cropper {
+        width: 400px;
+        height: 400px;
+    }
 
     h3 {
         text-align: center;

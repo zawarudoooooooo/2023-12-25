@@ -595,16 +595,7 @@ export default {
             </div>
 
             <!-- 寵物照片 -->
-            <div class="last">
-                <div class="picArea">
-                    <!-- 接到資料後改為陣列 -->
-                    <ul v-for="item in petWaterfall">
-                        <li>
-                            <img class="img" :src="item" alt="">
-                        </li>
-                    </ul>
-                </div>
-            </div>
+
 
             <!-- btn -->
             <div class="btnArea">

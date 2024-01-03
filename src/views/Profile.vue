@@ -10,11 +10,8 @@ export default {
             userInfoList: null,
             imageUrl: null,
             foundFileName: null,
-            // filePath: null
-
         };
     },
-    //進入頁面時，變更背景顏色
     beforeCreate() {
         document.querySelector('body').setAttribute('style', 'background:#F8F5EE');
     },
