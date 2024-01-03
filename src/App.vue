@@ -45,7 +45,15 @@ export default {
     closeChatArea(close){
       this.isShowChat = false;
       console.log("is show", this.isShowChat)
-    }
+    },
+
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    },
   }
 }
 </script>
@@ -71,8 +79,8 @@ export default {
       :room="room"/>
     </div>
     
-    <div class="fixedChat" @click="showChatArea">
-      <i class="fa-solid fa-comments" style="color: white;"></i>
+    <div class="fixedUp" @click="scrollToTop">
+      <i class="fa-solid fa-chevron-up"></i>
     </div>
   </div>
 </template>
@@ -101,12 +109,11 @@ export default {
 }
 
 
-.fixedChat{
-  width: 60px;
-  height: 60px;
-  background-color: #e7cfa3;
+.fixedUp{
+  width: 50px;
+  height: 50px;
+  background-color: rgba(211, 211, 211, 0.804);
   border-radius: 50%;
-  box-shadow: 5px 5px 5px lightgray;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -116,7 +123,7 @@ export default {
   transition: all 0.5s ease;
   font-size: 18pt;
   &:hover{
-    background-color: #ebc26f;
+    background-color: lightgray;
   }
 }
 </style>

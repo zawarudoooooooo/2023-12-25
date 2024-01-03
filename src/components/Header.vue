@@ -25,7 +25,7 @@ export default {
             // 根據不同的連結更新 headerColor
             switch (x) {
                 case '/ForumEntrance':
-                    this.updateHeaderColor('#ebc26f'); // 例如，設置為藍色
+                    this.updateHeaderColor('#6E75A8'); // 例如，設置為藍色
                     break;
                 case '/mapSearch':
                     console.log('Updating header color to: #df4a4a');

@@ -8,6 +8,7 @@ export default {
     data() {
         return {
             userInfo: {},
+            show: [],
         }
     },
 
@@ -16,6 +17,9 @@ export default {
 
         // pinia: getInfoState
         this.getChatRooms(this.userInfo);
+
+        // set 1500ms doing the method once
+        // setInterval(() => this.newShowList(), 1500);
     },
 
     computed: {
@@ -34,7 +38,7 @@ export default {
                     }
                 }
             })
-
+            this.show = roomArr;
             return roomArr;
         }
     },
@@ -50,6 +54,36 @@ export default {
     methods: {
         ...mapActions(getInfoState, ['getChatRooms', 'readMessage']),
         ...mapActions(socketState, ['connectServer', 'connectChannel']),
+
+        newShowList(){
+            this.getChatRooms(this.userInfo)
+
+            this.foundChattedRoomList.forEach( room => {
+                console.log(room)
+                for(let i = 0; i < this.foundChattedUserList.length; i++){
+                    let checkUser = this.foundChattedUserList[i];
+                    console.log(checkUser)
+                    for(let x = 0; x < this.show.length; x++){
+                        let checkShow = this.show[x];
+                        console.log(checkShow)
+                        if(checkUser.chatRoomId == room.chatRoomId && checkUser.receiver == this.userInfo.userId){
+                            if(checkShow.chatRoomId == room.chatRoomId){
+                                if(checkShow.lastMsg == room.lastMsg){
+                                    continue;
+                                } else {
+                                    checkShow = Object.assign({}, room, { isRead: checkUser});
+                                }
+                            } else {
+                                const newRoomObj = Object.assign({}, room, { isRead: checkUser});
+                                this.show.push(newRoomObj)
+                            }
+                            
+                        }
+                    }
+                    
+                }
+            })
+        },
 
         emitGo(roomInfo){
             // ponia WebSocket: 建立 channel
@@ -94,7 +128,7 @@ export default {
         </div>
 
         <div class="showListArea">
-            <div class="showList" v-for="(room, index) in showList">
+            <div class="showList" v-for="(room, index) in show">
                 <!-- 私聊 -->
                 <div v-if="room.ent == 1" class="showUser" :class="{ 'unreadBgc': room.isRead.receiver == userInfo.userId && room.isRead.read == false}" @click="emitGo(room)">
                     <img class="showImg" :src="'data:image/jpeg;base64,' + room.user.userPhoto" alt="">
