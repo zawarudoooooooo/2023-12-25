@@ -84,7 +84,7 @@ export default {
             <img src="../../public/logo只有圖案.png" alt="">
             <!-- <i class="fa-solid fa-house" style="color: white;"></i> -->
         </div>
-        <RouterLink class="routerLink" to="/ForumEntrance" @click="goTo('/ChatTest')">ChatTest</RouterLink>
+        <!-- <RouterLink class="routerLink" to="/ForumEntrance" @click="goTo('/ChatTest')">ChatTest</RouterLink> -->
 
         <RouterLink class="routerLink" to="/ForumEntrance" @click="goTo('/ForumEntrance')">論壇</RouterLink>
         <RouterLink class="routerLink" to="/mapSearch" @click="goTo('/mapSearch')">其他地點</RouterLink>

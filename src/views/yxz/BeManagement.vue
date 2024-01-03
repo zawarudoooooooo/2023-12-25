@@ -270,43 +270,43 @@ export default {
 
 <template>
     <div class="createNewInfo">
-        <!-- v-model雙向綁定到newInfo -->
         <table>
             <tr>
-                <td>標題:</td>
-                <td><input type="text" v-model="newInfo.title" /></td>
+                <td class="tdName">標題</td>
+                <td colspan="5"><input class="inputTitle" type="text" v-model="newInfo.title" /></td>
             </tr>
             <tr>
-                <td>內容:</td>
-                <td><textarea v-model="newInfo.content"></textarea></td>
+                <td class="tdName">內容</td>
+                <td colspan="5"><textarea v-model="newInfo.content"></textarea></td>
             </tr>
             <tr>
-                <td>日期:</td>
-                <td><input type="date" v-model="newInfo.date" /></td>
-            </tr>
-            <tr>
-                <td>類型:</td>
-                <td><select name="" id="" v-model="newInfo.type">
+                <td class="tdName">日期</td>
+                <td colspan="1"><input class="inputThree" type="date" v-model="newInfo.date" /></td>
+
+                <td class="tdName">類型</td>
+                <td colspan="1">
+                    <select class="inputThree" name="" id="" v-model="newInfo.type">
                         <option value="最新消息">最新消息</option>
                         <option value="科普">科普</option>
                     </select>
                 </td>
-            </tr>
-            <tr>
-                <td>分類:</td>
-                <select v-model="this.newInfo.category">
-                    <option v-for="typeOption in filteredCities" :value="typeOption">
-                        {{ typeOption }}
-                    </option>
-                </select>
+
+                <td class="tdName">分類</td>
+                <td colspan="1">
+                    <select class="inputThree" v-model="newInfo.category">
+                        <option v-for="typeOption in filteredCities" :value="typeOption">
+                            {{ typeOption }}
+                        </option>
+                    </select>
+                </td>
             </tr>
 
             <tr>
-                <td>圖片:</td>
-                <td><input type="file" @change="handleFileUpload" /></td><!-- 這是用來上傳圖片的輸入框 -->
+                <td class="tdName">圖片</td>
+                <td colspan="5"><input type="file" @change="handleFileUpload" /></td>
             </tr>
         </table>
-        <button @click="createNewInfo">新增</button><!-- 觸發新增的按鈕 -->
+        <button @click="createNewInfo">新增</button>
     </div>
 
     <div class="searchAllNewInfo">
@@ -365,72 +365,98 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+
+body{
+    background-color: #F8F5EE;
+}
 //新增的欄位
 .createNewInfo {
     margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
     table {
-        border-collapse: collapse; //用於合併相鄰單元格的邊框。
+        
+        border: 3px #cccccc solid;
+        background-color: #fff;
+        font-family: 微軟正黑體;
+        font-size: 16px;
+        width: 200px;
+        text-align: center;
+        border-collapse: collapse;
+        width: 80%;
+        margin-top: 30px;
+    }
+
+    th {
+        padding: 10px;
+        border:3px #cccccc solid;
+        color: #766a6a;
+    }
+
+    td {
+        border:3px #cccccc solid;
+    }
+
+    .tdName {
+        background-color: #DDDFEE;
+        font-weight: 700;
+        font-size: 15pt;
+        color: #7c6969;
+    }
+
+    .inputTitle {
         width: 100%;
+        height: 30px;
+        border: none;
+    }
 
-        tr {
-            &:nth-child(odd) {
-                //奇數行
-                background-color: #f2f2f2;
-                /* Alternate row background color */
-            }
+    textarea {
+        width: 100%;
+        height: 100px;
+        border: none;
+    }
 
-            td {
-                //單元格樣式
-                padding: 8px;
-                border: 1px solid #ddd;
-                text-align: left;
-            }
+    .inputThree {
+        width: 200px;
+        text-align: center; //字體居中
+    }
 
-            input[type='text'],
-            textarea,
-            input[type='date'] {
-                width: 100%;
-                padding: 8px;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-                box-sizing: border-box; //設定框模型為邊框內計算
-                margin-bottom: 10px;
-            }
+    //下拉選單
+    // select {
+    //     width: 15%;
+    //     height: 4.5vh;
+    //     font-size: 1.2vw;
+    //     margin-left: 4vw;
+    //     margin-right: 5vw;
+    //     border-radius: 2.5vw;
+    //     background-color: #DDDFEE;
+    //     border: none;
+    //     text-align: center; //字體居中
 
-            textarea {
-                height: 100px;
-                /* Adjust height for textarea */
-            }
+    // }
 
-            //下拉選單
-            // select {
-            //     width: 15%;
-            //     height: 4.5vh;
-            //     font-size: 1.2vw;
-            //     margin-left: 4vw;
-            //     margin-right: 5vw;
-            //     border-radius: 2.5vw;
-            //     background-color: #DDDFEE;
-            //     border: none;
-            //     text-align: center; //字體居中
+    button {
+        margin: 1%;
+        background-color:  #DDDFEE;
+        color: #7c6969;
+        font-weight: 700;
+        font-size: 15pt;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer; //設定鼠標懸停時顯示為手型
 
-            // }
-
-            button {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer; //設定鼠標懸停時顯示為手型
-
-                &:hover {
-                    background-color: #45a049;
-                }
-            }
+        &:hover {
+            background-color: #7c6969;
+            color: #ffffff;
         }
     }
+
+    // }
+    // }
 }
 
 
@@ -509,5 +535,4 @@ export default {
     max-width: 100%;
     border-radius: 4px;
     margin-top: 10px;
-}
-</style>
+}</style>

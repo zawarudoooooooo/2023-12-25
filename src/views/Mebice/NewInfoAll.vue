@@ -116,15 +116,19 @@ export default {
     }
 
     .searchAllNewInfo {
+        width: 100vw;
         display: flex;
+        justify-content: center;
         flex-wrap: wrap;
-        gap: 20px;
-        margin: 0 8vw 10vh 8vw;
-        padding: 0 30px;
+        gap: 1vw;
+        margin-top: 20px;
+        padding: 0 10%;
     }
 
     .info-card {
+        width: 30%;
         height: 65%;
+        /* 為所有卡片設定固定高度 */
         border: 1px solid #ddd;
         border-radius: 30px;
         margin: 20px 1px 0px 1px;
@@ -132,8 +136,7 @@ export default {
         color: #978989;
         font-size: 14pt;
         box-shadow: 0 0 3px 5px rgb(202, 202, 202);
-        width: calc(33.33% - 20px);
-        /* 調整每個消息卡片的寬度，這裡假設每行三個 */
+
         box-sizing: border-box;
         transition: all 0.4s; //過渡效果，持續時間為 0.4 秒
 
@@ -147,32 +150,33 @@ export default {
     //消息卡片內容的區塊
     .info-card2 {
         padding: 20px 20px 0px 20px;
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
     }
 
     .info-card h2 {
-        height: 8vh;
         font-size: 1.5rem;
         margin-bottom: 10px;
         font-weight: 700;
         color: #867e7e;
     }
 
+
+
     .imgArea {
-        vertical-align: middle;
         border-radius: 0px 0px 30px 30px;
         width: 100%;
-        height: 30vh;
-        padding: 0;
+        height: 300px;
     }
 
     .info-card img {
-        vertical-align: middle;
         width: 100%;
         height: 100%;
+        /* 確保所有圖片具有相同的高度 */
         border-radius: 0px 0px 30px 30px;
-        /* 设置圆角 上右下左 */
-        padding: 0;
         background-size: cover;
     }
 
