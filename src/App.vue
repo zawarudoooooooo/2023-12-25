@@ -72,9 +72,9 @@ export default {
     <div v-if="isShowChat" class="chatArea">
       <ChatFlow @chatIsClose="closeChatArea" :room="room" />
     </div>
-    
-    <div class="fixedChat" @click="showChatArea">
-      <i class="fa-solid fa-comments" style="color: white;"></i>
+
+    <div class="fixedUp" @click="scrollToTop">
+      <i class="fa-solid fa-chevron-up"></i>
     </div>
   </div>
 </template>
@@ -103,7 +103,7 @@ export default {
 }
 
 
-.fixedChat{
+.fixedChat {
   width: 60px;
   height: 60px;
   background-color: #e7cfa3;
@@ -116,7 +116,8 @@ export default {
   bottom: 10vh;
   transition: all 0.5s ease;
   font-size: 18pt;
-  &:hover{
+
+  &:hover {
     background-color: #ebc26f;
   }
 }
@@ -139,4 +140,7 @@ export default {
     background-color: lightgray;
   }
 }
+
+
+
 </style>
