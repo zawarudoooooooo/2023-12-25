@@ -9,7 +9,7 @@ export default {
         goTo(x) {
             this.$router.push(x);
         }
-    }
+    },
 }
 </script>
 <!-- 論壇首頁<br />科普版<br />閒聊版<br />MY ARTICLE -->
@@ -24,7 +24,7 @@ export default {
         <div class="adopt line">
             <p @click="goTo('/ForumEntrance/ForumMyArticle')">我的文章</p>
         </div>
-        <button class="dashboard_btn"  @click="goTo('/ForumEntrance/create_Article')">
+        <button v-if="foundUserInfo" class="dashboard_btn"  @click="goTo('/ForumEntrance/create_Article')">
             <i class="fa-solid fa-plus plus_icon"></i>
             <div class="dashboard_btn_text">我要發文</div>
         </button>
