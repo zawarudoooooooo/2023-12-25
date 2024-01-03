@@ -282,82 +282,82 @@ export default {
                 <div class="dashboard">
                     <ArticleDashBoard />
                 </div>
-                <div class="out_article_area">
-                    <div class="in_article_area">
-                        <div class="function_icon_area">
-                            <i v-if="this.foundUserInfo.userId == this.myArticle[0].userId"
-                                class="fa-solid fa-trash-can img-2" @click="deletePost()"></i>
-                            <i v-if="this.foundUserInfo.userId == this.myArticle[0].userId" class="fa-solid fa-pen img-3"
-                                @click="goTo('/ForumEntrance/edit_myArticle')"></i>
-                        </div>
-                        <div class="article">
-                            <div class="poster_area">
-                                <div class="poster">
-                                    <div class="div-13">
-                                        <div class="div-14">
-                                            <img class="poster_icon"
-                                                :src="'data:image/jpeg;base64,' + this.myArticle[0].userPhoto" alt="">
-                                            <div class="poster_data">
-                                                <span class="poster_name">{{ this.myArticle[0].userName }}</span>
-                                                <span class="poster_userId">@{{ this.myArticle[0].account }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column-4">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="div-20"></div>
-                            <div class="article_title">{{ this.myArticle[0].title }}</div>
-                            <img class="article_img" :src="'data:image/jpeg;base64,' + this.myArticle[0].postPhoto" alt="">
-                            <div class="article_contain">
-                                <p>{{ this.myArticle[0].postContent }}</p>
-                            </div>
-                            <div class="div-23">
-                                <span>Comment</span>
-                                <div class="likesCount">
-                                    <i :class="{ 'fa-solid fa-heart': this.myArticle[0].liked, 'fa-regular fa-heart': !this.myArticle[0].liked }"
-                                        @click="createLike()"></i>
-                                    <span @click="searchLikeByPostId()">{{ this.myArticle[0].likesCount }}</span>
-                                </div>
-                            </div>
-                            <div class="div-24"></div>
 
-                            <div class="reply">
-                                <button
-                                    style="margin-left: 950px; background-color:#6E75A8;color: white;border-radius: 15px;"
-                                    @click="showAllComments = !showAllComments">
-                                    {{ showAllComments ? '收起留言' : '查看更多' }}
-                                </button>
-                                <div class="replier"
-                                    v-for="(item, index) in showAllComments ? postCommentList : lastFiveComments">
-                                    <img style="width: 70px;height: 70px;border-radius: 50px; "
-                                        :src="'data:image/jpeg;base64,' + item.userPhoto" alt="">
-                                    <div class="replier_data">
-                                        <p class="replier_name">{{ item.userName }}</p>
-                                        <p class="replier_userId">{{ item.account }}</p>
-                                        <div class="replier_text">{{ item.commentContent }}</div>
-                                        <p>{{ showAllComments ? index + 1 : postCommentList.length - lastFiveComments.length
-                                            + index + 1 }}樓</p>
-                                    </div>
+
+                <div class="article">
+                    <div class="poster_area">
+                        <div class="poster">
+
+                            <div class="topLeft">
+                                <img class="poster_icon" :src="'data:image/jpeg;base64,' + this.myArticle[0].userPhoto"
+                                    alt="">
+                                <div class="poster_data">
+                                    <span class="poster_name">{{ this.myArticle[0].userName }}</span>
+                                    <span class="poster_userId">@{{ this.myArticle[0].account }}</span>
                                 </div>
                             </div>
-                            <div class="newReply" style="margin-left: 25px;">
-                                <img class="replier_img" :src="'data:image/jpeg;base64,' + this.foundUserInfo.userPhoto"
-                                    alt="">
-                                <div class="nameAccount">
-                                    <span>{{ this.foundUserInfo.userName }}</span>
-                                    <span>{{ this.foundUserInfo.account }}</span>
-                                </div>
-                                <input style="margin-left: 15px;" type="text" v-model="userReply"
-                                    @keyup.enter="createNewComment()">
-                                <button
-                                    style="margin-left: 15px; background-color:#6E75A8;color: white;border-radius: 15px;"
-                                    @click="createNewComment()">回覆</button>
+
+                            <div class="function_icon_area">
+                                <i v-if="this.foundUserInfo.userId == this.myArticle[0].userId"
+                                    class="fa-solid fa-trash-can img-2" @click="deletePost()"></i>
+                                <i v-if="this.foundUserInfo.userId == this.myArticle[0].userId"
+                                    class="fa-solid fa-pen img-3" @click="goTo('/ForumEntrance/edit_myArticle')"></i>
                             </div>
                         </div>
                     </div>
+
+                    <div class="div-20"></div>
+
+                    <div class="article_title">{{ this.myArticle[0].title }}</div>
+                    
+                    <div class="article_contain">
+                        <img class="article_img" :src="'data:image/jpeg;base64,' + this.myArticle[0].postPhoto" alt="">
+                        <p class="article_text">{{ this.myArticle[0].postContent }}</p>
+                    </div>
+
+                    <div class="div-23">
+                        <span>留言</span>
+                        <div class="likesCount">
+                            <i :class="{ 'fa-solid fa-heart': this.myArticle[0].liked, 'fa-regular fa-heart': !this.myArticle[0].liked }"
+                                @click="createLike()"></i>
+                            <span @click="searchLikeByPostId()">{{ this.myArticle[0].likesCount }}</span>
+                        </div>
+                    </div>
+
+                    <div class="div-24"></div>
+
+                    <div class="reply">
+                        <button style="margin-left: 950px; background-color:#6E75A8;color: white;border-radius: 15px;"
+                            @click="showAllComments = !showAllComments">
+                            {{ showAllComments ? '收起留言' : '查看更多' }}
+                        </button>
+                        <div class="replier" v-for="(item, index) in showAllComments ? postCommentList : lastFiveComments">
+                            <img style="width: 70px;height: 70px;border-radius: 50px; margin-right: 10px;"
+                                :src="'data:image/jpeg;base64,' + item.userPhoto" alt="">
+                            <div class="replier_data">
+                                <p class="replier_name">{{ item.userName }}</p>
+                                <p class="replier_userId">@{{ item.account }}</p>
+                                <div class="replier_text">{{ item.commentContent }}</div>
+                                <p>{{ showAllComments ? index + 1 : postCommentList.length - lastFiveComments.length
+                                    + index + 1 }}樓</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="div-20"></div>
+
+                    <div class="newReply">
+                        <img class="replier_img" :src="'data:image/jpeg;base64,' + this.foundUserInfo.userPhoto" alt="">
+                        <div class="nameAccount">
+                            <span style="font-size: 16pt;">{{ this.foundUserInfo.userName }}</span>
+                            <span style="font-size: 14pt;">@{{ this.foundUserInfo.account }}</span>
+                        </div>
+                        <input style="margin-left: 15px; width: 40%; height: 40px;" type="text" v-model="userReply" @keyup.enter="createNewComment()">
+                        <button style="margin-left: 15px; background-color:#6E75A8;color: white;border-radius: 15px;"
+                            @click="createNewComment()">回覆</button>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -368,7 +368,11 @@ export default {
 
 <style scoped>
 .newReply {
+    margin-top: 20px;
+    width: 100%;
     display: flex;
+    justify-content: center;
+    align-items: center;
 
     .nameAccount {
         display: flex;
@@ -472,11 +476,20 @@ export default {
 }
 
 .article {
-    align-self: stretch;
+    border-radius: 35px;
+    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
+    background-color: #fff;
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
-    margin: 57px 0 4px;
-    padding: 0 18px;
+    /* align-items: end; */
+    width: 78vw;
+    padding: 45px 0;
+    height: auto;
+    color: #978989;
+    padding: 20px 30px 20px 30px;
+    font-size: 20pt;
+
 }
 
 @media (max-width: 991px) {
@@ -487,6 +500,7 @@ export default {
 }
 
 .poster_area {
+    width: 100%;
     align-self: stretch;
 }
 
@@ -498,8 +512,16 @@ export default {
 }
 
 .poster {
+    width: 100%;
     gap: 20px;
     display: flex;
+    justify-content: space-between;
+
+    .topLeft {
+        display: flex;
+        padding-left: 20px;
+        padding-top: 20px;
+    }
 }
 
 @media (max-width: 991px) {
@@ -510,81 +532,29 @@ export default {
     }
 }
 
-.div-13 {
-    display: flex;
-    flex-direction: column;
-    line-height: normal;
-    /* width: 57%; */
-    margin-left: 0px;
-}
-
-@media (max-width: 991px) {
-    .div-13 {
-        width: 100%;
-    }
-}
-
-.div-14 {
-    display: flex;
-    margin-top: 16px;
-    gap: 18px;
-}
-
-@media (max-width: 991px) {
-    .div-14 {
-        margin-top: 40px;
-    }
-}
-
 .poster_icon {
     aspect-ratio: 1.03;
     object-fit: contain;
     object-position: center;
     width: 96px;
     overflow: hidden;
-    max-width: 100%;
     border-radius: 50%;
     margin-right: 30px;
 }
 
 .poster_data {
-    align-items: center;
-    justify-content: space-between;
-    width: 1000px;
     display: flex;
+    flex-direction: column;
     color: #978989;
     margin: auto 0;
     font: 800 32px Lexend, sans-serif;
-}
 
-.column-4 {
-    display: flex;
-    flex-direction: column;
-    line-height: normal;
-    width: 43%;
-    margin-left: 20px;
-}
-
-@media (max-width: 991px) {
-    .column-4 {
-        width: 100%;
+    .poster_userId {
+        font-size: 16pt;
     }
 }
 
-.div-16 {
-    display: flex;
-    width: 100%;
-    flex-grow: 1;
-    align-items: end;
-    justify-content: space-between;
-    gap: 20px;
-}
 
-@media (max-width: 991px) {
-    .div-16 {
-        margin-top: 40px;
-    }
-}
 
 .pet_state {
     color: #978989;
@@ -652,7 +622,7 @@ export default {
 @media (max-width: 991px) {
     .div-20 {
         max-width: 100%;
-        margin-top: 40px;
+        /* margin-top: 40px; */
     }
 }
 
@@ -660,14 +630,15 @@ export default {
     color: #978989;
     align-self: start;
     white-space: nowrap;
-    margin: 27px 0 0 76px;
     font: 800 39px Lexend, sans-serif;
+    margin: 40px 0px 40px 76px;
 }
 
 @media (max-width: 991px) {
     .article_title {
         margin-left: 10px;
         white-space: initial;
+        
     }
 }
 
@@ -675,11 +646,11 @@ export default {
     aspect-ratio: 0.91;
     object-fit: contain;
     object-position: center;
-    width: 369px;
+    width: 500px;
+    height: 380px;
     box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.28);
     overflow: hidden;
     align-self: start;
-    max-width: 100%;
     margin: 24px 0 0 66px;
 }
 
@@ -690,12 +661,17 @@ export default {
 }
 
 .article_contain {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     color: #978989;
     align-self: start;
-    width: 325px;
-    max-width: 100%;
-    margin: 36px 0 0 75px;
+
     font: 800 21px Lexend, sans-serif;
+    .article_text{
+        width: 45%;
+        height: 100%;
+    }
 }
 
 @media (max-width: 991px) {
@@ -754,7 +730,7 @@ export default {
     display: flex;
     align-items: start;
     gap: 17px;
-    margin: 34px 0 0 23px;
+    margin-left: 40px;
     flex-direction: column;
 }
 
@@ -768,10 +744,11 @@ export default {
     aspect-ratio: 1.04;
     object-fit: contain;
     object-position: center;
-    width: 73px;
+    width: 70px;
+    height: 70px;
     overflow: hidden;
-    max-width: 100%;
     border-radius: 50%;
+    margin-right: 10px;
 }
 
 .replier {
@@ -783,7 +760,11 @@ export default {
 
 .replier_data {
     color: #978989;
-    font: 800 12px Lexend, sans-serif;
+    font: 800 14pt Lexend, sans-serif;
+    .replier_name{
+        margin: 0px;
+        font-size: 16pt;
+    }
 }
 
 .replier_text {
