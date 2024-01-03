@@ -18,9 +18,9 @@ export default {
         <div class="setting line">
             <p @click="goTo('/ForumEntrance/ForumHome')">論壇首頁</p>
         </div>
-        <div class="article line">
+        <!-- <div class="article line">
             <p @click="goTo()">閒聊版</p>
-        </div>
+        </div> -->
         <div class="adopt line">
             <p @click="goTo('/ForumEntrance/ForumMyArticle')">我的文章</p>
         </div>
@@ -96,6 +96,7 @@ export default {
         padding: 0px 10px 0px 10px;
         font-size: 12pt;
         margin-bottom: 20px;
+        border: none;
         i {
             margin-bottom: 10px;
             margin-right: 1vmin

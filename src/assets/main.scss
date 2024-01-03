@@ -9,30 +9,34 @@
 
 // colors
 // 主色-黃色
-$primary:     #E9D2A6;
-$primaryBgc:  #F8F5EE;
+$primary: #E9D2A6;
+$primaryBgc: #F8F5EE;
 // 論壇-藍色
-$forum:       #6E75A8;
-$forumBgc:    #DDDFEE;
+$forum: #6E75A8;
+$forumBgc: #DDDFEE;
 // 領養-綠色
-$adoption:    #B2D2CB;
+$adoption: #B2D2CB;
 $adoptionBgc: #EDFDF9;
 // 送養-紅色
-$give:        #C79CA4;
-$giveBgc:     #F7E1E5;
-$giveBgcLight:  #fdf0f3;
+$give: #C79CA4;
+$giveBgc: #F7E1E5;
+$giveBgcLight: #fdf0f3;
 // 突出色
 $specialBlue: #6E75A8;
-$specialRed:  #A63A50;
+$specialRed: #A63A50;
 
-body{
+body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, 'cwTeXYen', sans-serif;
     color: #978989;
+
+    textarea {
+        resize: none;
+    }
 }
 
 // 寬高自己寫，可以用以下的尺寸
-.btn{
+.btn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,40 +50,42 @@ body{
     z-index: 10;
 }
 
-.btn-big{
+.btn-big {
     width: auto;
     height: 40px;
     font-size: 15pt;
 }
 
-.btn-specialBlue{
+.btn-specialBlue {
     background-color: $specialBlue;
-    &:hover{
+
+    &:hover {
         background-color: $forumBgc;
         transition: 0.3s;
     }
 }
 
-.btn-specialRed{
+.btn-specialRed {
     background-color: $specialRed;
-    &:hover{
+
+    &:hover {
         background-color: $give;
         transition: 0.3s;
     }
 }
 
 // input外觀
-input{
+input {
     padding: 0px 3px 0px 3px;
     border-radius: 5px;
 }
 
 // input填寫時外邊框
-input:focus{
+input:focus {
     outline: $primary solid 3px;
 }
 
 // textarea填寫時外邊框
-textarea:focus{
+textarea:focus {
     outline: $primary solid 3px;
 }

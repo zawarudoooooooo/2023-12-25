@@ -36,13 +36,13 @@ export default {
       this.userPetInfo = obj;
     },
 
-    showChatArea(data){
+    showChatArea(data) {
       this.isShowChat = !this.isShowChat;
       console.log("is show", this.isShowChat)
       this.room = data;
     },
 
-    closeChatArea(close){
+    closeChatArea(close) {
       this.isShowChat = false;
       console.log("is show", this.isShowChat)
     },
@@ -65,22 +65,16 @@ export default {
     </div>
 
     <div class="content">
-      <RouterView 
-      @userInfo="getUserInfo" :userInfo="userInfo" 
-      @petInfo="getPetInfo" :petInfo="petInfo" 
-      @petId="getPetId"  :petId="petId" 
-      @userPetInfo="getUserPetInfo" :userPetInfo="userPetInfo" 
-      @callChat="showChatArea"/>
+      <RouterView @userInfo="getUserInfo" :userInfo="userInfo" @petInfo="getPetInfo" :petInfo="petInfo" @petId="getPetId"
+        :petId="petId" @userPetInfo="getUserPetInfo" :userPetInfo="userPetInfo" @callChat="showChatArea" />
     </div>
 
     <div v-if="isShowChat" class="chatArea">
-      <ChatFlow 
-      @chatIsClose="closeChatArea" 
-      :room="room"/>
+      <ChatFlow @chatIsClose="closeChatArea" :room="room" />
     </div>
     
-    <div class="fixedUp" @click="scrollToTop">
-      <i class="fa-solid fa-chevron-up"></i>
+    <div class="fixedChat" @click="showChatArea">
+      <i class="fa-solid fa-comments" style="color: white;"></i>
     </div>
   </div>
 </template>
@@ -99,7 +93,7 @@ export default {
   overflow: scroll;
 }
 
-.chatArea{
+.chatArea {
   width: 45vw;
   height: 80vh;
   position: fixed;
@@ -109,7 +103,25 @@ export default {
 }
 
 
-.fixedUp{
+.fixedChat{
+  width: 60px;
+  height: 60px;
+  background-color: #e7cfa3;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  right: 5vw;
+  bottom: 10vh;
+  transition: all 0.5s ease;
+  font-size: 18pt;
+  &:hover{
+    background-color: #ebc26f;
+  }
+}
+
+.fixedUp {
   width: 50px;
   height: 50px;
   background-color: rgba(211, 211, 211, 0.804);
@@ -122,7 +134,8 @@ export default {
   bottom: 10vh;
   transition: all 0.5s ease;
   font-size: 18pt;
-  &:hover{
+
+  &:hover {
     background-color: lightgray;
   }
 }

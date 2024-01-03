@@ -421,7 +421,10 @@ export default {
 .article_text {
     width: 550px;
     height: 400px;
-    border-radius: 15px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+    resize: none;
 }
 
 

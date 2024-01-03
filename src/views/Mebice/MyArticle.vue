@@ -136,7 +136,17 @@ export default {
                 family_status: "",
                 user_photo: "",
             },
+
+            foundUserInfo: JSON.parse(sessionStorage.getItem('foundUserInfo')),
+            foundUser: null,
+
+            myArticle: null,
+            userInfoList: null,
+            integratedData: null,
         }
+    },
+    mounted() {
+        this.groupAll()
     },
     components: {
         ProfileDashBoard
@@ -160,7 +170,116 @@ export default {
             console.log(item)
             this.$emit("petInfo", item);
             this.$router.push('/AdoptPetDetail');
-        }
+        },
+        goTo(serialNo) {
+            sessionStorage.setItem('postSerialNo', serialNo);
+            this.$router.push('/ForumEntrance/pre_myArticle')
+        },
+        groupAll() {
+            const fetchData = () => {
+                fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
+                    method: 'GET',
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const userInfoList = data.userInfoList;
+
+                        fetch('http://localhost:8080/api/adoption/searchAllPost', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                const forumEntranceList = data.forumEntranceList;
+
+                                const integratedData = forumEntranceList.map(forumEntry => {
+                                    const userInfo = userInfoList.find(user => user.userId === forumEntry.userId);
+                                    return {
+                                        postContent: forumEntry.postContent,
+                                        postPhoto: forumEntry.postPhoto,
+                                        serialNo: forumEntry.serialNo,
+                                        title: forumEntry.title,
+                                        userId: forumEntry.userId,
+                                        likesCount: forumEntry.likesCount,
+                                        userName: userInfo.userName,
+                                        userPhoto: userInfo.userPhoto,
+                                        account: userInfo.account,
+                                    };
+                                });
+                                this.integratedData = integratedData;
+
+                                fetch('http://localhost:8080/api/adoption/searchLikeByUserId?userId=' + this.foundUserInfo.userId, {
+                                    method: 'GET',
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const likesRecordList = data.likesRecordList;
+
+                                        // 將 obtainedLikesRecords 整合到 integratedData 中
+                                        this.integratedData.forEach(post => {
+                                            const found = likesRecordList.find(record => record.postId === post.serialNo);
+                                            post.liked = !!found; // 設置 liked 屬性為布爾值，表示是否按過讚
+                                        });
+                                        // 獲取只包含特定 userId 的貼文
+                                        this.myArticle = this.integratedData.filter(post => post.userId === this.foundUserInfo.userId);
+                                    });
+                            });
+                    });
+            };
+
+            fetchData();
+
+        },
+        createLike(serialNo) {
+            console.log(serialNo)
+            const requestBody = {
+                likesRecord: {
+                    postId: serialNo,
+                    userId: this.foundUserInfo.userId
+                }
+            };
+
+            fetch(`http://localhost:8080/api/adoption/createLike`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    const postToUpdate = this.integratedData.find(post => post.serialNo === serialNo);
+                    if (postToUpdate) {
+                        // 如果当前帖子已经被喜欢，执行取消喜欢操作
+                        if (postToUpdate.liked) {
+                            // 在这里实现取消喜欢的逻辑
+                            postToUpdate.liked = false; // 更新喜欢状态
+                            postToUpdate.likesCount--; // 减少喜欢数
+                        } else {
+                            // 否则，执行喜欢操作
+                            postToUpdate.liked = true; // 更新喜欢状态
+                            postToUpdate.likesCount++; // 增加喜欢数
+                        }
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        },
+        searchLikeByPostId(serialNo) {
+            fetch(`http://localhost:8080/api/adoption/searchLikeByPostId?postId=${serialNo}`, {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                });
+        },
     }
 }
 </script>
@@ -177,38 +296,37 @@ export default {
         <div class="showBoard">
             <!-- title -->
             <div class="title">
-                <h1>My Article</h1>
+                <h1>我的文章</h1>
             </div>
-
 
             <!-- v-for the card -->
             <div class="showCardArea">
-                <div class="showCard" v-for="(item, index) in pets" @click="emitGo(item)">
+                <div class="showCard" v-for="(item, index) in myArticle">
                     <div class="cardTop">
-                        <img loading="lazy"
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/1a90f93bf046cb34155d14545eaf092cbb5340f95d7851405d718068990aeece?"
-                            class="poster_icon" />
+                        <img loading="lazy" class="poster_icon" :src="'data:image/jpeg;base64,' + item.userPhoto" />
                         <div class="poster_data">
-                            <p class="poster_name">短腿貓的爸</p>
+                            <p class="poster_name">{{ item.userName }}</p>
                             <!-- 短腿貓的爸<br /> -->
-                            <p class="poster_userId">@wei0113__</p>
+                            <p class="poster_userId">{{ item.account }}</p>
                         </div>
 
                     </div>
                     <div class="cardMiddle">
-                        <div class="article_title">好像養了一隻迷因貓</div>
+                        <div class="article_title">{{ item.title }}</div>
                         <div class="img">
-
+                            <img class="img" :src="'data:image/jpeg;base64,' + item.postPhoto" alt="">
                         </div>
                         <div class="cardInfo">
-                            <p class="infoText">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate quaerat
-                                numquam minus? Hic, provident aliquam?</p>
+                            <!-- <p class="infoText">{{ item.postContent }}</p> -->
                         </div>
-
                     </div>
                     <div class="cardLast">
-
-                        <p class="moreInfo">...點我看更多</p>
+                        <div class="likesCount">
+                            <i :class="{ 'fa-solid fa-heart': item.liked, 'fa-regular fa-heart': !item.liked }"
+                                @click="createLike(item.serialNo)"></i>
+                            <span @click="searchLikeByPostId(item.serialNo)">{{ item.likesCount }}</span>
+                        </div>
+                        <p class="moreInfo" @click="goTo(item.serialNo)">...點我看更多</p>
                     </div>
                 </div>
 
@@ -268,6 +386,7 @@ export default {
                     height: 60px;
                     position: absolute;
                     right: 105px;
+                    border-radius: 50%;
                 }
 
                 .poster_data {
@@ -291,7 +410,7 @@ export default {
 
                 .img {
                     width: 230px;
-                    height: 90px;
+                    height: 180px;
                     border: 1px solid #978989;
                     border-radius: 20px;
                     margin-bottom: 10px;
@@ -315,9 +434,21 @@ export default {
                 justify-content: space-between;
                 align-items: center;
 
+                .likesCount {
+                    display: flex;
+
+                    span {
+                        color: red;
+                    }
+
+                    i {
+                        color: red
+                    }
+                }
+
                 .moreInfo {
                     color: #6E75A8;
-                    margin-left: 125px;
+                    margin-left: 25px;
                     font-weight: 700;
                 }
             }
