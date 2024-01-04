@@ -352,7 +352,7 @@ export default {
                     <vue-cropper v-if="imageUrl" :src="imageUrl" :key="imageUrl" ref="cropper"
                         class="vue-cropper-element"></vue-cropper>
                     <!-- Button to save and close cropper -->
-                    <button @click="saveAndCloseCropper">儲存並關閉</button>
+                    <button class="btn" style="height: 30px; width: 400px; margin-top: 15px;" @click="saveAndCloseCropper">儲存並關閉</button>
                 </div>
 
                 <!-- 寵物資訊 -->
@@ -1033,7 +1033,7 @@ $inputBorder: #e2dbca;
 
 /* 在 Vue 組件中使用 vue-cropper 元素 */
 .vue-cropper-element {
-    max-width: 100%;
-    max-height: 100%;
+    width: 400px;
+    height: 400px;
 }
 </style>

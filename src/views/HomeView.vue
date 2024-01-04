@@ -92,7 +92,10 @@ export default {
                 <p style="line-height: 1.5;font-size:17pt;">${newInfo.content}</p>
                 <img src="${newInfo.base64Image}" alt="New Info Image" style="max-width: 100%;padding-left: 0; padding-right: 0; padding-bottom: 0;">
             `,
-                showCloseButton: true,//顯示關閉按鈕
+                showCancelButton: true,//顯示關閉按鈕
+                // showCloseButton: true,
+                closeOnConfirm: false,
+
                 showConfirmButton: false,//不顯示確認按鈕
                 width: '60%', // 調整內容區塊的寬度
 
@@ -193,13 +196,13 @@ export default {
                         <!-- 每個 newInfo 對象都被用來生成一個消息卡片。v-for 根據 newInfoList 的內容動態生成消息卡片。 -->
                         <div v-for="newInfo in newInfoList" :key="newInfo.serialNo" class="info-card"
                             @click="expandCard(newInfo)">
-                                <div class="info-card2">
-                                    <h2>{{ newInfo.title }}</h2>
-                                    <p>Category: {{ newInfo.category }}</p>
-                                    <p>Date: {{ newInfo.date }}</p>
-                                    <!-- 使用截斷內容的方法 -->
-                                    <p class="infoContent">{{ truncateContent(newInfo.content, 46) }}</p>
-                                </div>
+                            <div class="info-card2">
+                                <h2>{{ newInfo.title }}</h2>
+                                <p>Category: {{ newInfo.category }}</p>
+                                <p>Date: {{ newInfo.date }}</p>
+                                <!-- 使用截斷內容的方法 -->
+                                <p class="infoContent">{{ truncateContent(newInfo.content, 46) }}</p>
+                            </div>
                             <div class="imgArea">
                                 <!-- 如果 newInfo.base64Image 存在，則顯示一個圖片。 -->
                                 <img v-if="newInfo.base64Image" :src="newInfo.base64Image" alt="New Info Image" />
@@ -231,7 +234,7 @@ export default {
 
 .marquee {
     white-space: nowrap; //避免換行，單行顯示
-    animation: marquee-scroll 20s linear infinite ; //動畫時間為 20 秒，動畫效果為線性，且無限循環
+    animation: marquee-scroll 20s linear infinite; //動畫時間為 20 秒，動畫效果為線性，且無限循環
     height: 5vh;
     display: flex;
     align-items: center;
@@ -323,9 +326,9 @@ export default {
     position: relative;
     background-color: #F8F5EE;
 
-    .carousel-inner{
-    height: 90vh;
-    // overflow-y: scroll;    
+    .carousel-inner {
+        height: 90vh;
+        // overflow-y: scroll;    
     }
 }
 
@@ -344,7 +347,8 @@ export default {
 
 .info-card {
     width: 30%;
-    height: 450px; /* 為所有卡片設定固定高度 */
+    height: 450px;
+    /* 為所有卡片設定固定高度 */
     border: 1px solid #ddd;
     border-radius: 30px;
     margin: 20px 1px 0px 1px;
@@ -366,10 +370,11 @@ export default {
 //消息卡片內容的區塊
 .info-card2 {
     padding: 20px 20px 0px 20px;
-    height: 250px; 
+    height: 250px;
     display: flex;
     flex-direction: column;
-    p{
+
+    p {
         margin-bottom: 5px;
     }
 
@@ -392,7 +397,8 @@ export default {
 
 .info-card img {
     width: 100%;
-    height: 100%; /* 確保所有圖片具有相同的高度 */
+    height: 100%;
+    /* 確保所有圖片具有相同的高度 */
     border-radius: 0px 0px 30px 30px;
     background-size: cover;
 }
@@ -462,5 +468,13 @@ export default {
 
 }
 
+// .swal2-modal {
 
+//     button {
+//         border: none;
+//         &:focus{
+//             outline: none;
+//         }
+//     }
+// }
 </style>

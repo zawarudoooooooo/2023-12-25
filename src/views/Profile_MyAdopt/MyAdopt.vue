@@ -370,7 +370,7 @@ export default{
         width: 100%;
         height: auto;
         display: flex;
-        justify-content: center;
+        // justify-content: center;
         flex-wrap: wrap;
         padding-top: 20px;
         .showCard{

@@ -33,6 +33,14 @@ body {
     textarea {
         resize: none;
     }
+
+    button {
+        border: none;
+
+        &:focus {
+            border: none;
+        }
+    }
 }
 
 // 寬高自己寫，可以用以下的尺寸

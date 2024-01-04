@@ -640,8 +640,10 @@ export default {
         margin-bottom: 3vh;
         display: flex;
         flex-wrap: wrap;
-        justify-content: center;
-        padding: 20px 10px 20px 10px;
+        // justify-content: center;
+        padding: 20px 10px 20px 100px;
+        box-sizing: border-box;
+
 
         // .showCard {
         //     width: 300px;

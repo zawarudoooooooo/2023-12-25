@@ -33,6 +33,7 @@ export default {
     },
 
     methods: {
+
         groupAll() {
             fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
                 method: 'GET',
@@ -50,12 +51,9 @@ export default {
                         .then(response => response.json())
                         .then(data => {
                             const forumEntranceList = data.forumEntranceList;
-
-                            // 使用 reduce 方法整合資訊
                             const integratedData = forumEntranceList.map(forumEntry => {
                                 const userInfo = userInfoList.find(user => user.userId === forumEntry.userId);
 
-                                // 創建一個新的物件整合所需的資訊
                                 return {
                                     postContent: forumEntry.postContent,
                                     postPhoto: forumEntry.postPhoto,
@@ -70,33 +68,107 @@ export default {
                                 };
                             });
 
-                            // 在這裡處理整合後的資料 integratedData
+                            // Check if foundUserInfo exists before making the fetch request
+                            if (this.foundUserInfo && this.foundUserInfo.userId) {
+                                fetch('http://localhost:8080/api/adoption/searchLikeByUserId?userId=' + this.foundUserInfo.userId, {
+                                    method: 'GET',
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const likesRecordList = data.likesRecordList;
 
-
-                            fetch('http://localhost:8080/api/adoption/searchLikeByUserId?userId=' + this.foundUserInfo.userId, {
-                                method: 'GET',
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    const likesRecordList = data.likesRecordList;
-
-                                    // 將 obtainedLikesRecords 整合到 integratedData 中
-                                    integratedData.forEach(post => {
-                                        const found = likesRecordList.find(record => record.postId === post.serialNo);
-                                        post.liked = !!found; // 設置 liked 屬性為布爾值，表示是否按過讚
+                                        integratedData.forEach(post => {
+                                            const found = likesRecordList.find(record => record.postId === post.serialNo);
+                                            post.liked = !!found;
+                                        });
+                                        console.log(integratedData);
+                                        this.integratedData = integratedData;
+                                        console.log(this.postSerialNo);
+                                        const specificUserArticles = integratedData.filter(entry => entry.serialNo === this.postSerialNo);
+                                        this.myArticle = specificUserArticles;
+                                        console.log(this.myArticle);
+                                        console.log(this.myArticle[0].userId);
+                                        console.log(this.foundUserInfo.userId);
+                                    })
+                                    .catch(error => {
+                                        console.error('Error fetching likes:', error);
                                     });
-                                });
-                            console.log(integratedData);
-                            this.integratedData = integratedData
-                            console.log(this.postSerialNo)
-                            const specificUserArticles = integratedData.filter(entry => entry.serialNo === this.postSerialNo);
-                            this.myArticle = specificUserArticles
-                            console.log(this.myArticle)
-                            console.log(this.myArticle[0].userId)
-                            console.log(this.foundUserInfo.userId)
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching posts:', error);
                         });
+                })
+                .catch(error => {
+                    console.error('Error fetching user info:', error);
                 });
         },
+
+
+        // groupAll() {
+        //     fetch('http://localhost:8080/api/adoption/userInfo/searchAllUserInfo', {
+        //         method: 'GET',
+        //     })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             const userInfoList = data.userInfoList;
+
+        //             fetch('http://localhost:8080/api/adoption/searchAllPost', {
+        //                 method: 'GET',
+        //                 headers: {
+        //                     'Content-Type': 'application/json',
+        //                 },
+        //             })
+        //                 .then(response => response.json())
+        //                 .then(data => {
+        //                     const forumEntranceList = data.forumEntranceList;
+
+        //                     // 使用 reduce 方法整合資訊
+        //                     const integratedData = forumEntranceList.map(forumEntry => {
+        //                         const userInfo = userInfoList.find(user => user.userId === forumEntry.userId);
+
+        //                         // 創建一個新的物件整合所需的資訊
+        //                         return {
+        //                             postContent: forumEntry.postContent,
+        //                             postPhoto: forumEntry.postPhoto,
+        //                             serialNo: forumEntry.serialNo,
+        //                             title: forumEntry.title,
+        //                             userId: forumEntry.userId,
+        //                             likesCount: forumEntry.likesCount,
+
+        //                             userName: userInfo.userName,
+        //                             userPhoto: userInfo.userPhoto,
+        //                             account: userInfo.account,
+        //                         };
+        //                     });
+
+        //                     // 在這裡處理整合後的資料 integratedData
+
+
+        //                     fetch('http://localhost:8080/api/adoption/searchLikeByUserId?userId=' + this.foundUserInfo.userId, {
+        //                         method: 'GET',
+        //                     })
+        //                         .then(response => response.json())
+        //                         .then(data => {
+        //                             const likesRecordList = data.likesRecordList;
+
+        //                             // 將 obtainedLikesRecords 整合到 integratedData 中
+        //                             integratedData.forEach(post => {
+        //                                 const found = likesRecordList.find(record => record.postId === post.serialNo);
+        //                                 post.liked = !!found; // 設置 liked 屬性為布爾值，表示是否按過讚
+        //                             });
+        //                         });
+        //                     console.log(integratedData);
+        //                     this.integratedData = integratedData
+        //                     console.log(this.postSerialNo)
+        //                     const specificUserArticles = integratedData.filter(entry => entry.serialNo === this.postSerialNo);
+        //                     this.myArticle = specificUserArticles
+        //                     console.log(this.myArticle)
+        //                     console.log(this.myArticle[0].userId)
+        //                     console.log(this.foundUserInfo.userId)
+        //                 });
+        //         });
+        // },
 
         createLike() {
 
@@ -309,7 +381,7 @@ export default {
                     <div class="div-20"></div>
 
                     <div class="article_title">{{ this.myArticle[0].title }}</div>
-                    
+
                     <div class="article_contain">
                         <img class="article_img" :src="'data:image/jpeg;base64,' + this.myArticle[0].postPhoto" alt="">
                         <p class="article_text">{{ this.myArticle[0].postContent }}</p>
@@ -346,13 +418,14 @@ export default {
 
                     <div class="div-20"></div>
 
-                    <div class="newReply">
+                    <div class="newReply" v-if="foundUserInfo">
                         <img class="replier_img" :src="'data:image/jpeg;base64,' + this.foundUserInfo.userPhoto" alt="">
                         <div class="nameAccount">
                             <span style="font-size: 16pt;">{{ this.foundUserInfo.userName }}</span>
                             <span style="font-size: 14pt;">@{{ this.foundUserInfo.account }}</span>
                         </div>
-                        <input style="margin-left: 15px; width: 40%; height: 40px;" type="text" v-model="userReply" @keyup.enter="createNewComment()">
+                        <input style="margin-left: 15px; width: 40%; height: 40px;" type="text" v-model="userReply"
+                            @keyup.enter="createNewComment()">
                         <button style="margin-left: 15px; background-color:#6E75A8;color: white;border-radius: 15px;"
                             @click="createNewComment()">回覆</button>
                     </div>
@@ -638,7 +711,7 @@ export default {
     .article_title {
         margin-left: 10px;
         white-space: initial;
-        
+
     }
 }
 
@@ -668,7 +741,8 @@ export default {
     align-self: start;
 
     font: 800 21px Lexend, sans-serif;
-    .article_text{
+
+    .article_text {
         width: 45%;
         height: 100%;
     }
@@ -761,7 +835,8 @@ export default {
 .replier_data {
     color: #978989;
     font: 800 14pt Lexend, sans-serif;
-    .replier_name{
+
+    .replier_name {
         margin: 0px;
         font-size: 16pt;
     }
@@ -957,5 +1032,4 @@ export default {
     color: #978989;
     margin-top: 12px;
     font: 800 21px Lexend, sans-serif;
-}
-</style>
+}</style>

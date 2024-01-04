@@ -559,6 +559,11 @@ export default {
                         // object-position: center;
                         width: 100%;
                     }
+
+                    .croppedImg{
+                        height: 100%;
+                        width: 100%;
+                    }
                 }
 
                 .inputFileArea {

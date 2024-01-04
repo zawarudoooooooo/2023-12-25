@@ -102,7 +102,8 @@ export default {
                 <p style="line-height: 1.5;font-size:17pt;">${newInfo.content}</p>
                 <img src="${newInfo.base64Image}" alt="New Info Image" style="max-width: 100%;padding-left: 0; padding-right: 0; padding-bottom: 0;">
             `,
-                showCloseButton: true,//顯示關閉按鈕
+                showCancelButton: true,//顯示關閉按鈕
+
                 showConfirmButton: false,//不顯示確認按鈕
                 width: '60%', // 調整內容區塊的寬度
 
@@ -188,7 +189,7 @@ export default {
             <div class="div-7">
                 <h1>你知道嗎?</h1>
             </div>
-            
+
             <!-- 最新消息輪播 -->
             <div id="carouselNewInfo" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
@@ -226,7 +227,8 @@ export default {
                 </button>
             </div>
             <div class="infoMoreBtnArea">
-                <button class="btn btn-big btn-specialBlue" style="color: white; border: none;" @click="goToZ('/ForumEntrance/ForumPopularScienceAll')">查看更多科普</button>
+                <button class="btn btn-big btn-specialBlue" style="color: white; border: none;"
+                    @click="goToZ('/ForumEntrance/ForumPopularScienceAll')">查看更多科普</button>
             </div>
 
             <div class="div-14">
@@ -436,7 +438,8 @@ export default {
             color: #978989;
             font-size: 17px;
             font-weight: 700;
-            p{
+
+            p {
                 margin: 0px;
             }
         }
