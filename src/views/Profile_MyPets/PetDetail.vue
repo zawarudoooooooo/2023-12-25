@@ -513,7 +513,7 @@ export default {
                                 <p>{{ item.userInfo.profile ? item.userInfo.profile : "未填寫" }}</p>
                             </div>
 
-                            <div class="adopterFileBtn">
+                            <div v-if="!isAlreadyAdopted" class="adopterFileBtn">
                                 <button class="btn btn-specialRed" data-bs-toggle="modal" :data-bs-target="'#detailModal'+index"
                                     @click="showModal(item.userInfo)">
                                     <i class="fa-solid fa-circle-info" style="color: white;"></i>
