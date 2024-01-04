@@ -200,15 +200,15 @@ export default {
                             <!-- 每個 newInfo 對象都被用來生成一個消息卡片。v-for 根據 newInfoList 的內容動態生成消息卡片。 -->
                             <div v-for="newInfo in newInfoList" :key="newInfo.serialNo" class="info-card"
                                 @click="expandCard(newInfo)">
-                                <div>
-                                    <div class="info-card2">
-                                        <h2>{{ newInfo.title }}</h2>
-                                        <p>Category: {{ newInfo.category }}</p>
-                                        <p>Date: {{ newInfo.date }}</p>
-                                        <!-- 使用截斷內容的方法 -->
-                                        <p>{{ truncateContent(newInfo.content, 46) }}</p>
-                                    </div>
+
+                                <div class="info-card2">
+                                    <h2>{{ newInfo.title }}</h2>
+                                    <p>Category: {{ newInfo.category }}</p>
+                                    <p>Date: {{ newInfo.date }}</p>
+                                    <!-- 使用截斷內容的方法 -->
+                                    <p>{{ truncateContent(newInfo.content, 46) }}</p>
                                 </div>
+
                                 <div class="imgArea">
                                     <!-- 如果 newInfo.base64Image 存在，則顯示一個圖片。 -->
                                     <img v-if="newInfo.base64Image" :src="newInfo.base64Image" alt="New Info Image" />
@@ -284,7 +284,7 @@ export default {
 
             <div class="div-36">
                 <button class="btn btn-big btn-specialBlue" style="color: white; border: none;"
-                    @click="goToZ('/ForumEntrance/ForumHome')">看更多</button>
+                    @click="goToZ('/ForumEntrance/ForumHome')">查看更多文章</button>
             </div>
         </div>
     </div>
@@ -303,6 +303,7 @@ export default {
 }
 
 .searchAllNewInfo {
+    height: 500px;
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -311,28 +312,32 @@ export default {
 }
 
 .info-card {
-    height: 65%;
+    height: 450px;
     border: 1px solid #ddd;
     border-radius: 30px;
     margin: 20px 1px 0px 1px;
     background-color: white;
     color: #978989;
     font-size: 14pt;
-    box-shadow: 0 0 3px 5px rgb(202, 202, 202);
+    // box-shadow: 0 0 3px 5px rgb(202, 202, 202);
     width: calc(33.33% - 20px);
     /* 調整每個消息卡片的寬度，這裡假設每行三個 */
     box-sizing: border-box;
     transition: all 0.4s; //過渡效果，持續時間為 0.4 秒
+    transition: box-shadow 0.8s; // 添加過渡效果
+    cursor: pointer;
 
     &:hover {
         transform: scale(1.03);
-        border: 5px solid#978989;
+        // border: 5px solid#978989;
+        box-shadow: 3px 3px 5px gray; // 放大效果
 
     }
 }
 
 //消息卡片內容的區塊
 .info-card2 {
+    height: 60%;
     padding: 20px 20px 0px 20px;
 
 }
@@ -345,30 +350,23 @@ export default {
 }
 
 .imgArea {
-    vertical-align: middle;
+    // vertical-align: middle;
     border-radius: 0px 0px 30px 30px;
     width: 100%;
+    height: 40%;
     padding: 0;
 }
 
 .info-card img {
-    vertical-align: middle;
+    // vertical-align: middle;
     width: 100%;
-    height: 150px;
+    height: 100%;
     border-radius: 0px 0px 30px 30px;
     /* 设置圆角 上右下左 */
     padding: 0;
     background-size: cover;
 }
 
-.info-card {
-    transition: box-shadow 0.8s; // 添加過渡效果
-    cursor: pointer;
-}
-
-.info-card:hover {
-    box-shadow: 3px 3px 5px gray; // 放大效果
-}
 
 
 

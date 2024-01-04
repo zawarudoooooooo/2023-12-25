@@ -90,7 +90,6 @@ export default {
   width: 100vw;
   min-height: 85vh;
   height: auto;
-  overflow: scroll;
 }
 
 .chatArea {

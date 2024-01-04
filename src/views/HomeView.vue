@@ -355,14 +355,14 @@ export default {
     background-color: white;
     color: #978989;
     font-size: 14pt;
-    box-shadow: 0 0 3px 5px rgb(202, 202, 202);
+    // box-shadow: 0 0 3px 5px rgb(202, 202, 202);
 
     box-sizing: border-box;
     transition: all 0.4s; //過渡效果，持續時間為 0.4 秒
 
     &:hover {
         transform: scale(1.03);
-        border: 5px solid#978989;
+        // border: 5px solid#978989;
 
     }
 }

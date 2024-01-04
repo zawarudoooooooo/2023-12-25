@@ -343,6 +343,7 @@ export default {
 @import '../../assets/RStyle.scss';
 
 .content {
+    width: 100vw;
     background-color: $forumBgc;
 }
 
