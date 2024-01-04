@@ -22,7 +22,7 @@ export default {
             <p @click="goTo()">閒聊版</p>
         </div> -->
         <div class="adopt line">
-            <p @click="goTo('/ForumEntrance/ForumMyArticle')">我的文章</p>
+            <button :style="{ color: foundUserInfo ? '#978989' : '#bfacac'}" style="background-color: transparent; font-weight: 700;" @click="goTo('/ForumEntrance/ForumMyArticle')" :disabled=" foundUserInfo == null">我的文章</button>
         </div>
         <button v-if="foundUserInfo" class="dashboard_btn"  @click="goTo('/ForumEntrance/create_Article')">
             <i class="fa-solid fa-plus plus_icon"></i>

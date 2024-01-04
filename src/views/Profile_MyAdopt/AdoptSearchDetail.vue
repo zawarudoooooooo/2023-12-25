@@ -110,6 +110,11 @@ export default {
         sendApply() {
             const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
 
+            if(user == null){
+                Swal.fire('請先登錄！');
+                return;
+            }
+
             axios.post('http://localhost:8080/api/adoption/petInfo/adoptPet', {
                 petId: this.petInfo.pet_id,
                 userId: user.userId
@@ -127,7 +132,7 @@ export default {
                     } else if (response.data.rtnCode == 'THE_USER_HAS_ALREADY_ADOPTED_THE_PET') {
                         Swal.fire('您已認養過此寵物！');
                     } else {
-                        Swal.fire('出了些錯誤，請再次檢查');
+                        Swal.fire('出了些錯誤，請再次檢查！');
                     }
                 })
                 .catch(error => {
@@ -169,7 +174,46 @@ export default {
                 .catch(error => {
                     console.error(error)
                 })
+        },
 
+        openChat(){
+            const user = JSON.parse(sessionStorage.getItem("foundUserInfo"));
+
+            if(user == null){
+                Swal.fire('請先登錄！');
+                return;
+            }
+
+            if(this.petInfo == {}){
+                Swal.fire('出了些錯誤，請再次檢查！');
+                return;
+            }
+
+            const subList = [];
+            subList.push(user.userId);
+            subList.push(this.petInfo.user_id);
+
+            const subListStr = subList.join(',');
+
+            axios.post(`http://localhost:8080/api/adoption/chat/create_room`, {
+                creator: user.userId, 
+                subscriberList: subListStr, 
+                name: subListStr
+            })
+            .then(response => {
+                console.log(response.data)
+                const chatRoom = response.data.chatRoom;
+                this.$emit('callChat', chatRoom)
+
+                // pinia WebSocket: connectServer()
+                this.connectServer(user)
+
+                // pinia WebSocket: 連接頻道
+                this.connectChannel(chatRoom);
+            })
+            .catch(error => {
+                console.error(error);
+            })
         },
     }
 }
@@ -197,7 +241,7 @@ export default {
                         <i class="fa-solid fa-hand-holding-heart" style="color: white"></i>
                         <p style="color: white;">申請領養</p>
                     </button>
-                    <button class="btn btn-specialBlue modal-btn">
+                    <button class="btn btn-specialBlue modal-btn" @click="openChat()">
                         <i class="fa-solid fa-comments" style="color: white;"></i>
                         <p style="color: white;">聊聊了解</p>
                     </button>
