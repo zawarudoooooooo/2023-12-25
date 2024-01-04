@@ -1,6 +1,8 @@
 <script>
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { mapState, mapGetters, mapActions } from "pinia";
+import socketState from '../../stores/socketState';
 
 export default {
     data() {
@@ -47,6 +49,8 @@ export default {
         },
     },
     methods: {
+        ...mapActions(socketState, ['connectServer', 'connectChannel']),
+
         getPetUser() {
             axios.get('http://localhost:8080/api/adoption/petInfo/getAdoptPetInfoAndUserInfo', {
                 params: {

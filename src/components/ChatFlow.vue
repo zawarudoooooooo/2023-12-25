@@ -55,13 +55,13 @@ export default{
         
         dateCount(){
             // 尚未捕捉到pinia變數readRecord的值時，不執行
-            if(!this.readRecord || !this.readRecord.readTime){
-                return;
-            }
+            // if(!this.readRecord || !this.readRecord.readTime){
+            //     return;
+            // }
 
-            const readTime = new Date(this.readRecord.readTime);
-            const formattedReadTime = readTime.toISOString();
-            console.log("formatted Read Time", formattedReadTime)
+            // const readTime = new Date(this.readRecord.readTime);
+            // const formattedReadTime = readTime.toISOString();
+            // console.log("formatted Read Time", formattedReadTime)
 
             // 使用 reduce 进行分组
             // acc：key的日期
@@ -77,16 +77,17 @@ export default{
                 }
 
                 // 設置已讀或未讀
-                let isRead = false;
-                const timeStamp = new Date(item.timeStamp);
-                const formattedTimeStamp = timeStamp.toISOString();
+                // let isRead = false;
+                // const timeStamp = new Date(item.timeStamp);
+                // const formattedTimeStamp = timeStamp.toISOString();
 
-                if(formattedTimeStamp < formattedReadTime){
-                    isRead = true;
-                }
+                // if(formattedTimeStamp < formattedReadTime){
+                //     isRead = true;
+                // }
 
                 // 添加 sendTime & 已讀未讀
-                const newItem = { ...item, sendTime, isRead: isRead};
+                // const newItem = { ...item, sendTime, isRead: isRead};
+                const newItem = { ...item, sendTime, isRead: false};
 
                 // 加入新的訊息到 acc[date]
                 acc[date].push(newItem);
