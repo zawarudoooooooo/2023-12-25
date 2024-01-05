@@ -118,6 +118,7 @@ const router = createRouter({
           name: 'ForumPopularScienceAll',
           component: () => import('../views/Forum/ForumPopularScienceAll.vue'),
         },
+        
         {
           path: 'edit_myArticle',
           name: 'edit_myArticle',
